@@ -20,4 +20,6 @@ public class ArticuloManufacturadoDetalle extends Base {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "articulo_insumo_id")
     private ArticuloInsumo articuloInsumo;
+
+
 }

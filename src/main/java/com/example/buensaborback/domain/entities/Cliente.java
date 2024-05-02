@@ -12,9 +12,9 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-@Entity
 @ToString
 @SuperBuilder
+@Entity
 public class Cliente extends Base{
 
     private String nombre;

@@ -8,16 +8,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ClienteServiceImpl implements IClienteService {
+public class ClienteServiceImpl extends BaseServiceImpl<Cliente,Long> implements IClienteService{
 
-    private final ClienteRepository clienteRepository;
-
-    public ClienteServiceImpl(ClienteRepository clienteRepository) {
-        this.clienteRepository = clienteRepository;
-    }
-
-    @Override
-    public List<Cliente> getAll() {
-        return this.clienteRepository.findAll();
-    }
 }

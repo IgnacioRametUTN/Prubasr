@@ -1,4 +1,5 @@
 package com.example.buensaborback.domain.dtos.cliente;
+import com.example.buensaborback.domain.dtos.BaseDto;
 import lombok.*;
 
 @NoArgsConstructor
@@ -7,10 +8,7 @@ import lombok.*;
 @Setter
 @ToString
 @Builder
-
-
-public class ClienteShortDto {
-    private Integer id;
+public class ClienteBase extends BaseDto {
     private String nombre;
     private String apellido;
     private String telefono;
