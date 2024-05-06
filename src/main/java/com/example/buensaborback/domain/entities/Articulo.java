@@ -3,6 +3,7 @@ package com.example.buensaborback.domain.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.HashSet;
@@ -41,4 +42,8 @@ public abstract class Articulo {
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
+    @Column
+    @ColumnDefault(value = "true")
+    @Builder.Default
+    private boolean alta = true;
 }

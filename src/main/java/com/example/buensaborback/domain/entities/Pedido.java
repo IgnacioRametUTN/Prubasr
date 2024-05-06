@@ -52,6 +52,7 @@ public class Pedido extends Base{
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cliente_id")
+    @ToString.Exclude
     private Cliente cliente;
 
 

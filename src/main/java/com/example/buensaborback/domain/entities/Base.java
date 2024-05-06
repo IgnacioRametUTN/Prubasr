@@ -24,5 +24,6 @@ public abstract class Base implements Serializable {
 
     @Column
     @ColumnDefault(value = "true")
+    @Builder.Default
     private boolean alta = true;
 }
