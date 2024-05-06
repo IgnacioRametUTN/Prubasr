@@ -12,5 +12,7 @@ public class DomicilioFullDto {
     private String calle;
     private Integer numero;
     private Integer cp;
-    private LocalidadDto localidad;
+    private String localidad;
+    private String provincia;
+    private String pais;
 }

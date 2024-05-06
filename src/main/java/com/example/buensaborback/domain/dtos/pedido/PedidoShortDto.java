@@ -1,6 +1,6 @@
 package com.example.buensaborback.domain.dtos.pedido;
 
-import com.example.buensaborback.domain.dtos.cliente.ClienteBase;
+import com.example.buensaborback.domain.dtos.cliente.ClienteFullDto;
 import com.example.buensaborback.domain.dtos.domicilio.DomicilioShortDto;
 import com.example.buensaborback.domain.entities.DetallePedido;
 import com.example.buensaborback.domain.entities.enums.Estado;
@@ -24,7 +24,7 @@ public class PedidoShortDto {
     private TipoEnvio tipoEnvio;
     private String formaDePago;
     private DomicilioShortDto domicilioShortDto;
-    private ClienteBase clienteBase;
+    private ClienteFullDto cliente;
     private List<DetallePedido>DetallePedidoDtoList;
 
 }

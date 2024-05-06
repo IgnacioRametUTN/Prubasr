@@ -1,9 +1,9 @@
 package com.example.buensaborback.bussines.facade;
 
-import com.example.buensaborback.domain.dtos.cliente.ClienteBase;
+import com.example.buensaborback.domain.dtos.cliente.ClienteFullDto;
 
 import java.util.List;
 
-public interface IClienteFacade extends IBaseFacade<ClienteBase, Long> {
+public interface IClienteFacade extends IBaseFacade<ClienteFullDto, Long> {
 
 }

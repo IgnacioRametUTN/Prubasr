@@ -1,9 +1,13 @@
 package com.example.buensaborback.domain.dtos.cliente;
 
+import com.example.buensaborback.domain.dtos.BaseDto;
+import com.example.buensaborback.domain.dtos.domicilio.DomicilioFullDto;
 import com.example.buensaborback.domain.dtos.domicilio.DomicilioShortDto;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,12 +16,14 @@ import java.time.LocalDate;
 @ToString
 @Builder
 
-public class ClienteFullDto {
-    //TODO:Agregar imagen
+public class ClienteFullDto extends BaseDto {
     private String nombre;
     private String apellido;
     private String telefono;
     private String email;
+    @JsonProperty("fecha_nacimiento")
     private LocalDate fechaNacimiento;
-    private DomicilioShortDto domicilioShortDto;
+    @JsonProperty("url_imagen")
+    private String imagen;
+    private List<DomicilioFullDto> domicilios;
 }

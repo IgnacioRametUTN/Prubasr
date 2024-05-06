@@ -4,6 +4,6 @@ import com.example.buensaborback.domain.entities.Cliente;
 
 import java.util.List;
 
-public interface IClienteService {
-    List<Cliente> getAll();
+public interface IClienteService extends  IBaseService<Cliente, Long >{
+
 }

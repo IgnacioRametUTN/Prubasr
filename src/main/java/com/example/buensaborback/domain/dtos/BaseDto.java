@@ -12,5 +12,6 @@ import lombok.Setter;
 @Setter
 public abstract class BaseDto {
     protected Long id;
+    protected boolean alta;
 
 }
