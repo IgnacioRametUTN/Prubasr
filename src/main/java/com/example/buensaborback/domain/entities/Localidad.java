@@ -25,6 +25,7 @@ public class Localidad extends Base{
 
     @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true, mappedBy = "localidad")
     @Builder.Default
+    @ToString.Exclude
     private Set<Domicilio> domicilios = new HashSet<>();
 
 
