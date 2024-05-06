@@ -5,6 +5,7 @@ import com.example.buensaborback.domain.dtos.domicilio.DomicilioFullDto;
 import com.example.buensaborback.domain.dtos.domicilio.DomicilioShortDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Builder
+@SuperBuilder
 
 public class ClienteFullDto extends BaseDto {
     private String nombre;

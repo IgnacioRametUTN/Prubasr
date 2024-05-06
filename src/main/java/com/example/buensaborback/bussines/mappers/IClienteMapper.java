@@ -1,14 +1,15 @@
 package com.example.buensaborback.bussines.mappers;
 
+import com.example.buensaborback.domain.dtos.BaseDto;
 import com.example.buensaborback.domain.dtos.cliente.ClienteFullDto;
+import com.example.buensaborback.domain.entities.Base;
 import com.example.buensaborback.domain.entities.Cliente;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 import java.util.List;
 
 
-@Mapper(componentModel = "spring", uses = IDomicilioMapper.class)
+@Mapper(componentModel = "spring", uses = IDomicilioMapper.class, mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_FROM_CONFIG)
 public interface IClienteMapper extends IBaseMapper<Cliente, ClienteFullDto> {
 
     @Mapping(target = "imagen", source = "source.imagen.url")
