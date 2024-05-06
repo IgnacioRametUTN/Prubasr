@@ -21,12 +21,13 @@ public class Domicilio extends Base{
     private Integer cp;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_domicilio")
+    @JoinColumn(name = "id_localidad")
     private Localidad localidad;
 
 
     @ManyToMany(mappedBy = "domicilios")
     @Builder.Default
+    @ToString.Exclude
     private Set<Cliente> clientes = new HashSet<>();
 
 }
