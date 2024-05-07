@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ArticuloInsumoRepository extends BaseArticuloRepository<ArticuloInsumo,Long> {
+public interface ArticuloInsumoRepository extends BaseRepository<ArticuloInsumo,Long> {
 }

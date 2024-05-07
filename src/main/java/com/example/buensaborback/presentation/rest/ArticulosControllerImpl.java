@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import java.io.Serializable;
 
-public abstract class ArticulosControllerImpl<E extends Articulo,D extends BaseDto, ID extends Serializable, F extends BaseArticuloFacadeImpl<E,D,ID>> implements IGenericController<D,ID> {
+public abstract class ArticulosControllerImpl<E extends Articulo,D extends BaseDto, ID extends Serializable, F extends BaseFacadeImpl<E,D,ID>> implements IGenericController<D,ID> {
     private static final Logger logger = LoggerFactory.getLogger(ArticulosControllerImpl.class);
     protected F facade;
     public ArticulosControllerImpl(F facade){

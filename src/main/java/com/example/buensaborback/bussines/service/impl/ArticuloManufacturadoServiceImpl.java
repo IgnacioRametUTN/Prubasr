@@ -7,5 +7,5 @@ import com.example.buensaborback.domain.entities.Cliente;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ArticuloManufacturadoServiceImpl extends BaseArticuloServiceImpl<ArticuloManufacturado,Long> implements IArticuloManufacturadoService {
+public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloManufacturado,Long> implements IArticuloManufacturadoService {
 }

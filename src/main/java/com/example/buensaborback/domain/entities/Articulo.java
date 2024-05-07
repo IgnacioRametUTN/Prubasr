@@ -18,11 +18,9 @@ import java.util.Set;
 @ToString
 @SuperBuilder
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Articulo {
+public abstract class Articulo extends Base {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    protected Long id;
+
     protected String denominacion;
     protected Double precioVenta;
 
@@ -42,8 +40,6 @@ public abstract class Articulo {
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
-    @Column
-    @ColumnDefault(value = "true")
-    @Builder.Default
-    private boolean alta = true;
+    //manytomany
+    //private Set<PromocionDetalle> promocionDetalle;
 }
