@@ -1,7 +1,10 @@
 package com.example.buensaborback.bussines.service.impl;
 
+import com.example.buensaborback.bussines.service.IBaseArticuloService;
 import com.example.buensaborback.bussines.service.IBaseService;
+import com.example.buensaborback.domain.entities.Articulo;
 import com.example.buensaborback.domain.entities.Base;
+import com.example.buensaborback.repositories.BaseArticuloRepository;
 import com.example.buensaborback.repositories.BaseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,13 +13,14 @@ import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.List;
-@Service
-public abstract class BaseServiceImpl<E extends Base,ID extends Serializable> implements IBaseService<E, ID> {
 
-    private static final Logger logger = LoggerFactory.getLogger(BaseServiceImpl.class);
+@Service
+public abstract class BaseArticuloServiceImpl<E extends Articulo,ID extends Serializable> implements IBaseArticuloService<E, ID> {
+
+    private static final Logger logger = LoggerFactory.getLogger(BaseArticuloServiceImpl.class);
 
     @Autowired
-    protected BaseRepository<E,ID> baseRepository;
+    protected BaseArticuloRepository<E,ID> baseRepository;
 
     @Override
     public E create(E entity) {

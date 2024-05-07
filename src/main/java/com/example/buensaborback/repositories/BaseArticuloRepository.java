@@ -6,12 +6,14 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
 import java.util.List;
 
 //Se debe crear repositorio para articulos porque no se puede cambiar la estrategia de Base (Identity) por (Sequence) que se necesita
 // para poder crear ArticuloInsumo y ArticuloManufacturado con estrategia TABLE_PER_CLASS
+@Repository
 public interface BaseArticuloRepository <E extends Articulo, ID extends Serializable> extends JpaRepository<E, ID> {
     Logger logger = LoggerFactory.getLogger(BaseRepository.class);
 

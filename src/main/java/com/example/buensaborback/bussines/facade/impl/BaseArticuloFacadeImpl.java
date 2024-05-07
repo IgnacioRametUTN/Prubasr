@@ -1,11 +1,16 @@
 package com.example.buensaborback.bussines.facade.impl;
 
+import com.example.buensaborback.bussines.facade.IBaseArticuloFacade;
 import com.example.buensaborback.bussines.facade.IBaseFacade;
+import com.example.buensaborback.bussines.mappers.IBaseArticuloMapper;
 import com.example.buensaborback.bussines.mappers.IBaseMapper;
+import com.example.buensaborback.bussines.service.IBaseArticuloService;
 import com.example.buensaborback.bussines.service.IBaseService;
-import com.example.buensaborback.bussines.service.impl.BaseServiceImpl;
+import com.example.buensaborback.bussines.service.impl.BaseArticuloServiceImpl;
 import com.example.buensaborback.domain.dtos.BaseDto;
+import com.example.buensaborback.domain.entities.Articulo;
 import com.example.buensaborback.domain.entities.Base;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -13,12 +18,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public abstract class BaseFacadeImpl<E extends Base,D extends BaseDto,ID extends Serializable> implements IBaseFacade<D,ID> {
+public abstract class BaseArticuloFacadeImpl<E extends Articulo,D extends BaseDto,ID extends Serializable> implements IBaseArticuloFacade<D,ID> {
 
-    protected IBaseService<E,ID> baseService;
-    protected IBaseMapper<E,D> baseMapper;
+    protected IBaseArticuloService<E,ID> baseService;
+    protected IBaseArticuloMapper<E,D> baseMapper;
 
-    public BaseFacadeImpl(IBaseService<E,ID> baseService, IBaseMapper<E,D> baseMapper) {
+    @Autowired
+    public BaseArticuloFacadeImpl(IBaseArticuloService<E,ID> baseService, IBaseArticuloMapper<E,D> baseMapper) {
         this.baseService = baseService;
         this.baseMapper = baseMapper;
     }
