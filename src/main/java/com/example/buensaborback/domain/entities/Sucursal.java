@@ -32,7 +32,7 @@ public class Sucursal extends Base{
     @Builder.Default
     private Set<Categoria> categorias = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true, mappedBy = "sucursal" )
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "sucursal" )
     private Set<Pedido> pedidos;
 
 
@@ -46,7 +46,7 @@ public class Sucursal extends Base{
 
 
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "empresa_id")
     private Empresa empresa;
 }

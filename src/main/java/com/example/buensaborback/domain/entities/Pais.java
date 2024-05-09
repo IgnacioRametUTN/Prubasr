@@ -20,7 +20,7 @@ public class Pais extends Base{
 
     private String nombre;
 
-    @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true, mappedBy = "pais")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "pais")
     @Builder.Default
     @ToString.Exclude
     private Set<Provincia> provincias = new HashSet<>();

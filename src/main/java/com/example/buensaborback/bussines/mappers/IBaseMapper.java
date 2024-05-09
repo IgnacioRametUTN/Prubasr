@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
-
 public interface IBaseMapper <E extends Base,D extends BaseDto>{
     D toDTO(E source);
     E toEntity(D source);

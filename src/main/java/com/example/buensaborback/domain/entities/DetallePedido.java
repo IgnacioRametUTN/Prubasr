@@ -24,8 +24,12 @@ public class DetallePedido extends Base{
     private Articulo articulo;
 
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
+
+
+    @OneToMany(cascade=CascadeType.ALL,mappedBy = "detallePedido")
+    private Set<Promocion>promociones=new HashSet<>();
     
 }

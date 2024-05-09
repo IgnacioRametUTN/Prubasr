@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.List;
-
 @Service
 public abstract class BaseServiceImpl<E extends Base,ID extends Serializable> implements IBaseService<E, ID> {
 

@@ -18,7 +18,7 @@ import java.util.Set;
 public class Provincia extends Base{
 
     private String nombre;
-    @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true, mappedBy = "provincia")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "provincia")
     @Builder.Default
     @ToString.Exclude
     private Set<Localidad>localidades=new HashSet<>();

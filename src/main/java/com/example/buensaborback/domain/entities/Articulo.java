@@ -18,11 +18,9 @@ import java.util.Set;
 @ToString
 @SuperBuilder
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Articulo {
+public abstract class Articulo extends Base {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    protected Long id;
+
     protected String denominacion;
     protected Double precioVenta;
 
@@ -34,16 +32,10 @@ public abstract class Articulo {
     @ManyToOne(cascade = CascadeType.ALL)
     protected UnidadMedida unidadMedida;
 
-    @ManyToMany(mappedBy = "articulos", cascade = CascadeType.ALL)
-    @Builder.Default
-    protected Set<Promocion> estaEnPromociones = new HashSet<>();
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
-    @Column
-    @ColumnDefault(value = "true")
-    @Builder.Default
-    private boolean alta = true;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "articulo")
+    private Set<PromocionDetalle> promocionDetalle;
 }

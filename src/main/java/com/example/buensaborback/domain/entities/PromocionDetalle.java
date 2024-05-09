@@ -17,13 +17,9 @@ import java.util.Set;
 public class PromocionDetalle extends Base{
    private Integer cantidad;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    //SE AGREGA EL JOIN COLUMN PARA QUE JPA NO CREE LA TABLA INTERMEDIA EN UNA RELACION ONE TO MANY
-    //DE ESTA MANERA PONE EL FOREIGN KEY 'pedido_id' EN LA TABLA DE LOS MANY
-    @JoinColumn(name = "promocion_id")
-    //SE AGREGA EL BUILDER.DEFAULT PARA QUE BUILDER NO SOBREESCRIBA LA INICIALIZACION DE LA LISTA
-    @Builder.Default
-    private Set<Articulo> articulos = new HashSet<>();
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "articulo_id")
+    private Articulo articulo;
 
 
     @ManyToOne(cascade = CascadeType.ALL)
