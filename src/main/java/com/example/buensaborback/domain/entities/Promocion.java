@@ -28,14 +28,9 @@ public class Promocion extends Base {
     private Double precioPromocional;
     private TipoPromocion tipoPromocion;
 
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "promocion_articulo",
-            joinColumns = @JoinColumn(name = "promocion_id"),
-            inverseJoinColumns = @JoinColumn(name = "articulo_id"))
-    @Builder.Default
-    //TODO: revisar si articulo tiene que estar aca y en DetallePromocion
-    private Set<Articulo> articulos= new HashSet<>();
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "detallePedido_id")
+    private DetallePedido detallePedido;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "promocion_id")

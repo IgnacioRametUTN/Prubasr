@@ -32,14 +32,10 @@ public abstract class Articulo extends Base {
     @ManyToOne(cascade = CascadeType.ALL)
     protected UnidadMedida unidadMedida;
 
-    @ManyToMany(mappedBy = "articulos", cascade = CascadeType.ALL)
-    @Builder.Default
-    protected Set<Promocion> estaEnPromociones = new HashSet<>();
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
-    //manytomany
-    //private Set<PromocionDetalle> promocionDetalle;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "articulo")
+    private Set<PromocionDetalle> promocionDetalle;
 }

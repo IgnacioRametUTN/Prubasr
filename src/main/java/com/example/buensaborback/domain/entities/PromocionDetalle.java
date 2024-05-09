@@ -17,10 +17,9 @@ import java.util.Set;
 public class PromocionDetalle extends Base{
    private Integer cantidad;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "promocion_id")
-    @Builder.Default
-    private Set<Articulo> articulos = new HashSet<>();
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "articulo_id")
+    private Articulo articulo;
 
 
     @ManyToOne(cascade = CascadeType.ALL)

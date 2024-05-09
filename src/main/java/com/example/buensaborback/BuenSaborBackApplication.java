@@ -211,7 +211,6 @@ public class BuenSaborBackApplication {
 					.stockMaximo(100)
 					.esParaElaborar(true)
 					.unidadMedida(unidadMedidakg)
-					.estaEnPromociones(new HashSet<>()) //No está en promocion
 
 					.build();
 			queso.getImagenes().add(imagen3);
@@ -235,7 +234,6 @@ public class BuenSaborBackApplication {
 					.stockMaximo(100)
 					.esParaElaborar(true)
 					.unidadMedida(unidadMedidakg)
-					.estaEnPromociones(new HashSet<>()) //No está en promocion
 
 					.build();
 			harina.getImagenes().add(imagen2);
@@ -269,7 +267,6 @@ public class BuenSaborBackApplication {
 					.stockActual(50)
 					.stockMaximo(100)
 					.esParaElaborar(false)
-					.estaEnPromociones(new HashSet<>()) //No está en promocion
 					.imagenes(new HashSet<>(Set.of(imagen5)))
 					.unidadMedida(unidadMedidaLitro)
 					.build();
@@ -389,7 +386,6 @@ public class BuenSaborBackApplication {
 
 			Promocion promocionPizza = Promocion.builder()
 					.imagenes(new HashSet<>(Set.of(imagenPromocion)))
-					.articulos(new HashSet<>(Set.of(pizzaNapolitana)))
 					.denominacion("Promocion 2 x 1 en pizza napolitana")
 					.descripcionDescuento("Si llevas dos pizzas napolitana de 8 porciones llevate una gratis ")
 					.fechaDesde(LocalDate.now())
@@ -402,12 +398,11 @@ public class BuenSaborBackApplication {
 
 			PromocionDetalle promocionDetallePizzaNapo = PromocionDetalle.builder()
 					.cantidad(2)
-					.articulos(new HashSet<>(List.of(pizzaNapolitana)))
+					.articulo(pizzaNapolitana)
 					.build();
 			promocionDetallePizzaNapo.setPromocion(promocionPizza);
 			promocionPizza.getDetallesPromocion().add(promocionDetallePizzaNapo);
-
-			pizzaNapolitana.getEstaEnPromociones().add(promocionPizza);
+			detallePedido.setPromociones(new HashSet<>(Set.of(promocionPizza)));
 			sucursal1.getPromociones().add(promocionPizza);
 
 			pedido1.setEmpleado(empleado);
