@@ -1,6 +1,7 @@
 package com.example.buensaborback.domain.dtos.articulos.manufacturado;
 
 import com.example.buensaborback.domain.dtos.BaseDto;
+import com.example.buensaborback.domain.dtos.promocion.PromocionDetalleDto;
 import com.example.buensaborback.domain.entities.Articulo;
 import com.example.buensaborback.domain.entities.Imagen;
 import com.example.buensaborback.domain.entities.PromocionDetalle;
@@ -32,5 +33,5 @@ public class PromocionDto extends BaseDto {
      TipoPromocion tipoPromocion;
      Set<Articulo> articulos;
      Set<Imagen> imagenes;
-     Set<PromocionDetalle> detallesPromocion ;
+     Set<PromocionDetalleDto> detallesPromocion ;
 }

@@ -6,6 +6,8 @@ import com.example.buensaborback.bussines.service.IBaseService;
 import com.example.buensaborback.bussines.service.impl.BaseServiceImpl;
 import com.example.buensaborback.domain.dtos.BaseDto;
 import com.example.buensaborback.domain.entities.Base;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 public abstract class BaseFacadeImpl<E extends Base,D extends BaseDto,ID extends Serializable> implements IBaseFacade<D,ID> {
-
+    private static final Logger logger = LoggerFactory.getLogger(BaseFacadeImpl.class);
     protected IBaseService<E,ID> baseService;
     protected IBaseMapper<E,D> baseMapper;
 

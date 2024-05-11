@@ -18,7 +18,7 @@ import java.util.Set;
 @ToString
 @SuperBuilder
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Articulo extends Base {
+public  class Articulo extends Base {
 
 
     protected String denominacion;
@@ -34,8 +34,8 @@ public abstract class Articulo extends Base {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "categoria_id")
-    private Categoria categoria;
+    protected Categoria categoria;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "articulo")
-    private Set<PromocionDetalle> promocionDetalle;
+    protected Set<PromocionDetalle> promocionDetalle;
 }
