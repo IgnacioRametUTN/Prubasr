@@ -24,9 +24,16 @@ public class ArticuloDto extends BaseDto {
      @JsonProperty("precio_venta")
      Double precioVenta;
      //Set<Imagen> imagenes;
+     /*
      @JsonProperty("unidad_medida")
      UnidadMedida unidadMedida;
+     Revisar Tmb los dto de pais provincia localidad
+     hice dto solo de domicilio full short
+     */
+     //TODO: Hacer cambios en el main y los mappers
+     String unidadMedida;
      CategoriaDto categoria;
+
      @JsonProperty("promocion_detalle")
      Set<PromocionDetalleDto> promocionDetalle;
 }
