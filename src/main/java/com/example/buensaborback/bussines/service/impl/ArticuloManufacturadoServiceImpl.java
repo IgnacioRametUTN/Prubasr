@@ -24,21 +24,17 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
 
     @Override
     public ArticuloManufacturado create(ArticuloManufacturado entity) {
-        //Verificar Stock de cada ArticuloInsumo
-//        List<ArticuloManufacturadoDetalle> detallesValidos =  entity.getArticuloManufacturadoDetalles().stream().peek(System.out::println).filter(
-//                detalle -> detalle.getCantidad() <= articuloInsumoService.getById(detalle.getArticuloInsumo().getId()).getStockActual()
-//        ).toList();
-        entity.setCategoria(categoriaService.getById(entity.getCategoria().getId()));
-        entity.setUnidadMedida(unidadMedidaService.getById(entity.getUnidadMedida().getId()));
-        Set<ArticuloManufacturadoDetalle> detallesValidos = entity.getArticuloManufacturadoDetalles();
-        Set<ArticuloInsumo> nuevos = new HashSet<>();
-        for (ArticuloManufacturadoDetalle detalle : detallesValidos){
-            ArticuloInsumo articuloInsumo = articuloInsumoService.getById(detalle.getArticuloInsumo().getId());
-            nuevos.add(articuloInsumo);
-            detalle.setArticuloInsumo(articuloInsumo);
-        }
-        if(detallesValidos.size() != entity.getArticuloManufacturadoDetalles().size()) throw new InsufficientStockException("No hay insumos suficiente para preparar" + entity.getDenominacion());
+        entity.setCategoria(categoriaService.getById(entity.getCategoria().getId())); //Si id no se encuentra throws Exception en Repository
+        entity.setUnidadMedida(unidadMedidaService.getById(entity.getUnidadMedida().getId()));//Si id no se encuentra throws Exception en Repository
 
+        Set<ArticuloManufacturadoDetalle> detalles = new HashSet<>();
+        for (ArticuloManufacturadoDetalle detalle : entity.getArticuloManufacturadoDetalles()){
+            detalle.setArticuloManufacturado(entity);//Agrega Bidireccion
+            detalle.setArticuloInsumo(articuloInsumoService.getById(detalle.getArticuloInsumo().getId()));//Si id no se encuentra throws Exception en Repository
+            detalles.add(detalle);
+        }
+
+        entity.setArticuloManufacturadoDetalles(detalles);//Se guardan detalles con ArticuloInsumo de la DB
         return super.create(entity);
     }
 }

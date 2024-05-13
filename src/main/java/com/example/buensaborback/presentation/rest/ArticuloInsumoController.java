@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/articulos-insumo")
+@RequestMapping("/api/articulos/insumos")
 @CrossOrigin("*")
 public class ArticuloInsumoController extends GenericControllerImpl<ArticuloInsumo, ArticuloInsumoDto,Long, ArticuloInsumoFacadeImpl> {
     private static final Logger logger = LoggerFactory.getLogger(ClienteController.class);

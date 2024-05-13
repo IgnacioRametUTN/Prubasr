@@ -31,7 +31,7 @@ public class ArticuloDto extends BaseDto {
      hice dto solo de domicilio full short
      */
      //TODO: Hacer cambios en el main y los mappers
-     String unidadMedida;
+     CategoriaDto unidadMedida;
      CategoriaDto categoria;
 
      @JsonProperty("promocion_detalle")
