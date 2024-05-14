@@ -20,7 +20,6 @@ import java.util.Set;
 public class ArticuloManufacturadoDto extends ArticuloDto {
 
      String descripcion;
-     @JsonProperty("tiempo_estimado_minutos")
      Integer tiempoEstimadoMinutos;
      String preparacion;
      Set<ArticuloManufacturadoDetalleDto> articuloManufacturadoDetalles ;

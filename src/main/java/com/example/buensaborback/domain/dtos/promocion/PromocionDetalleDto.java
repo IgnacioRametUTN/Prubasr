@@ -23,7 +23,7 @@ import lombok.experimental.SuperBuilder;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PromocionDetalleDto extends BaseDto {
-   
+
     Integer cantidad;
 
     String articulo;

@@ -21,7 +21,6 @@ import java.util.Set;
 public class ArticuloDto extends BaseDto {
 
      String denominacion;
-     @JsonProperty("precio_venta")
      Double precioVenta;
      //Set<Imagen> imagenes;
      /*
@@ -34,6 +33,5 @@ public class ArticuloDto extends BaseDto {
      CategoriaDto unidadMedida;
      CategoriaDto categoria;
 
-     @JsonProperty("promocion_detalle")
      Set<PromocionDetalleDto> promocionDetalle;
 }

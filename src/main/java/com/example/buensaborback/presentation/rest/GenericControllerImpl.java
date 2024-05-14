@@ -45,7 +45,8 @@ public abstract class GenericControllerImpl<E extends Base,D extends BaseDto, ID
     @PutMapping("/{id}")
     public ResponseEntity<?> update(ID id, D entity) {
         logger.info("INICIO EDIT {}",entity.getClass());
-        return null;
+        D savedEntity = this.facade.update(entity, id);
+        return new ResponseEntity<>(entity, HttpStatus.OK);
     }
 
     @Override
