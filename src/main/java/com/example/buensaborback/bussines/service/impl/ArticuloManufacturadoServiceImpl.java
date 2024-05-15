@@ -24,7 +24,6 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
 
     @Override
     public ArticuloManufacturado create(ArticuloManufacturado entity) {
-        System.out.println("AAAAAAAAAAAA");
         entity.setCategoria(categoriaService.getById(entity.getCategoria().getId())); //Si id no se encuentra throws Exception en Repository
         entity.setUnidadMedida(unidadMedidaService.getById(entity.getUnidadMedida().getId()));//Si id no se encuentra throws Exception en Repository
 
