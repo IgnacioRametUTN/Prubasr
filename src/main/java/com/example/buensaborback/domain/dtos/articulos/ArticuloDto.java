@@ -1,8 +1,11 @@
 package com.example.buensaborback.domain.dtos.articulos;
 
 import com.example.buensaborback.domain.dtos.BaseDto;
+import com.example.buensaborback.domain.dtos.ImagenDto;
 import com.example.buensaborback.domain.dtos.categoria.CategoriaDto;
 import com.example.buensaborback.domain.dtos.promocion.PromocionDetalleDto;
+import com.example.buensaborback.domain.dtos.unidadmedida.UnidadMedidaDto;
+import com.example.buensaborback.domain.entities.Imagen;
 import com.example.buensaborback.domain.entities.UnidadMedida;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,16 +25,8 @@ public class ArticuloDto extends BaseDto {
 
      String denominacion;
      Double precioVenta;
-     //Set<Imagen> imagenes;
-     /*
-     @JsonProperty("unidad_medida")
-     UnidadMedida unidadMedida;
-     Revisar Tmb los dto de pais provincia localidad
-     hice dto solo de domicilio full short
-     */
-     //TODO: Hacer cambios en el main y los mappers
-     CategoriaDto unidadMedida;
+     Set<ImagenDto> imagenes;
+     UnidadMedidaDto unidadMedida;
      CategoriaDto categoria;
-
      Set<PromocionDetalleDto> promocionDetalle;
 }

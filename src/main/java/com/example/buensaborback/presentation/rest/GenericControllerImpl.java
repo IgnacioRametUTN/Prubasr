@@ -46,14 +46,15 @@ public abstract class GenericControllerImpl<E extends Base,D extends BaseDto, ID
     public ResponseEntity<?> update(ID id, D entity) {
         logger.info("INICIO EDIT {}",entity.getClass());
         D savedEntity = this.facade.update(entity, id);
-        return new ResponseEntity<>(entity, HttpStatus.OK);
+        return new ResponseEntity<>(savedEntity, HttpStatus.OK);
     }
 
     @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(ID id) {
         logger.info("INICIO DELETE BY ID {}",id);
-        return null;
+        this.facade.delete(id);
+        return ResponseEntity.ok().build();
     }
 
 
