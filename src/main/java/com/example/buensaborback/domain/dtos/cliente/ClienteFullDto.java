@@ -16,7 +16,6 @@ import java.util.List;
 @Setter
 @ToString
 @SuperBuilder
-
 public class ClienteFullDto extends BaseDto {
     private String nombre;
     private String apellido;

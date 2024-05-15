@@ -5,6 +5,7 @@ import com.example.buensaborback.domain.dtos.BaseDto;
 import com.example.buensaborback.domain.entities.Base;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,28 +30,31 @@ public abstract class GenericControllerImpl<E extends Base,D extends BaseDto, ID
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(ID id) {
         logger.info("INICIO GET BY ID {}",id);
-        return null;
+        return ResponseEntity.ok().body(this.facade.getById(id));
     }
 
     @Override
     @PostMapping()
     public ResponseEntity<?> save(D entity) {
         logger.info("INICIO CREATE {}",entity.getClass());
-        return null;
+        D savedEntity = this.facade.create(entity);
+        return new ResponseEntity<>(savedEntity, HttpStatus.CREATED);
     }
 
     @Override
     @PutMapping("/{id}")
     public ResponseEntity<?> update(ID id, D entity) {
         logger.info("INICIO EDIT {}",entity.getClass());
-        return null;
+        D savedEntity = this.facade.update(entity, id);
+        return new ResponseEntity<>(savedEntity, HttpStatus.OK);
     }
 
     @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(ID id) {
         logger.info("INICIO DELETE BY ID {}",id);
-        return null;
+        this.facade.delete(id);
+        return ResponseEntity.ok().build();
     }
 
 

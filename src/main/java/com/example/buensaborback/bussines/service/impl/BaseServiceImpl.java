@@ -2,6 +2,7 @@ package com.example.buensaborback.bussines.service.impl;
 
 import com.example.buensaborback.bussines.service.IBaseService;
 import com.example.buensaborback.domain.entities.Base;
+import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.BaseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +52,7 @@ public abstract class BaseServiceImpl<E extends Base,ID extends Serializable> im
         var optionalEntity = baseRepository.findById((ID) entity.getId());
         if (optionalEntity.isEmpty()){
             logger.error("No se encontro una entidad con el id " + entity.getId());
-            throw new RuntimeException("No se encontro una entidad con el id " + entity.getId());
+            throw new NotFoundException("No se encontro una entidad con el id " + entity.getId());
         }
         var newEntity = baseRepository.save(entity);
         logger.info("Actualizada entidad {}",newEntity);

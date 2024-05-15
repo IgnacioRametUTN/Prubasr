@@ -1,6 +1,7 @@
 package com.example.buensaborback.repositories;
 
 import com.example.buensaborback.domain.entities.Base;
+import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,16 +27,17 @@ public interface BaseRepository <E extends Base, ID extends Serializable> extend
 
     @Override
     default E getById(ID id){
-        logger.info("EJECUTANDO GEY BY ID SOBREESCRITO");
+        logger.info("EJECUTANDO GET BY ID SOBREESCRITO");
         var optionalEntity = findById(id);
 
         if (optionalEntity.isEmpty()){
-            String errMsg = "La entidad con el id " + id + " se encuentra borrada logicamente";
+            String errMsg = "La entidad "+  optionalEntity.getClass().getSimpleName() +" con el id " + id + " no se encuentra";
             logger.error(errMsg);
-            throw new RuntimeException(errMsg);
+            throw new NotFoundException(errMsg);
         }
 
         var entity = optionalEntity.get();
+        logger.info("Obtenida entidad alta {}",entity.isAlta());
         if(!entity.isAlta()){
             String errMsg = "La entidad del tipo " + entity.getClass().getSimpleName() + " con el id " + id + " se encuentra borrada logicamente";
             logger.error(errMsg);

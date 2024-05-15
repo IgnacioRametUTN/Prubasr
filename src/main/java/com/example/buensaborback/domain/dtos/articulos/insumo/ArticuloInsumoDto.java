@@ -1,4 +1,4 @@
-package com.example.buensaborback.domain.dtos.articulos.manufacturado;
+package com.example.buensaborback.domain.dtos.articulos.insumo;
 
 import com.example.buensaborback.domain.dtos.articulos.ArticuloDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -7,9 +7,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Getter
 @Setter
 @ToString
@@ -17,11 +14,10 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ArticuloManufacturadoDto extends ArticuloDto {
-
-     String descripcion;
-     Integer tiempoEstimadoMinutos;
-     String preparacion;
-     Set<ArticuloManufacturadoDetalleDto> articuloManufacturadoDetalles ;
+public class ArticuloInsumoDto extends ArticuloDto {
+    Double precioCompra;
+    Integer stockActual;
+    Integer stockMaximo;
+    Boolean esParaElaborar;
 
 }

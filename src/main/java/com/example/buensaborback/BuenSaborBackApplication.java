@@ -272,7 +272,7 @@ public class BuenSaborBackApplication {
 					.build();
 			refrescosCola.getArticulos().add(coca);
 			coca.setCategoria(refrescosCola);
-			
+
 			ArticuloManufacturadoDetalle artManufacDetalleQueso = ArticuloManufacturadoDetalle.builder()
 					.articuloInsumo(queso)
 					.cantidad(0.5)

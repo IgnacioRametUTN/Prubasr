@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/articulos-manufacturados")
+@RequestMapping("/api/articulos/manufacturados")
 @CrossOrigin("*")
-public class ArticuloManufacturadoController extends ArticulosControllerImpl<ArticuloManufacturado, ArticuloManufacturadoDto,Long, ArticuloManufacturadoFacadeImpl> {
+public class ArticuloManufacturadoController extends GenericControllerImpl<ArticuloManufacturado, ArticuloManufacturadoDto,Long, ArticuloManufacturadoFacadeImpl> {
     private static final Logger logger = LoggerFactory.getLogger(ClienteController.class);
     public ArticuloManufacturadoController(ArticuloManufacturadoFacadeImpl facade) {
         super(facade);

@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
-public abstract class BaseDto {
+public class BaseDto {
     protected Long id;
     protected Boolean alta;
 

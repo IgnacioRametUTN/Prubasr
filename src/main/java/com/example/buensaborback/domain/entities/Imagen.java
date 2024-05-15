@@ -14,5 +14,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class Imagen extends Base{
     private String url;
-    
+
 }

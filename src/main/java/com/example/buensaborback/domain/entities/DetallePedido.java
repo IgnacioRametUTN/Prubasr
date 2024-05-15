@@ -31,5 +31,5 @@ public class DetallePedido extends Base{
 
     @OneToMany(cascade=CascadeType.ALL,mappedBy = "detallePedido")
     private Set<Promocion>promociones=new HashSet<>();
-    
+
 }
