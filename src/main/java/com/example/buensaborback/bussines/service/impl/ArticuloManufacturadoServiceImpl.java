@@ -24,6 +24,7 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
 
     @Override
     public ArticuloManufacturado create(ArticuloManufacturado entity) {
+        System.out.println("AAAAAAAAAAAA");
         entity.setCategoria(categoriaService.getById(entity.getCategoria().getId())); //Si id no se encuentra throws Exception en Repository
         entity.setUnidadMedida(unidadMedidaService.getById(entity.getUnidadMedida().getId()));//Si id no se encuentra throws Exception en Repository
 
@@ -36,5 +37,20 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
 
         entity.setArticuloManufacturadoDetalles(detalles);//Se guardan detalles con ArticuloInsumo de la DB
         return super.create(entity);
+    }
+
+    @Override
+    public ArticuloManufacturado update(ArticuloManufacturado entity) {
+        entity.setCategoria(categoriaService.getById(entity.getCategoria().getId())); //Si id no se encuentra throws Exception en Repository
+        entity.setUnidadMedida(unidadMedidaService.getById(entity.getUnidadMedida().getId()));//Si id no se encuentra throws Exception en Repository
+        Set<ArticuloManufacturadoDetalle> detalles = new HashSet<>();
+        for (ArticuloManufacturadoDetalle detalle : entity.getArticuloManufacturadoDetalles()){
+            detalle.setArticuloManufacturado(entity);//Agrega Bidireccion
+            detalle.setArticuloInsumo(articuloInsumoService.getById(detalle.getArticuloInsumo().getId()));//Si id no se encuentra throws Exception en Repository
+            detalles.add(detalle);
+        }
+
+        entity.setArticuloManufacturadoDetalles(detalles);//Se guardan detalles con ArticuloInsumo de la DB
+        return super.update(entity);
     }
 }
