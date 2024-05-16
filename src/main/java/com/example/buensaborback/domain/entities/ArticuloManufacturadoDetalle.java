@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Objects;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -21,5 +23,16 @@ public class ArticuloManufacturadoDetalle extends Base {
     @JoinColumn(name = "articulo_insumo_id")
     private ArticuloInsumo articuloInsumo;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ArticuloManufacturadoDetalle that = (ArticuloManufacturadoDetalle) o;
+        return Objects.equals(cantidad, that.cantidad) && Objects.equals(articuloManufacturado, that.articuloManufacturado) && Objects.equals(articuloInsumo, that.articuloInsumo);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(cantidad, articuloManufacturado, articuloInsumo);
+    }
 }
