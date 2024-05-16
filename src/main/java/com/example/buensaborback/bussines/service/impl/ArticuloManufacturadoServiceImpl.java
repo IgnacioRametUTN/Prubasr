@@ -49,30 +49,52 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
     @Override
     @Transactional
     public ArticuloManufacturado update(ArticuloManufacturado entity) {
-        Set<ArticuloManufacturadoDetalle> detallesViejo = new HashSet<>();
-        detallesViejo=this.articuloManufacturadoRepository.getById(entity.getId()).getArticuloManufacturadoDetalles();
-        entity.setCategoria(categoriaService.getById(entity.getCategoria().getId())); //Si id no se encuentra throws Exception en Repository
-        entity.setUnidadMedida(unidadMedidaService.getById(entity.getUnidadMedida().getId()));//Si id no se encuentra throws Exception en Repository
+        // Obtén el artículo manufacturado existente de la base de datos
+        ArticuloManufacturado existingEntity = articuloManufacturadoRepository.getById(entity.getId());
+
+        // Obtener los detalles antiguos
+        Set<ArticuloManufacturadoDetalle> detallesViejo = existingEntity.getArticuloManufacturadoDetalles();
+
+        // Asignar las entidades relacionadas
+        entity.setCategoria(categoriaService.getById(entity.getCategoria().getId())); // Si id no se encuentra, lanza una excepción en Repository
+        entity.setUnidadMedida(unidadMedidaService.getById(entity.getUnidadMedida().getId())); // Si id no se encuentra, lanza una excepción en Repository
+
+        // Prepara un nuevo conjunto para los detalles
         Set<ArticuloManufacturadoDetalle> detalles = new HashSet<>();
 
-        for (ArticuloManufacturadoDetalle detalle : entity.getArticuloManufacturadoDetalles()){
-            detalle.setArticuloManufacturado(entity);//Agrega Bidireccion
-            detalle.setArticuloInsumo(articuloInsumoService.getById(detalle.getArticuloInsumo().getId()));//Si id no se encuentra throws Exception en Repository
-            detalles.add(detalle);
+        for (ArticuloManufacturadoDetalle detalle : entity.getArticuloManufacturadoDetalles()) {
+            // Verifica si el detalle ya existe en los detalles viejos por ArticuloInsumo ID
+            ArticuloManufacturadoDetalle existingDetalle = detallesViejo.stream()
+                    .filter(d -> d.getArticuloInsumo().getId().equals(detalle.getArticuloInsumo().getId()))
+                    .findFirst()
+                    .orElse(null);
 
-        }
-        System.out.println("Detalle Viejo: "+detallesViejo.toString());
-        System.out.println("------------------------------");
-        System.out.println("detalle editado: "+detalles.toString());
-        for (ArticuloManufacturadoDetalle detalle  : detallesViejo) {
-            if (!detalles.contains(detalle)) {
-                System.out.println("Entre :D"+detalle.toString());
-                detalle.setAlta(false);
-                articuloManufacturadoDetalleRepository.save(detalle);
+            if (existingDetalle != null) {
+                // Actualiza el detalle existente
+                existingDetalle.setCantidad(detalle.getCantidad()); // Actualiza otras propiedades según sea necesario
+                existingDetalle.setAlta(true); // Marca como activo
+                detalles.add(existingDetalle);
+            } else {
+                // Si el detalle no existe, crea uno nuevo
+                detalle.setArticuloManufacturado(entity); // Mantén la relación bidireccional
+                detalle.setArticuloInsumo(articuloInsumoService.getById(detalle.getArticuloInsumo().getId())); // Si id no se encuentra, lanza una excepción en Repository
+                detalles.add(detalle);
             }
         }
 
-        entity.setArticuloManufacturadoDetalles(detalles);//Se guardan detalles con ArticuloInsumo de la DB
+        // Maneja los detalles que ya no están presentes en la entidad actualizada
+        for (ArticuloManufacturadoDetalle detalleViejo : detallesViejo) {
+            if (!detalles.contains(detalleViejo)) {
+                System.out.println("Desactivando: " + detalleViejo.toString());
+                detalleViejo.setAlta(false);
+                articuloManufacturadoDetalleRepository.save(detalleViejo);
+            }
+        }
+
+        // Asigna el nuevo conjunto de detalles a la entidad principal
+        entity.setArticuloManufacturadoDetalles(detalles);
+
+        // Llama al método update de la clase base
         return super.update(entity);
     }
 }
