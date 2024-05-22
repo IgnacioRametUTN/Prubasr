@@ -88,7 +88,7 @@ public class BuenSaborBackApplication {
 			logger.info("----------------Persistiendo los modelos---------------------");
 			//Se crea empresa
 			Empresa empresa = Empresa.builder()
-					.cuil(2012334675)
+					.cuil(2012334675L)
 					.razonSocial("Empresa de ejemplo A")
 					.nombre("Domodin de dimsdale")
 					.build();
