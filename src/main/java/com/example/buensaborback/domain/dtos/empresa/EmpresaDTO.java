@@ -1,32 +1,21 @@
-package com.example.buensaborback.domain.entities;
-
-import jakarta.persistence.*;
+package com.example.buensaborback.domain.dtos.empresa;
+import com.example.buensaborback.domain.dtos.sucursal.SucursalFullDto;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
-import java.util.HashSet;
-import java.util.Set;
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    @ToString
+    @Builder
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@ToString
-@SuperBuilder
-@Entity
-public class Empresa extends Base {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+public class EmpresaDTO {
     private Long id;
     private String nombre;
     private String razonSocial;
     private Long cuil;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa")
-    @Builder.Default
-    private Set<Sucursal> sucursales = new HashSet<>();
-
-
+    private SucursalFullDto sucursalFullDto;
 
     // Getters y setters
     public Long getId() {
@@ -61,13 +50,14 @@ public class Empresa extends Base {
         this.cuil = cuil;
     }
 
-    public Set<Sucursal> getSucursales() {
-        return sucursales;
+    public SucursalFullDto getSucursalFullDto() {
+        return sucursalFullDto;
     }
 
-    public void setSucursales(Set<Sucursal> sucursales) {
-        this.sucursales = sucursales;
+    public void setSucursalFullDto(SucursalFullDto sucursalFullDto) {
+        this.sucursalFullDto = sucursalFullDto;
     }
-
-
 }
+
+
+
