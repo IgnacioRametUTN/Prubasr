@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SucursalServiceImpl /*extends BaseServiceImpl<Sucursal,Long> implements ISucursalService*/ {
@@ -22,4 +23,8 @@ public class SucursalServiceImpl /*extends BaseServiceImpl<Sucursal,Long> implem
         return sucursalRepository.save(sucursal);
     }
 
+    public Sucursal findById(Long id) {
+        Optional<Sucursal> optionalSucursal = sucursalRepository.findById(id);
+        return optionalSucursal.orElse(null);
+    }
 }

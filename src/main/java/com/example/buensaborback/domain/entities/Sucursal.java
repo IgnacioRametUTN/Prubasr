@@ -17,8 +17,8 @@ import java.util.Set;
 public class Sucursal extends Base{
 
     private String nombre;
-    private String horarioApertura;
-    private String horarioCierre;
+    private LocalTime horarioApertura;
+    private LocalTime horarioCierre;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Domicilio domicilio;

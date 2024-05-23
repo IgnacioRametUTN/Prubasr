@@ -2,12 +2,16 @@ package com.example.buensaborback.presentation.rest;
 
 import com.example.buensaborback.bussines.service.impl.SucursalServiceImpl;
 import com.example.buensaborback.domain.dtos.sucursal.SucursalFullDto;
+import com.example.buensaborback.domain.entities.Pedido;
 import com.example.buensaborback.domain.entities.Sucursal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -33,8 +37,23 @@ public class SucursalController {
 
     @PutMapping("/{id}")
     public SucursalFullDto update(@PathVariable Long id, @RequestBody SucursalFullDto sucursalFullDto) {
-        Sucursal sucursal = convertToEntity(sucursalFullDto);
-        sucursal.setId(id);
+        // Obtener la sucursal existente de la base de datos
+        Sucursal sucursal = sucursalService.findById(id);
+        if (sucursal == null) {
+            // Manejar el caso en que no se encuentre la sucursal
+            // Aquí puedes lanzar una excepción o devolver un error adecuado
+            return null;
+        }
+
+        // Actualizar los atributos de la sucursal con los valores del DTO
+        sucursal.setNombre(sucursalFullDto.getNombre());
+        sucursal.setHorarioApertura(LocalTime.parse(sucursalFullDto.getHorarioApertura(), DateTimeFormatter.ISO_LOCAL_TIME));
+        sucursal.setHorarioCierre(LocalTime.parse(sucursalFullDto.getHorarioCierre(), DateTimeFormatter.ISO_LOCAL_TIME));
+
+        // Actualizar la referencia de la sucursal en cada pedido
+        sucursal.getPedidos().forEach(pedido -> pedido.setSucursal(sucursal));
+
+        // Guardar la sucursal actualizada
         return convertToDto(sucursalService.save(sucursal));
     }
 
@@ -42,8 +61,8 @@ public class SucursalController {
         SucursalFullDto sucursalFullDto = new SucursalFullDto();
         sucursalFullDto.setId(sucursal.getId());
         sucursalFullDto.setNombre(sucursal.getNombre());
-        sucursalFullDto.setHorarioApertura(sucursal.getHorarioApertura());
-        sucursalFullDto.setHorarioCierre(sucursal.getHorarioCierre());
+        sucursalFullDto.setHorarioApertura(sucursal.getHorarioApertura().toString());
+        sucursalFullDto.setHorarioCierre(sucursal.getHorarioCierre().toString());
         return sucursalFullDto;
     }
 
@@ -51,8 +70,14 @@ public class SucursalController {
         Sucursal sucursal = new Sucursal();
         sucursal.setId(sucursalFullDto.getId());
         sucursal.setNombre(sucursalFullDto.getNombre());
-        sucursal.setHorarioApertura(sucursalFullDto.getHorarioApertura());
-        sucursal.setHorarioCierre(sucursalFullDto.getHorarioCierre());
+        // Convertir horarioApertura de String a LocalTime
+        LocalTime horarioApertura = LocalTime.parse(sucursalFullDto.getHorarioApertura(), DateTimeFormatter.ISO_LOCAL_TIME);
+        sucursal.setHorarioApertura(horarioApertura);
+
+        // Convertir horarioCierre de String a LocalTime
+        LocalTime horarioCierre = LocalTime.parse(sucursalFullDto.getHorarioCierre(), DateTimeFormatter.ISO_LOCAL_TIME);
+        sucursal.setHorarioCierre(horarioCierre);
+
         return sucursal;
     }
 }

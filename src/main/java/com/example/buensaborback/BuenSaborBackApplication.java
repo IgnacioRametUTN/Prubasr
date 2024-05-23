@@ -129,8 +129,8 @@ public class BuenSaborBackApplication {
 			//Se crean sucursal 1
 			Sucursal sucursal1 = Sucursal.builder()
 					.nombre("Sucursal Lujan")
-					.horarioApertura("10:01:01")
-					.horarioCierre("10:01:02")
+					.horarioApertura(LocalTime.of(10,30,00))
+					.horarioCierre(LocalTime.of(23,30,00))
 					.domicilio(domicilio1)
 					.empresa(empresa)
 					.build();
@@ -151,8 +151,8 @@ public class BuenSaborBackApplication {
 					.nombre("Surcursal Godoy Cruz")
 					.domicilio(domicilio2)
 					.empresa(empresa)
-					.horarioApertura("10:01:05")
-					.horarioCierre("10:01:06")
+					.horarioApertura(LocalTime.of(10,30,00))
+					.horarioCierre(LocalTime.of(23,30,00))
 					.build();
 
 
