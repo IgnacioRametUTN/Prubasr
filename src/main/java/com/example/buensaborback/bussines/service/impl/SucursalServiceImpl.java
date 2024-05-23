@@ -27,4 +27,10 @@ public class SucursalServiceImpl /*extends BaseServiceImpl<Sucursal,Long> implem
         Optional<Sucursal> optionalSucursal = sucursalRepository.findById(id);
         return optionalSucursal.orElse(null);
     }
+
+
+    public List<Sucursal> findByEmpresaId(Long empresaId) {
+        // Utiliza el método findByEmpresaId de tu repositorio para buscar las sucursales por ID de empresa
+        return sucursalRepository.findByEmpresaId(empresaId);
+    }
 }

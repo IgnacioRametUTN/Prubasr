@@ -30,6 +30,16 @@ public class SucursalController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/{id}")
+    public List<SucursalFullDto> getAllByEmpresaId(@PathVariable Long id) {
+        // Obtener todas las sucursales de la empresa con el ID proporcionado
+        List<Sucursal> sucursales = sucursalService.findByEmpresaId(id);
+        // Convertir las sucursales a DTO y devolver la lista
+        return sucursales.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     @PostMapping
     public Sucursal create(@RequestBody Sucursal sucursal) {
         return sucursalService.save(sucursal);
