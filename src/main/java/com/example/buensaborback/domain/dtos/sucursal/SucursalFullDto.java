@@ -17,7 +17,7 @@ public class SucursalFullDto  {
     private String nombre;
     private String horarioApertura;
     private String horarioCierre;
-
+    private Long idEmpresa;
 
 
 }

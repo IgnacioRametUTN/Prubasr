@@ -2,6 +2,7 @@ package com.example.buensaborback.presentation.rest;
 
 import com.example.buensaborback.bussines.service.impl.SucursalServiceImpl;
 import com.example.buensaborback.domain.dtos.sucursal.SucursalFullDto;
+import com.example.buensaborback.domain.entities.Empresa;
 import com.example.buensaborback.domain.entities.Pedido;
 import com.example.buensaborback.domain.entities.Sucursal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ public class SucursalController {
 
     @GetMapping
     public List<SucursalFullDto> getAll() {
+        System.out.println("por Todos");
         List<Sucursal> sucursales = sucursalService.findAll();
         return sucursales.stream()
                 .map(this::convertToDto)
@@ -33,6 +35,7 @@ public class SucursalController {
     @GetMapping("/{id}")
     public List<SucursalFullDto> getAllByEmpresaId(@PathVariable Long id) {
         // Obtener todas las sucursales de la empresa con el ID proporcionado
+        System.out.println("por ID");
         List<Sucursal> sucursales = sucursalService.findByEmpresaId(id);
         // Convertir las sucursales a DTO y devolver la lista
         return sucursales.stream()
@@ -41,8 +44,9 @@ public class SucursalController {
     }
 
     @PostMapping
-    public Sucursal create(@RequestBody Sucursal sucursal) {
-        return sucursalService.save(sucursal);
+    public SucursalFullDto create(@RequestBody SucursalFullDto sucursal) {
+
+        return convertToDto(sucursalService.save(convertToEntity(sucursal)));
     }
 
     @PutMapping("/{id}")
@@ -87,6 +91,10 @@ public class SucursalController {
         // Convertir horarioCierre de String a LocalTime
         LocalTime horarioCierre = LocalTime.parse(sucursalFullDto.getHorarioCierre(), DateTimeFormatter.ISO_LOCAL_TIME);
         sucursal.setHorarioCierre(horarioCierre);
+        System.out.println(sucursalFullDto.getIdEmpresa());
+        Empresa empresa=new Empresa();
+        empresa.setId(sucursalFullDto.getIdEmpresa());
+        sucursal.setEmpresa(empresa);
 
         return sucursal;
     }
