@@ -4,6 +4,7 @@ import com.example.buensaborback.domain.dtos.empresa.EmpresaDTO;
 import com.example.buensaborback.domain.dtos.sucursal.SucursalFullDto;
 import com.example.buensaborback.domain.entities.Empresa;
 import com.example.buensaborback.bussines.service.impl.EmpresaServiceImpl;
+import com.example.buensaborback.domain.entities.Sucursal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/empresas")
 @CrossOrigin("*")
 public class EmpresaController {
+
     @Autowired
     private EmpresaServiceImpl empresaService;
 
@@ -39,8 +41,22 @@ public class EmpresaController {
         return convertToDto(empresaService.save(empresa));
     }
 
+    @GetMapping("/{id}/sucursal")
+    public List<SucursalFullDto> getSucursalesByEmpresaId(@PathVariable Long id) {
+        Empresa empresa = empresaService.findById(id);
+        return empresa.getSucursales().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
 
-    
+    private SucursalFullDto convertToDto(Sucursal sucursal) {
+        SucursalFullDto sucursalFullDto = new SucursalFullDto();
+        sucursalFullDto.setId(sucursal.getId());
+        sucursalFullDto.setNombre(sucursal.getNombre());
+        sucursalFullDto.setHorarioApertura(sucursal.getHorarioApertura());
+        sucursalFullDto.setHorarioCierre(sucursal.getHorarioCierre());
+        return sucursalFullDto;
+    }
 
     // Método para convertir Empresa a EmpresaDTO
     private EmpresaDTO convertToDto(Empresa empresa) {

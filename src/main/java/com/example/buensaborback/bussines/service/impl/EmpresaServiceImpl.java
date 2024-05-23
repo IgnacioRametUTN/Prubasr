@@ -2,6 +2,7 @@ package com.example.buensaborback.bussines.service.impl;
 
 import com.example.buensaborback.domain.entities.Empresa;
 import com.example.buensaborback.repositories.EmpresaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,9 @@ public class EmpresaServiceImpl {
             return empresaRepository.save(empresa);
         }
 
-        // Otros métodos CRUD
+    public Empresa findById(Long id) {
+        return empresaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Empresa no encontrada con ID: " + id));
+    }
     }
 
