@@ -1,5 +1,6 @@
 package com.example.buensaborback.domain.dtos.sucursal;
 
+import com.example.buensaborback.domain.dtos.BaseDto;
 import com.example.buensaborback.domain.dtos.domicilio.DomicilioFullDto;
 import lombok.*;
 
@@ -11,11 +12,12 @@ import java.time.LocalTime;
 @Setter
 @ToString
 @Builder
-public class SucursalFullDto {
+public class SucursalFullDto  {
+    private Long id;
     private String nombre;
-    private LocalTime horarioApertura;
-    private LocalTime horarioCierre;
-    private DomicilioFullDto domicilioFullDto;
+    private String horarioApertura;
+    private String horarioCierre;
+
 
 
 }

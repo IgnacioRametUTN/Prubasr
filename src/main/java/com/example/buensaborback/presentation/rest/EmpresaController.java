@@ -1,6 +1,7 @@
 package com.example.buensaborback.presentation.rest;
 
 import com.example.buensaborback.domain.dtos.empresa.EmpresaDTO;
+import com.example.buensaborback.domain.dtos.sucursal.SucursalFullDto;
 import com.example.buensaborback.domain.entities.Empresa;
 import com.example.buensaborback.bussines.service.impl.EmpresaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,9 @@ public class EmpresaController {
         empresa.setId(id); // Establecer el ID de la empresa a actualizar
         return convertToDto(empresaService.save(empresa));
     }
+
+
+    
 
     // Método para convertir Empresa a EmpresaDTO
     private EmpresaDTO convertToDto(Empresa empresa) {
