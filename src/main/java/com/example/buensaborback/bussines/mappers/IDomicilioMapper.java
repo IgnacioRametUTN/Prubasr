@@ -9,19 +9,25 @@ import org.mapstruct.Mapping;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface IDomicilioMapper {
+public interface IDomicilioMapper extends IBaseMapper<Domicilio, DomicilioFullDto> {
 
+
+
+    @Override
     @Mapping( target = "localidad" ,source = "localidad.nombre")
     @Mapping( target = "provincia" ,source = "localidad.provincia.nombre")
     @Mapping( target = "pais" ,source = "localidad.provincia.pais.nombre")
-    DomicilioFullDto domicilioToDomicilioFullDto(Domicilio domicilio);
+    DomicilioFullDto toDTO(Domicilio source);
 
+    @Override
     @Mapping( source = "localidad" ,target = "localidad.nombre")
     @Mapping( source = "provincia" ,target = "localidad.provincia.nombre")
     @Mapping( source = "pais" ,target = "localidad.provincia.pais.nombre")
-    Domicilio DomicilioFullDtoToDomicilio(DomicilioFullDto DomicilioFullDto);
+    Domicilio toEntity(DomicilioFullDto source);
 
-    List<DomicilioFullDto> domiciliosToDomicilioFullDtos(List<Domicilio> domicilios);
+    @Override
+    List<DomicilioFullDto> toDTOsList(List<Domicilio> source);
 
-    List<Domicilio> DomicilioFullDtosToDomicilios(List<DomicilioFullDto> DomicilioFullDtos);
+    @Override
+    List<Domicilio> toEntitiesList(List<DomicilioFullDto> source);
 }

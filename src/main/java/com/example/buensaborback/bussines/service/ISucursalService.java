@@ -4,8 +4,6 @@ import com.example.buensaborback.domain.entities.Sucursal;
 
 import java.util.List;
 
-public interface ISucursalService extends  IBaseService<Sucursal, Long >{
-
-    List<Sucursal> findAll();
-    Sucursal save(Sucursal sucursal);
+public interface ISucursalService extends IBaseService<Sucursal, Long> {
+    List<Sucursal> findSucursalesByEmpresaId(Long id);
 }

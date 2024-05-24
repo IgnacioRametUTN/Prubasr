@@ -1,5 +1,5 @@
 package com.example.buensaborback.domain.dtos.empresa;
-import com.example.buensaborback.domain.dtos.sucursal.SucursalFullDto;
+import com.example.buensaborback.domain.dtos.sucursal.SucursalDto;
 import lombok.*;
 
 import java.util.List;
@@ -13,6 +13,6 @@ import java.util.List;
 
 public class EmpresaShortDto {
     private String nombre;
-    private List<SucursalFullDto>listaSucursales;
+    private List<SucursalDto>listaSucursales;
 
 }
