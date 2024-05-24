@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -96,5 +97,26 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
 
         // Llama al método update de la clase base
         return super.update(entity);
+    }
+
+    @Override
+    public List<ArticuloManufacturado> getAll(Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt) {
+        Categoria categoria;
+        UnidadMedida unidadMedida;
+        if(categoriaOpt.isPresent() && unidadMedidaOpt.isPresent()){
+            categoria = categoriaService.getById(categoriaOpt.get());
+            unidadMedida = unidadMedidaService.getById(unidadMedidaOpt.get());
+            return  this.articuloManufacturadoRepository.findByCategoriaAndUnidadMedida(categoria, unidadMedida);
+        }
+        if(categoriaOpt.isPresent()){
+            categoria = categoriaService.getById(categoriaOpt.get());
+            return  this.articuloManufacturadoRepository.findByCategoria(categoria);
+        }
+        if(unidadMedidaOpt.isPresent()){
+            unidadMedida = unidadMedidaService.getById(unidadMedidaOpt.get());
+            return  this.articuloManufacturadoRepository.findByUnidadMedida(unidadMedida);
+        }
+
+        return super.getAll();
     }
 }
