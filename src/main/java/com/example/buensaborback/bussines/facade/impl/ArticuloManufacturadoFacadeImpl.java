@@ -24,7 +24,7 @@ public class ArticuloManufacturadoFacadeImpl extends BaseFacadeImpl<ArticuloManu
     }
 
     @Override
-    public List<ArticuloManufacturadoDto> getArticulosInsumos(Optional<Long> categoria, Optional<Long> unidadMedida) {
-        return this.baseMapper.toDTOsList(this.articuloManufacturadoService.getAll(categoria, unidadMedida));
+    public List<ArticuloManufacturadoDto> getArticulosInsumos(Optional<Long> categoria, Optional<Long> unidadMedida, Optional<String> denominacion) {
+        return this.baseMapper.toDTOsList(this.articuloManufacturadoService.getAll(categoria, unidadMedida, denominacion));
     }
 }

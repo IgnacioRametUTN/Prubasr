@@ -23,7 +23,7 @@ public class ArticuloInsumoFacadeImpl extends BaseFacadeImpl<ArticuloInsumo, Art
     }
 
     @Override
-    public List<ArticuloInsumoDto> getArticulosInsumos(Optional<Long> categoria, Optional<Long> unidadMedida) {
-        return this.baseMapper.toDTOsList(this.articuloInsumoService.getAll(categoria, unidadMedida));
+    public List<ArticuloInsumoDto> getArticulosInsumos(Optional<Long> categoria, Optional<Long> unidadMedida, Optional<String> denominacion) {
+        return this.baseMapper.toDTOsList(this.articuloInsumoService.getAll(categoria, unidadMedida, denominacion));
     }
 }

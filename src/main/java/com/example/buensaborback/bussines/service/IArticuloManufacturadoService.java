@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface IArticuloManufacturadoService extends  IBaseService<ArticuloManufacturado, Long >{
 
-    List<ArticuloManufacturado> getAll(Optional<Long> categoria, Optional<Long> unidadMedida);
+    List<ArticuloManufacturado> getAll(Optional<Long> categoria, Optional<Long> unidadMedida, Optional<String> denominacion);
 }

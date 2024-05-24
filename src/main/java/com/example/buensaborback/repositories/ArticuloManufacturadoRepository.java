@@ -10,10 +10,7 @@ import java.util.List;
 
 
 @Repository
-public interface ArticuloManufacturadoRepository extends BaseRepository<ArticuloManufacturado,Long> {
-    List<ArticuloManufacturado> findByCategoriaAndUnidadMedida(Categoria categoria, UnidadMedida unidadMedida);
+public interface ArticuloManufacturadoRepository extends BaseRepository<ArticuloManufacturado, Long>, IBusquedaRepository<ArticuloManufacturado> {
 
-    List<ArticuloManufacturado> findByCategoria(Categoria categoria);
 
-    List<ArticuloManufacturado> findByUnidadMedida(UnidadMedida unidadMedida);
 }

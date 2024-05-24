@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface IArticuloInsumoFacade  extends IBaseFacade<ArticuloInsumoDto, Long> {
 
-    List<ArticuloInsumoDto> getArticulosInsumos(Optional<Long> categoria, Optional<Long> unidadMedida);
+    List<ArticuloInsumoDto> getArticulosInsumos(Optional<Long> categoria, Optional<Long> unidadMedida, Optional<String> denominacion);
 }

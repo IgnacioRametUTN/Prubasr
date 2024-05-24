@@ -7,7 +7,6 @@ import com.example.buensaborback.domain.entities.PromocionDetalle;
 import com.example.buensaborback.domain.entities.UnidadMedida;
 import com.example.buensaborback.repositories.ArticuloInsumoRepository;
 import com.example.buensaborback.repositories.PromocionDetalleRepository;
-import com.example.buensaborback.repositories.PromocionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,21 +49,37 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo,Lo
     }
 
     @Override
-    public List<ArticuloInsumo> getAll(Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt) {
-        Categoria categoria;
-        UnidadMedida unidadMedida;
-        if(categoriaOpt.isPresent() && unidadMedidaOpt.isPresent()){
+    public List<ArticuloInsumo> getAll(Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> denominacionOpt) {
+        Categoria categoria = null;
+        UnidadMedida unidadMedida = null;
+        String denominacion = "";
+
+        if(categoriaOpt.isPresent()) {
             categoria = categoriaService.getById(categoriaOpt.get());
-            unidadMedida = unidadMedidaService.getById(unidadMedidaOpt.get());
-          return  this.articuloInsumoRepository.findByCategoriaAndUnidadMedida(categoria, unidadMedida);
         }
-        if(categoriaOpt.isPresent()){
-            categoria = categoriaService.getById(categoriaOpt.get());
-            return  this.articuloInsumoRepository.findByCategoria(categoria);
-        }
-        if(unidadMedidaOpt.isPresent()){
+
+        if(unidadMedidaOpt.isPresent()) {
             unidadMedida = unidadMedidaService.getById(unidadMedidaOpt.get());
-            return  this.articuloInsumoRepository.findByUnidadMedida(unidadMedida);
+        }
+
+        if(denominacionOpt.isPresent()) {
+            denominacion = denominacionOpt.get();
+        }
+
+        if(categoria != null && unidadMedida != null){
+            return this.articuloInsumoRepository.findByCategoriaAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(categoria, unidadMedida, denominacion);
+        }
+
+        if(categoria != null){
+            return this.articuloInsumoRepository.findByCategoriaAndDenominacionStartingWithIgnoreCase(categoria, denominacion);
+        }
+
+        if(unidadMedida != null){
+            return this.articuloInsumoRepository.findByUnidadMedidaAndDenominacionStartingWithIgnoreCase(unidadMedida, denominacion);
+        }
+
+        if(denominacion != null){
+            return this.articuloInsumoRepository.findByDenominacionStartingWithIgnoreCase(denominacion);
         }
 
         return super.getAll();

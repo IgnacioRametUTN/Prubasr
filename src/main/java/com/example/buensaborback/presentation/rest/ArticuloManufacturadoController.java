@@ -27,8 +27,9 @@ public class ArticuloManufacturadoController extends GenericControllerImpl<Artic
 
     @GetMapping("/search")
     public ResponseEntity<?> getAll(@RequestParam("categoria_id") Optional<Long> categoria,
-                                    @RequestParam("unidad_id") Optional<Long> unidadMedida) {
-        return ResponseEntity.ok().body(this.articuloManufacturadoFacade.getArticulosInsumos(categoria, unidadMedida));
+                                    @RequestParam("unidad_id") Optional<Long> unidadMedida,
+                                    @RequestParam("denominacion") Optional<String> denominacion){
+        return ResponseEntity.ok().body(this.articuloManufacturadoFacade.getArticulosInsumos(categoria, unidadMedida, denominacion));
     }
 
 }

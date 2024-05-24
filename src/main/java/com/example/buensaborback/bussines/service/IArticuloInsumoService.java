@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface IArticuloInsumoService  extends  IBaseService<ArticuloInsumo, Long >{
 
-    List<ArticuloInsumo> getAll(Optional<Long> categoria, Optional<Long> unidadMedida);
+    List<ArticuloInsumo> getAll(Optional<Long> categoria, Optional<Long> unidadMedida, Optional<String> denominacion);
 }
