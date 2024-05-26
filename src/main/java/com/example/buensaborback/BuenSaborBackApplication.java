@@ -88,7 +88,7 @@ public class BuenSaborBackApplication {
 			logger.info("----------------Persistiendo los modelos---------------------");
 			//Se crea empresa
 			Empresa empresa = Empresa.builder()
-					.cuil(2012334675)
+					.cuil(2012334675L)
 					.razonSocial("Empresa de ejemplo A")
 					.nombre("Domodin de dimsdale")
 					.build();
@@ -129,8 +129,8 @@ public class BuenSaborBackApplication {
 			//Se crean sucursal 1
 			Sucursal sucursal1 = Sucursal.builder()
 					.nombre("Sucursal Lujan")
-					.horarioApertura(LocalTime.of(10,1,1))
-					.horarioCierre(LocalTime.of(20,1,1))
+					.horarioApertura(LocalTime.of(10,30,00))
+					.horarioCierre(LocalTime.of(23,30,00))
 					.domicilio(domicilio1)
 					.empresa(empresa)
 					.build();
@@ -151,8 +151,8 @@ public class BuenSaborBackApplication {
 					.nombre("Surcursal Godoy Cruz")
 					.domicilio(domicilio2)
 					.empresa(empresa)
-					.horarioApertura(LocalTime.of(10,1,1))
-					.horarioCierre(LocalTime.of(20,1,1))
+					.horarioApertura(LocalTime.of(10,30,00))
+					.horarioCierre(LocalTime.of(23,30,00))
 					.build();
 
 

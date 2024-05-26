@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 public abstract class GenericControllerImpl<E extends Base,D extends BaseDto, ID extends Serializable, F extends BaseFacadeImpl<E,D,ID>> implements IGenericController<D,ID> {
     private static final Logger logger = LoggerFactory.getLogger(GenericControllerImpl.class);
@@ -56,6 +57,5 @@ public abstract class GenericControllerImpl<E extends Base,D extends BaseDto, ID
         this.facade.delete(id);
         return ResponseEntity.ok().build();
     }
-
 
 }

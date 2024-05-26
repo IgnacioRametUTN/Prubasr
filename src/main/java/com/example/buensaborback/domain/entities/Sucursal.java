@@ -49,4 +49,6 @@ public class Sucursal extends Base{
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "empresa_id")
     private Empresa empresa;
+
+
 }

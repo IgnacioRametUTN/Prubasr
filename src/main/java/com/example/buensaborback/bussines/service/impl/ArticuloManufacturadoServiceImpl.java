@@ -2,10 +2,8 @@ package com.example.buensaborback.bussines.service.impl;
 
 import com.example.buensaborback.bussines.service.IArticuloManufacturadoService;
 import com.example.buensaborback.domain.entities.*;
-import com.example.buensaborback.presentation.advice.exception.InsufficientStockException;
 import com.example.buensaborback.repositories.ArticuloManufacturadoDetalleRepository;
 import com.example.buensaborback.repositories.ArticuloManufacturadoRepository;
-import com.example.buensaborback.repositories.CategoriaRepository;
 import com.example.buensaborback.repositories.UnidadMedidaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -96,5 +95,42 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
 
         // Llama al método update de la clase base
         return super.update(entity);
+    }
+
+    @Override
+    public List<ArticuloManufacturado> getAll(Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> denominacionOpt) {
+        Categoria categoria = null;
+        UnidadMedida unidadMedida = null;
+        String denominacion = "";
+
+        if(categoriaOpt.isPresent()) {
+            categoria = categoriaService.getById(categoriaOpt.get());
+        }
+
+        if(unidadMedidaOpt.isPresent()) {
+            unidadMedida = unidadMedidaService.getById(unidadMedidaOpt.get());
+        }
+
+        if(denominacionOpt.isPresent()) {
+            denominacion = denominacionOpt.get();
+        }
+
+        if(categoria != null && unidadMedida != null ){
+            return this.articuloManufacturadoRepository.findByCategoriaAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(categoria, unidadMedida, denominacion);
+        }
+
+        if(categoria != null){
+            return this.articuloManufacturadoRepository.findByCategoriaAndDenominacionStartingWithIgnoreCase(categoria, denominacion);
+        }
+
+        if(unidadMedida != null){
+            return this.articuloManufacturadoRepository.findByUnidadMedidaAndDenominacionStartingWithIgnoreCase(unidadMedida, denominacion);
+        }
+
+        if(denominacion != null){
+            return this.articuloManufacturadoRepository.findByDenominacionStartingWithIgnoreCase(denominacion);
+        }
+
+        return super.getAll();
     }
 }
