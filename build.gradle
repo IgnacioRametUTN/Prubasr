@@ -31,7 +31,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.mapstruct/mapstruct
 	implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final' //Anotacion para implementar los beans de mapstruct
-
+	implementation 'com.mercadopago:sdk-java:2.1.24'
 }
 
 tasks.named('test') {
