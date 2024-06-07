@@ -20,7 +20,7 @@ public class DetallePedido extends Base{
     private Integer cantidad;
     private Double subTotal;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Articulo articulo;
 
 

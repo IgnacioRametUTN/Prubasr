@@ -2,7 +2,6 @@ package com.example.buensaborback.domain.dtos.cliente;
 
 import com.example.buensaborback.domain.dtos.BaseDto;
 import com.example.buensaborback.domain.dtos.domicilio.DomicilioFullDto;
-import com.example.buensaborback.domain.dtos.domicilio.DomicilioShortDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
