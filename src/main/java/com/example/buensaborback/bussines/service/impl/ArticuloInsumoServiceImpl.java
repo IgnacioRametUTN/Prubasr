@@ -1,6 +1,5 @@
 package com.example.buensaborback.bussines.service.impl;
 
-import com.example.buensaborback.bussines.service.IArticuloInsumoService;
 import com.example.buensaborback.domain.entities.ArticuloInsumo;
 import com.example.buensaborback.domain.entities.Categoria;
 import com.example.buensaborback.domain.entities.PromocionDetalle;
@@ -16,7 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo,Long> implements IArticuloInsumoService {
+public class ArticuloInsumoServiceImpl {
     @Autowired
     private UnidadMedidaServiceImpl unidadMedidaService;
     @Autowired

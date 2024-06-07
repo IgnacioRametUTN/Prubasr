@@ -1,6 +1,5 @@
 package com.example.buensaborback.bussines.service.impl;
 
-import com.example.buensaborback.bussines.service.IArticuloManufacturadoService;
 import com.example.buensaborback.domain.entities.*;
 import com.example.buensaborback.repositories.ArticuloManufacturadoDetalleRepository;
 import com.example.buensaborback.repositories.ArticuloManufacturadoRepository;
@@ -15,7 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloManufacturado,Long> implements IArticuloManufacturadoService {
+public class ArticuloManufacturadoServiceImpl {
 
     @Autowired
     private ArticuloInsumoServiceImpl articuloInsumoService;
