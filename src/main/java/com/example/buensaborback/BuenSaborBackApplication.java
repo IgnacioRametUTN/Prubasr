@@ -375,7 +375,7 @@ public class BuenSaborBackApplication {
 
 			//se agrega el cliente al domicilio
 			domicilioCliente.setClientes(new HashSet<>(Set.of(cliente1)));
-
+			pedido1.setCliente(cliente1);
 
 			//Se crea imagen para la promocion
 			Imagen imagenPromocion = Imagen.builder()

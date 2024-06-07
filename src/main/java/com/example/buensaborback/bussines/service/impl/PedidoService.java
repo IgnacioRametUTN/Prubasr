@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +52,11 @@ public class PedidoService {
     @Transactional(readOnly = true)
     public List<Pedido> obtenerTodosPedidos() {
         return pedidoRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Pedido> obtenerPedidosPorFecha(LocalDate fecha) {
+        return pedidoRepository.findByFechaPedido(fecha);
     }
 
     @Transactional

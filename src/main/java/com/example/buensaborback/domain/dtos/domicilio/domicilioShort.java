@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 @ToString
 @Builder
-public class DomicilioShortDto {
+public class domicilioShort {
     private String calle;
     private Integer numero;
     private String localidad;
