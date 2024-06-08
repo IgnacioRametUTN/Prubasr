@@ -1,8 +1,8 @@
 package com.example.buensaborback.bussines.service.impl;
 
 import com.example.buensaborback.domain.entities.Usuario;
+import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
@@ -11,8 +11,22 @@ import java.util.Optional;
 
 @Service
 public class UsuarioService {
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
+
+    public UsuarioService(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
+
+    public Usuario getUsuarioById(Long id){
+        return this.usuarioRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Unidad Medida con ID %d no encontrado", id)));
+    }
+
+    public boolean existsUsuarioById(Long id){
+        return this.usuarioRepository.existsById(id);
+    }
+    public boolean existsUsuarioByUsername(String username) {
+        return this.usuarioRepository.findByUsername(username).isPresent();
+    }
 
     public Optional<Usuario> login(String nombreUsuario, String clave) {
         return usuarioRepository.findByAuth0IdAndUsername(clave, nombreUsuario);
@@ -22,9 +36,7 @@ public class UsuarioService {
         //usuario.setAuth0Id(encriptarClaveSHA256(usuario.getAuth0Id()));
         return usuarioRepository.save(usuario);
     }
-    public boolean existeUsuario(String nombreUsuario) {
-        return usuarioRepository.findByUsername(nombreUsuario).isPresent();
-    }
+
     public String encriptarClaveSHA256(String clave) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");

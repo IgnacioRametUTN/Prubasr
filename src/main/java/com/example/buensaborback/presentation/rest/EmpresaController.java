@@ -13,9 +13,12 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/empresas")
 @CrossOrigin("*")
-public class EmpresaController  extends GenericControllerImpl<Empresa, EmpresaDto,Long, EmpresaFacadeImpl> {
+public class EmpresaController  {
 
-    public EmpresaController(EmpresaFacadeImpl facade) {
-        super(facade);
+    @Autowired
+    private final EmpresaServiceImpl empresaService;
+
+    public EmpresaController(EmpresaServiceImpl empresaService) {
+        this.empresaService = empresaService;
     }
 }

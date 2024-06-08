@@ -1,5 +1,6 @@
 package com.example.buensaborback.repositories;
 
+import com.example.buensaborback.domain.entities.ArticuloManufacturadoDetalle;
 import com.example.buensaborback.domain.entities.Usuario;
 import com.example.buensaborback.domain.entities.enums.Rol;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UsuarioRepository extends BaseRepository<Usuario,Long> {
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByAuth0IdAndUsername(String clave, String username);
     Optional<Usuario> findByUsername(String username);
 

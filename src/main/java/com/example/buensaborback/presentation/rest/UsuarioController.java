@@ -2,7 +2,6 @@ package com.example.buensaborback.presentation.rest;
 
 import com.example.buensaborback.bussines.service.impl.UsuarioService;
 import com.example.buensaborback.domain.entities.Usuario;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +12,11 @@ import java.util.Optional;
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/auth")
 public class UsuarioController {
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
+
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Usuario usuario) {
@@ -37,7 +39,7 @@ public class UsuarioController {
 
     @GetMapping("/validar")
     public ResponseEntity<Boolean> validarExistenciaUsuario(@RequestParam String nombreUsuario) {
-        boolean usuarioExistente = usuarioService.existeUsuario(nombreUsuario);
+        boolean usuarioExistente = usuarioService.existsUsuarioByUsername(nombreUsuario);
         return ResponseEntity.ok(usuarioExistente);
     }
 }

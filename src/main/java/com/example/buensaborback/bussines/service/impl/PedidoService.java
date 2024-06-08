@@ -1,6 +1,7 @@
 package com.example.buensaborback.bussines.service.impl;
 
 import com.example.buensaborback.domain.entities.*;
+import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.ArticuloManufacturadoRepository;
 import com.example.buensaborback.repositories.PedidoRepository;
 import com.example.buensaborback.repositories.UsuarioRepository;
@@ -18,7 +19,6 @@ public class PedidoService {
     private final UsuarioRepository usuarioRepository;
     private final ArticuloManufacturadoRepository articuloRepository;
 
-
     @Autowired
     public PedidoService(PedidoRepository pedidoRepository, UsuarioRepository usuarioRepository,ArticuloManufacturadoRepository articuloRepository) {
         this.pedidoRepository = pedidoRepository;
@@ -26,6 +26,13 @@ public class PedidoService {
         this.articuloRepository=articuloRepository;
     }
 
+    public Pedido getPedidoById(Long id){
+        return this.pedidoRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Pedido con ID %d no encontrado", id)));
+    }
+
+    public boolean existsPedidoById(Long id){
+        return this.pedidoRepository.existsById(id);
+    }
     @Transactional
     public Pedido guardarPedido(Pedido pedido) {
         Optional<Usuario> usuarioOp = usuarioRepository.findByUsername(pedido.getCliente().getUsuario().getUsername());
