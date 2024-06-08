@@ -1,9 +1,7 @@
 package com.example.buensaborback.domain.entities;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -25,9 +23,15 @@ public class Empresa extends Base {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa", fetch = FetchType.LAZY)
     @Builder.Default
+    @JsonIgnore
+
     private Set<Sucursal> sucursales = new HashSet<>();
 
-
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "imagen_id")
+    protected ImagenEmpresa imagen;
 
 
 }
+
+
