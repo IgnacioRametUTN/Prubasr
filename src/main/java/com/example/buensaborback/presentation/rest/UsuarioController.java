@@ -1,6 +1,6 @@
 package com.example.buensaborback.presentation.rest;
 
-import com.example.buensaborback.bussines.service.impl.UsuarioService;
+import com.example.buensaborback.bussines.service.UsuarioService;
 import com.example.buensaborback.domain.entities.Usuario;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

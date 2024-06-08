@@ -20,16 +20,17 @@ public class DetallePedido extends Base{
     private Integer cantidad;
     private Double subTotal;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Articulo articulo;
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
 
 
-    @OneToMany(cascade=CascadeType.ALL,mappedBy = "detallePedido")
-    private Set<Promocion>promociones=new HashSet<>();
+    @OneToMany(cascade=CascadeType.ALL,mappedBy = "detallePedido", fetch = FetchType.LAZY)
+    @Builder.Default
+    private Set<Promocion>promociones = new HashSet<>();
 
 }

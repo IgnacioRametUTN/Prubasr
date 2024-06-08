@@ -1,6 +1,5 @@
 package com.example.buensaborback.repositories;
 
-import com.example.buensaborback.domain.entities.ArticuloManufacturadoDetalle;
 import com.example.buensaborback.domain.entities.Usuario;
 import com.example.buensaborback.domain.entities.enums.Rol;
 import org.springframework.data.jpa.repository.JpaRepository;

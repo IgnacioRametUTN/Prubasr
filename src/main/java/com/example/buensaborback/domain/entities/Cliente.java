@@ -23,20 +23,20 @@ public class Cliente extends Base{
     private String email;
     private LocalDate fechaNacimiento;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Usuario usuario;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Imagen imagen;
 
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
     @Builder.Default
     private Set<Pedido> pedidos = new HashSet<>();
 
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "Cliente_domicilio",
             joinColumns = @JoinColumn(name = "Cliente_id"),
             inverseJoinColumns = @JoinColumn(name = "domicilio_id"))

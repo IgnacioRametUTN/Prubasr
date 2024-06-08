@@ -20,23 +20,23 @@ public class Sucursal extends Base{
     private LocalTime horarioApertura;
     private LocalTime horarioCierre;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Domicilio domicilio;
 
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "sucursal_categoria",
             joinColumns = @JoinColumn(name = "sucursal_id"),
             inverseJoinColumns = @JoinColumn(name = "categoria_id"))
     @Builder.Default
     private Set<Categoria> categorias = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "sucursal" )
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "sucursal" , fetch = FetchType.LAZY)
     private Set<Pedido> pedidos;
 
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "sucursal_promocion",
             joinColumns = @JoinColumn(name = "sucursal_id"),
             inverseJoinColumns = @JoinColumn(name = "promocion_id"))

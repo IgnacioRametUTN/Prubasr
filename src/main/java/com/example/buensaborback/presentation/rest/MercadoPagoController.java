@@ -1,6 +1,6 @@
 package com.example.buensaborback.presentation.rest;
 
-import com.example.buensaborback.bussines.service.impl.MercadoPagoService;
+import com.example.buensaborback.bussines.service.MercadoPagoService;
 import com.example.buensaborback.domain.entities.Pedido;
 import com.example.buensaborback.domain.entities.PreferenceMP;
 import org.springframework.beans.factory.annotation.Autowired;

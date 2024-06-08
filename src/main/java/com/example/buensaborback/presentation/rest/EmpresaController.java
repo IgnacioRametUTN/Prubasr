@@ -1,14 +1,10 @@
 package com.example.buensaborback.presentation.rest;
 
-import com.example.buensaborback.bussines.facade.impl.EmpresaFacadeImpl;
-import com.example.buensaborback.domain.dtos.empresa.EmpresaDto;
-import com.example.buensaborback.domain.entities.Empresa;
-import com.example.buensaborback.bussines.service.impl.EmpresaServiceImpl;
+import com.example.buensaborback.bussines.service.EmpresaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/empresas")
@@ -16,9 +12,9 @@ import java.util.stream.Collectors;
 public class EmpresaController  {
 
     @Autowired
-    private final EmpresaServiceImpl empresaService;
+    private final EmpresaService empresaService;
 
-    public EmpresaController(EmpresaServiceImpl empresaService) {
+    public EmpresaController(EmpresaService empresaService) {
         this.empresaService = empresaService;
     }
 }

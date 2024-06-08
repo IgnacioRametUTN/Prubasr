@@ -1,6 +1,6 @@
 package com.example.buensaborback.presentation.rest;
 
-import com.example.buensaborback.bussines.service.impl.SucursalServiceImpl;
+import com.example.buensaborback.bussines.service.SucursalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class SucursalController  {
 
 
-    private final SucursalServiceImpl sucursalService;
+    private final SucursalService sucursalService;
 
     @Autowired
-    public SucursalController(SucursalServiceImpl sucursalService) {
+    public SucursalController(SucursalService sucursalService) {
         this.sucursalService = sucursalService;
     }
 

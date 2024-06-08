@@ -1,14 +1,6 @@
 package com.example.buensaborback.presentation.rest;
 
-import com.example.buensaborback.bussines.facade.IArticuloInsumoFacade;
-import com.example.buensaborback.bussines.facade.IArticuloManufacturadoFacade;
-import com.example.buensaborback.bussines.facade.impl.ArticuloManufacturadoFacadeImpl;
-import com.example.buensaborback.bussines.facade.impl.ClienteFacadeImpl;
-import com.example.buensaborback.bussines.service.impl.ArticuloManufacturadoServiceImpl;
-import com.example.buensaborback.domain.dtos.articulos.manufacturado.ArticuloManufacturadoDto;
-import com.example.buensaborback.domain.entities.ArticuloManufacturado;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.example.buensaborback.bussines.service.ArticuloManufacturadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +12,10 @@ import java.util.Optional;
 @CrossOrigin("*")
 public class ArticuloManufacturadoController{
 
-    private final ArticuloManufacturadoServiceImpl articuloManufacturadoService;
+    private final ArticuloManufacturadoService articuloManufacturadoService;
 
     @Autowired
-    public ArticuloManufacturadoController(ArticuloManufacturadoServiceImpl articuloManufacturadoService) {
+    public ArticuloManufacturadoController(ArticuloManufacturadoService articuloManufacturadoService) {
         this.articuloManufacturadoService = articuloManufacturadoService;
     }
 
@@ -31,7 +23,7 @@ public class ArticuloManufacturadoController{
     public ResponseEntity<?> getAll(@RequestParam("categoria_id") Optional<Long> categoria,
                                     @RequestParam("unidad_id") Optional<Long> unidadMedida,
                                     @RequestParam("denominacion") Optional<String> denominacion){
-        return ResponseEntity.ok().body(this.articuloManufacturadoService.getArticulosInsumos(categoria, unidadMedida, denominacion));
+        return ResponseEntity.ok().body(this.articuloManufacturadoService.getAll(categoria, unidadMedida, denominacion));
     }
 
 }

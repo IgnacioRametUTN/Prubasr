@@ -1,6 +1,9 @@
 package com.example.buensaborback.domain.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -20,7 +23,7 @@ public class ArticuloManufacturado extends Articulo{
     private Integer tiempoEstimadoMinutos;
     private String preparacion;
 
-    @OneToMany(mappedBy = "articuloManufacturado", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "articuloManufacturado", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
     private Set<ArticuloManufacturadoDetalle> articuloManufacturadoDetalles = new HashSet<>();
 }

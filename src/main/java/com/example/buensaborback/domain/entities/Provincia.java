@@ -18,13 +18,13 @@ import java.util.Set;
 public class Provincia extends Base{
 
     private String nombre;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "provincia")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "provincia", fetch = FetchType.LAZY)
     @Builder.Default
     @ToString.Exclude
     private Set<Localidad>localidades=new HashSet<>();
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_pais")
     private Pais pais;
 

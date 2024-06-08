@@ -1,6 +1,9 @@
 package com.example.buensaborback.domain.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -20,7 +23,7 @@ public class Empresa extends Base {
     private String razonSocial;
     private Long cuil;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa", fetch = FetchType.LAZY)
     @Builder.Default
     private Set<Sucursal> sucursales = new HashSet<>();
 

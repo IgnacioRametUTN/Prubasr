@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DialectOverride;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.io.Serializable;

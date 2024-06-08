@@ -2,6 +2,7 @@ package com.example.buensaborback.domain.entities;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -20,7 +21,7 @@ public class Pais extends Base{
 
     private String nombre;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "pais")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "pais", fetch = FetchType.LAZY)
     @Builder.Default
     @ToString.Exclude
     private Set<Provincia> provincias = new HashSet<>();

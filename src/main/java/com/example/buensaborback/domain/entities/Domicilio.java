@@ -20,12 +20,12 @@ public class Domicilio extends Base{
     private Integer numero;
     private Integer cp;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_localidad")
     private Localidad localidad;
 
 
-    @ManyToMany(mappedBy = "domicilios")
+    @ManyToMany(mappedBy = "domicilios", fetch = FetchType.LAZY)
     @Builder.Default
     @ToString.Exclude
     private Set<Cliente> clientes = new HashSet<>();

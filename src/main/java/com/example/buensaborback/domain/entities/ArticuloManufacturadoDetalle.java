@@ -19,7 +19,7 @@ public class ArticuloManufacturadoDetalle extends Base {
     @JoinColumn(name = "articulo_manufacturado_id")
     @ToString.Exclude
     private ArticuloManufacturado articuloManufacturado;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "articulo_insumo_id")
     private ArticuloInsumo articuloInsumo;
 

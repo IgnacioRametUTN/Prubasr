@@ -28,16 +28,16 @@ public class Promocion extends Base {
     private Double precioPromocional;
     private TipoPromocion tipoPromocion;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "detallePedido_id")
     private DetallePedido detallePedido;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "promocion_id")
     @Builder.Default
     private Set<Imagen> imagenes= new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "promocion")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "promocion", fetch = FetchType.LAZY)
     @Builder.Default
     private Set<PromocionDetalle> detallesPromocion = new HashSet<>();
 
