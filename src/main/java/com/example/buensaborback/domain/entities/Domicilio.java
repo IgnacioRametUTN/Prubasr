@@ -28,7 +28,6 @@ public class Domicilio extends Base{
     @JsonManagedReference
     private Localidad localidad;
 
-
     @ManyToMany(mappedBy = "domicilios", fetch = FetchType.LAZY)
     @Builder.Default
     @ToString.Exclude

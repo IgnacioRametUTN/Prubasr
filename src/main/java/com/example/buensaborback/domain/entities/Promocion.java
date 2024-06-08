@@ -1,6 +1,7 @@
 package com.example.buensaborback.domain.entities;
 
 import com.example.buensaborback.domain.entities.enums.TipoPromocion;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -39,6 +40,7 @@ public class Promocion extends Base {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "promocion", fetch = FetchType.LAZY)
     @Builder.Default
+    @JsonManagedReference
     private Set<PromocionDetalle> detallesPromocion = new HashSet<>();
 
 }

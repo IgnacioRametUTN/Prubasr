@@ -1,5 +1,6 @@
 package com.example.buensaborback.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -28,12 +29,15 @@ public  class Articulo extends Base {
     protected Set<Imagen> imagenes = new HashSet<Imagen>();
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     protected UnidadMedida unidadMedida;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id")
+    @JsonManagedReference
     protected Categoria categoria;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "articulo", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "articulo")
+    @JsonManagedReference
     protected Set<PromocionDetalle> promocionDetalle;
 }

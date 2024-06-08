@@ -3,7 +3,7 @@ package com.example.buensaborback.domain.entities;
 import com.example.buensaborback.domain.entities.enums.Estado;
 import com.example.buensaborback.domain.entities.enums.FormaPago;
 import com.example.buensaborback.domain.entities.enums.TipoEnvio;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -37,8 +37,8 @@ public class Pedido extends Base{
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) //Dirección a donde se envía el pedido
     private Domicilio domicilio;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonBackReference
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Sucursal sucursal;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

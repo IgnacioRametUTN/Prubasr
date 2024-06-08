@@ -23,7 +23,7 @@ public class Sucursal extends Base{
     private LocalTime horarioApertura;
     private LocalTime horarioCierre;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
     @JsonManagedReference
     private Domicilio domicilio;
 
@@ -36,10 +36,10 @@ public class Sucursal extends Base{
     private Set<Categoria> categorias = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "sucursal", fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonBackReference
     private Set<Pedido> pedidos;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "sucursal_promocion",
             joinColumns = @JoinColumn(name = "sucursal_id"),
             inverseJoinColumns = @JoinColumn(name = "promocion_id"))
@@ -52,7 +52,6 @@ public class Sucursal extends Base{
     @JsonBackReference
     private Empresa empresa;
 
-    @OneToOne(mappedBy = "sucursal", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @OneToOne(mappedBy = "sucursal", cascade = CascadeType.ALL)
     private ImagenSucursal imagenSucursal;
 }
