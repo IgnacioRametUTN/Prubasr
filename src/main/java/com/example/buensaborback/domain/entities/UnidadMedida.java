@@ -12,7 +12,5 @@ import lombok.experimental.SuperBuilder;
 @ToString
 @SuperBuilder
 public class UnidadMedida extends Base{
-
     private String denominacion;
-
 }
