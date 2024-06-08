@@ -1,6 +1,6 @@
 package com.example.buensaborback.presentation.rest;
 
-import com.example.buensaborback.bussines.service.UnidadMedidaService;
+import com.example.buensaborback.bussines.service.impl.UnidadMedidaServiceImpl;
 import com.example.buensaborback.domain.entities.UnidadMedida;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +12,10 @@ import java.util.List;
 @RequestMapping("/api/unidades-medida")
 @CrossOrigin("*")
 public class UnidadMedidaController  {
-    private final UnidadMedidaService unidadMedidaService;
+    private final UnidadMedidaServiceImpl unidadMedidaService;
 
     @Autowired
-    public UnidadMedidaController(UnidadMedidaService unidadMedidaService) {
+    public UnidadMedidaController(UnidadMedidaServiceImpl unidadMedidaService) {
         this.unidadMedidaService = unidadMedidaService;
     }
 

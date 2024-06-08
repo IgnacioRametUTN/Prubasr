@@ -1,5 +1,6 @@
 package com.example.buensaborback.bussines.service;
 
+import com.example.buensaborback.bussines.service.impl.UnidadMedidaServiceImpl;
 import com.example.buensaborback.domain.entities.*;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.ArticuloManufacturadoRepository;
@@ -17,11 +18,11 @@ public class ArticuloManufacturadoService {
     private final ArticuloManufacturadoRepository articuloManufacturadoRepository;
     private final ArticuloInsumoService articuloInsumoService;
     private final CategoriaService categoriaService;
-    private final UnidadMedidaService unidadMedidaService;
+    private final UnidadMedidaServiceImpl unidadMedidaService;
     private final ArticuloManufacturadoDetalleService articuloManufacturadoDetalleService;
     private final PromocionDetalleService promocionDetalleService;
 
-    public ArticuloManufacturadoService(ArticuloManufacturadoRepository articuloManufacturadoRepository, ArticuloInsumoService articuloInsumoService, CategoriaService categoriaService, UnidadMedidaService unidadMedidaService, ArticuloManufacturadoDetalleService articuloManufacturadoDetalleService, PromocionDetalleService promocionDetalleService) {
+    public ArticuloManufacturadoService(ArticuloManufacturadoRepository articuloManufacturadoRepository, ArticuloInsumoService articuloInsumoService, CategoriaService categoriaService, UnidadMedidaServiceImpl unidadMedidaService, ArticuloManufacturadoDetalleService articuloManufacturadoDetalleService, PromocionDetalleService promocionDetalleService) {
         this.articuloManufacturadoRepository = articuloManufacturadoRepository;
         this.articuloInsumoService = articuloInsumoService;
         this.categoriaService = categoriaService;

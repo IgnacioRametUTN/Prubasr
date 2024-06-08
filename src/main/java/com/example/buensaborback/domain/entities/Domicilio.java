@@ -1,5 +1,7 @@
 package com.example.buensaborback.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -22,12 +24,14 @@ public class Domicilio extends Base{
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_localidad")
+    @JsonManagedReference
     private Localidad localidad;
 
 
     @ManyToMany(mappedBy = "domicilios", fetch = FetchType.LAZY)
     @Builder.Default
     @ToString.Exclude
+    @JsonBackReference
     private Set<Cliente> clientes = new HashSet<>();
 
 }

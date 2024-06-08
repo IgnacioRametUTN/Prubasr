@@ -1,5 +1,6 @@
 package com.example.buensaborback.bussines.service;
 
+import com.example.buensaborback.bussines.service.impl.UnidadMedidaServiceImpl;
 import com.example.buensaborback.domain.entities.ArticuloInsumo;
 import com.example.buensaborback.domain.entities.Categoria;
 import com.example.buensaborback.domain.entities.PromocionDetalle;
@@ -15,11 +16,11 @@ import java.util.stream.Collectors;
 @Service
 public class ArticuloInsumoService {
     private final ArticuloInsumoRepository articuloInsumoRepository;
-    private final UnidadMedidaService unidadMedidaService;
+    private final UnidadMedidaServiceImpl unidadMedidaService;
     private final CategoriaService categoriaService;
     private final PromocionDetalleService promocionDetalleService;
 
-    public ArticuloInsumoService(ArticuloInsumoRepository articuloInsumoRepository, UnidadMedidaService unidadMedidaService, CategoriaService categoriaService, PromocionDetalleService promocionDetalleService) {
+    public ArticuloInsumoService(ArticuloInsumoRepository articuloInsumoRepository, UnidadMedidaServiceImpl unidadMedidaService, CategoriaService categoriaService, PromocionDetalleService promocionDetalleService) {
         this.articuloInsumoRepository = articuloInsumoRepository;
         this.unidadMedidaService = unidadMedidaService;
         this.categoriaService = categoriaService;

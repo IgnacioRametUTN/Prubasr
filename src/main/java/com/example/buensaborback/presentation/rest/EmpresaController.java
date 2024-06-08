@@ -34,7 +34,7 @@ public class EmpresaController {
 
     @GetMapping
     public ResponseEntity<List<Empresa>> getAllEmpresas() {
-        List<Empresa> empresas = empresaService.getAllEmpresas();
+        List<Empresa> empresas = empresaService.getAll();
         return ResponseEntity.ok(empresas);
     }
 

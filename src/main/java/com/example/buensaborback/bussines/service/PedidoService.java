@@ -1,9 +1,6 @@
 package com.example.buensaborback.bussines.service;
 
-import com.example.buensaborback.domain.entities.ArticuloManufacturado;
-import com.example.buensaborback.domain.entities.DetallePedido;
-import com.example.buensaborback.domain.entities.Pedido;
-import com.example.buensaborback.domain.entities.Usuario;
+import com.example.buensaborback.domain.entities.*;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.ArticuloManufacturadoRepository;
 import com.example.buensaborback.repositories.PedidoRepository;
@@ -17,27 +14,29 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PedidoService {
+public class PedidoService implements IPedidoService{
     private final PedidoRepository pedidoRepository;
     private final UsuarioRepository usuarioRepository;
     private final ArticuloManufacturadoRepository articuloRepository;
-
+    private final ClienteService clienteService;
     @Autowired
-    public PedidoService(PedidoRepository pedidoRepository, UsuarioRepository usuarioRepository,ArticuloManufacturadoRepository articuloRepository) {
+    public PedidoService(PedidoRepository pedidoRepository, UsuarioRepository usuarioRepository, ArticuloManufacturadoRepository articuloRepository, ClienteService clienteService) {
         this.pedidoRepository = pedidoRepository;
         this.usuarioRepository = usuarioRepository;
         this.articuloRepository=articuloRepository;
+        this.clienteService = clienteService;
     }
-
+    @Override
     public Pedido getPedidoById(Long id){
         return this.pedidoRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Pedido con ID %d no encontrado", id)));
     }
 
+    @Override
     public boolean existsPedidoById(Long id){
         return this.pedidoRepository.existsById(id);
     }
     @Transactional
-    public Pedido guardarPedido(Pedido pedido) {
+    public Pedido save(Pedido pedido) {
         Optional<Usuario> usuarioOp = usuarioRepository.findByUsername(pedido.getCliente().getUsuario().getUsername());
         if (usuarioOp.isPresent()) {
             pedido.setCliente(usuarioOp.get().getCliente());
@@ -53,25 +52,30 @@ public class PedidoService {
             throw new IllegalArgumentException("Usuario no encontrado");
         }
     }
-
+    @Override
     @Transactional(readOnly = true)
-    public Optional<Pedido> obtenerPedidoPorId(Long id) {
-        return pedidoRepository.findById(id);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Pedido> obtenerTodosPedidos() {
+    public List<Pedido> getAll() {
         return pedidoRepository.findAll();
     }
 
+    @Override
     @Transactional(readOnly = true)
-    public List<Pedido> obtenerPedidosPorFecha(LocalDate fecha) {
+    public List<Pedido> getAllByFecha(LocalDate fecha) {
         return pedidoRepository.findByFechaPedido(fecha);
     }
 
+    @Override
     @Transactional
-    public void eliminarPedido(Long id) {
-        pedidoRepository.deleteById(id);
+    public Pedido delete(Long id) {
+        Pedido pedido = this.getPedidoById(id);
+        pedido.setAlta(pedido.isAlta());
+        return pedidoRepository.save(pedido);
+    }
+
+    @Override
+    public List<Pedido> getAllByCliente(Long idCliente){
+        Cliente cliente = this.clienteService.getClienteById(idCliente);
+        return this.pedidoRepository.findByAltaTrueAndCliente(cliente);
     }
 
 }

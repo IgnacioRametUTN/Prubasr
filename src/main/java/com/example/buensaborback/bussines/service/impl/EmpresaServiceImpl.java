@@ -3,6 +3,7 @@ package com.example.buensaborback.bussines.service.impl;
 import com.example.buensaborback.bussines.service.EmpresaService;
 import com.example.buensaborback.domain.entities.Empresa;
 
+import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.EmpresaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,14 +23,22 @@ public class EmpresaServiceImpl implements EmpresaService {
     }
 
     @Override
-    public Empresa getEmpresaById(Long id) {
-        Optional<Empresa> empresa = empresaRepository.findById(id);
-        return empresa.orElse(null);
+    public Empresa getEmpresaById(Long id){
+        return this.empresaRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Empresa con ID %d no encontrado", id)));
+    }
+    @Override
+    public boolean existsEmpresaById(Long id){
+        return this.empresaRepository.existsById(id);
     }
 
     @Override
-    public List<Empresa> getAllEmpresas() {
+    public List<Empresa> getAll() {
         return empresaRepository.findAll();
+    }
+
+    @Override
+    public List<Empresa> getAllAlta() {
+        return empresaRepository.findByAltaTrue();
     }
 
     @Override
@@ -50,6 +59,8 @@ public class EmpresaServiceImpl implements EmpresaService {
 
     @Override
     public void deleteEmpresa(Long id) {
-        empresaRepository.deleteById(id);
+        Empresa empresa = this.getEmpresaById(id);
+        empresa.setAlta(!empresa.isAlta());
+        empresaRepository.save(empresa);
     }
 }

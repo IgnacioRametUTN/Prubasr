@@ -1,5 +1,6 @@
 package com.example.buensaborback.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -21,15 +22,18 @@ public class Categoria extends Base{
 
     @ManyToMany(mappedBy = "categorias", fetch = FetchType.LAZY)
     @Builder.Default
+    @JsonBackReference
     private Set<Sucursal> sucursales = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "categoria", fetch = FetchType.LAZY)
     @Builder.Default
+    @JsonBackReference
     private Set<Articulo> articulos = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id")
     @Builder.Default
+    @JsonBackReference
     private Set<Categoria> subCategorias = new HashSet<>();
 
 }

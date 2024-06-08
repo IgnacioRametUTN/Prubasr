@@ -5,7 +5,9 @@ import java.util.List;
 public interface EmpresaService {
     Empresa saveEmpresa(Empresa empresa);
     Empresa getEmpresaById(Long id);
-    List<Empresa> getAllEmpresas();
+    boolean existsEmpresaById(Long id);
+    List<Empresa> getAll();
+    List<Empresa> getAllAlta();
     Empresa updateEmpresa(Long id, Empresa empresa);
     void deleteEmpresa(Long id);
 }

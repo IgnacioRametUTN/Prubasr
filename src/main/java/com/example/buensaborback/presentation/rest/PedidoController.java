@@ -25,7 +25,7 @@ public class PedidoController {
     @PostMapping("/guardar")
     public ResponseEntity<Long> guardarPedido(@RequestBody Pedido pedido) {
         try {
-            Pedido nuevoPedido = pedidoService.guardarPedido(pedido);
+            Pedido nuevoPedido = pedidoService.save(pedido);
             return ResponseEntity.ok(nuevoPedido.getId());
         } catch (Exception e) {
             System.err.println("Error al guardar el pedido: " + e.getMessage());
@@ -36,19 +36,18 @@ public class PedidoController {
 
     @GetMapping("/traer/")
     public ResponseEntity<List<Pedido>> obtenerTodosLosPedidos() {
-        List<Pedido> pedidos = pedidoService.obtenerTodosPedidos();
+        List<Pedido> pedidos = pedidoService.getAll();
         return new ResponseEntity<>(pedidos, HttpStatus.OK);
     }
 
     @GetMapping("/traer/{id}")
     public ResponseEntity<Pedido> obtenerPedidoPorId(@PathVariable("id") Long id) {
-        return pedidoService.obtenerPedidoPorId(id)
-                .map(pedido -> new ResponseEntity<>(pedido, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return new ResponseEntity<>(pedidoService.getPedidoById(id), HttpStatus.OK);
+
     }
     @GetMapping("/fecha/{fecha}")
     public ResponseEntity<List<Pedido>> obtenerPedidoPorDia(@PathVariable("fecha") LocalDate fecha) {
-        List<Pedido> pedidos = pedidoService.obtenerPedidosPorFecha(fecha);
+        List<Pedido> pedidos = pedidoService.getAllByFecha(fecha);
         return new ResponseEntity<>(pedidos, HttpStatus.OK);
     }
 
