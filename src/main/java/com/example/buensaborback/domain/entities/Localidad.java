@@ -20,7 +20,7 @@ public class Localidad extends Base{
 
     private String nombre;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_provincia")
     @JsonManagedReference
     private Provincia provincia;

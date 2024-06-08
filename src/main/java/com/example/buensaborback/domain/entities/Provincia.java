@@ -27,7 +27,7 @@ public class Provincia extends Base{
     private Set<Localidad>localidades=new HashSet<>();
 
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_pais")
     @JsonManagedReference
     private Pais pais;
