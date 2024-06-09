@@ -9,10 +9,10 @@ public interface ICategoriaService {
     boolean existsCategoriaById(Long id);
     boolean existsCategoriaByDenominacion(String denominacion);
     List<Categoria> findAll();
+    List<Categoria> findAllCategoriasPadre();
     List<Categoria> findAllAlta();
     Categoria update(Long id, Categoria body);
-    Categoria create(Categoria body);
+    Categoria create(Long idPadre, Categoria body);
     Categoria delete(Long id);
 
-    Categoria createSubCategoria(Long id, Categoria body);
 }

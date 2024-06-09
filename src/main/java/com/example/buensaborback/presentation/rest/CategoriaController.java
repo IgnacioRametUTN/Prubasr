@@ -24,6 +24,11 @@ public class CategoriaController{
         return ResponseEntity.ok().body(this.categoriaServiceImpl.findAll());
     }
 
+    @GetMapping("/padres")
+    public ResponseEntity<List<Categoria>> getAllCategoriasPadres(){
+        return ResponseEntity.ok().body(this.categoriaServiceImpl.findAllCategoriasPadre());
+    }
+
     @GetMapping("/alta")
     public ResponseEntity<List<Categoria>> getAllAlta(){
         return ResponseEntity.ok().body(this.categoriaServiceImpl.findAllAlta());
@@ -40,14 +45,9 @@ public class CategoriaController{
         return ResponseEntity.ok().body(this.categoriaServiceImpl.update(id, body));
     }
 
-    @PostMapping("")
-    public ResponseEntity<Categoria> save(@RequestBody Categoria body){
-        return ResponseEntity.ok().body(this.categoriaServiceImpl.create(body));
-    }
-
-    @PostMapping("/subcategoria/{idCategoriaPadre}")
-    public ResponseEntity<Categoria> saveSubCategoria(@PathVariable("idCategoriaPadre") Long id, @RequestBody Categoria body){
-        return ResponseEntity.ok().body(this.categoriaServiceImpl.createSubCategoria(id, body));
+    @PostMapping("/{idCategoriaPadre}")
+    public ResponseEntity<Categoria> save(@PathVariable("idCategoriaPadre") Long idPadre, @RequestBody Categoria body){
+        return ResponseEntity.ok().body(this.categoriaServiceImpl.create(idPadre, body));
     }
 
     @DeleteMapping("/{id}")

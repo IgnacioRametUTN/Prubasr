@@ -184,6 +184,7 @@ public class BuenSaborBackApplication {
 					.subCategorias(new HashSet<>(Set.of(refrescosCola)))
 					.sucursales(new HashSet<>(Set.of(sucursal1, sucursal2)))
 					.build();
+			refrescosCola.setCategoriaPadre(bebidas);
 			//Se crean articulos insumo
 				//Se crea unidad de medida
 			UnidadMedida unidadMedidakg= UnidadMedida.builder()

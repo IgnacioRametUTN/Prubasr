@@ -32,8 +32,15 @@ public class Categoria extends Base {
     @JsonIgnore
     private Set<Articulo> articulos = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "categoria_padre_id")
+    @JsonBackReference(value = "categoria-categorias")
+    @ToString.Exclude
+    private Categoria categoriaPadre;
+
+    @OneToMany(mappedBy = "categoriaPadre", cascade = CascadeType.ALL)
     @Builder.Default
+    @JsonManagedReference(value = "categoria-categorias")
     private Set<Categoria> subCategorias = new HashSet<>();
 
 }
