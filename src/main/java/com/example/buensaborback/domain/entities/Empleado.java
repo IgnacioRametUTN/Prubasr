@@ -1,6 +1,7 @@
 package com.example.buensaborback.domain.entities;
 
 import com.example.buensaborback.domain.entities.enums.Rol;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,6 +25,7 @@ public class Empleado extends Base {
     private Rol perfil;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Usuario usuario;
 
 

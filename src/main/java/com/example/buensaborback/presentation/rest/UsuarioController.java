@@ -35,4 +35,9 @@ public class UsuarioController {
         boolean usuarioExistente = usuarioService.existsUsuarioByUsername(nombreUsuario);
         return ResponseEntity.ok(usuarioExistente);
     }
+
+    @GetMapping("")
+    public ResponseEntity<?> getAll() {
+        return ResponseEntity.ok(this.usuarioService.getAll());
+    }
 }

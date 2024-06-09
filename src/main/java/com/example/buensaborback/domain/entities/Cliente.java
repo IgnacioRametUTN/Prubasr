@@ -1,5 +1,6 @@
 package com.example.buensaborback.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -23,24 +24,28 @@ public class Cliente extends Base{
     private String email;
     private LocalDate fechaNacimiento;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Usuario usuario;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Imagen imagen;
 
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
     @Builder.Default
+    @JsonManagedReference
     private Set<Pedido> pedidos = new HashSet<>();
 
 
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "Cliente_domicilio",
             joinColumns = @JoinColumn(name = "Cliente_id"),
             inverseJoinColumns = @JoinColumn(name = "domicilio_id"))
     @Builder.Default
+    @JsonManagedReference
     private Set<Domicilio> domicilios = new HashSet<>();
 
 

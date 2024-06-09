@@ -3,6 +3,8 @@ package com.example.buensaborback.domain.entities;
 import com.example.buensaborback.domain.entities.enums.Estado;
 import com.example.buensaborback.domain.entities.enums.FormaPago;
 import com.example.buensaborback.domain.entities.enums.TipoEnvio;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,29 +32,34 @@ public class Pedido extends Base{
     private FormaPago formaPago;
     private LocalDate fechaPedido;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "empleado_id")
+    @JsonBackReference
     private Empleado empleado;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) //Dirección a donde se envía el pedido
+    @ManyToOne(cascade = CascadeType.ALL) //Dirección a donde se envía el pedido
+    @JsonManagedReference
     private Domicilio domicilio;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonManagedReference
     private Sucursal sucursal;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Factura factura;
 
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pedido", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pedido")
     @Builder.Default
+    @JsonManagedReference
     private Set<DetallePedido> detallePedidos = new HashSet<>();
 
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cliente_id")
     @ToString.Exclude
+    @JsonBackReference
     private Cliente cliente;
 
 

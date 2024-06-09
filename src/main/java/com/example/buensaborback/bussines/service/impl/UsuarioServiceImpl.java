@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @Service
 public class UsuarioServiceImpl implements IUsuarioService {
@@ -26,6 +27,11 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     public Usuario getUsuarioByUsername(String username){
         return this.usuarioRepository.findByUsername(username).orElseThrow(() -> new NotFoundException(String.format("Usuario con Username %s no encontrado", username)));
+    }
+
+    @Override
+    public List<Usuario> getAll() {
+        return this.usuarioRepository.findAll();
     }
 
     public boolean existsUsuarioById(Long id){
@@ -45,7 +51,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     public Usuario register(Usuario usuario) {
         if(existsUsuarioByUsername(usuario.getUsername())){
-            throw new DuplicateEntryException("Usuario ya registrado"):
+            throw new DuplicateEntryException("Usuario ya registrado");
         }
         //usuario.setAuth0Id(encriptarClaveSHA256(usuario.getAuth0Id()));
         return usuarioRepository.save(usuario);

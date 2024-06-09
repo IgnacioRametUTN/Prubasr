@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/MercadoPago")
+@RequestMapping("/api/mercado-pago")
 public class MercadoPagoController {
     private final MercadoPagoService mercadoPagoService;
 

@@ -1,5 +1,6 @@
 package com.example.buensaborback.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -24,21 +25,21 @@ public  class Articulo extends Base {
     protected String denominacion;
     protected Double precioVenta;
 
-    @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name= "articulo_id")
     @Builder.Default
     protected Set<Imagen> imagenes = new HashSet<Imagen>();
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonManagedReference
     protected UnidadMedida unidadMedida;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "categoria_id")
-    @JsonManagedReference(value = "categoria-articulos")
+    @JsonManagedReference
     protected Categoria categoria;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "articulo")
-    @JsonManagedReference
+    @JsonBackReference
     protected Set<PromocionDetalle> promocionDetalle;
 }

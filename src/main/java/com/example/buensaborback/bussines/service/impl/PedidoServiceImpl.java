@@ -1,12 +1,12 @@
 package com.example.buensaborback.bussines.service.impl;
 
+import com.example.buensaborback.bussines.service.IArtManufacturadoService;
 import com.example.buensaborback.bussines.service.IPedidoService;
-import com.example.buensaborback.bussines.service.impl.ClienteServiceImpl;
+import com.example.buensaborback.bussines.service.IUsuarioService;
 import com.example.buensaborback.domain.entities.*;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.ArticuloManufacturadoRepository;
 import com.example.buensaborback.repositories.PedidoRepository;
-import com.example.buensaborback.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,14 +18,14 @@ import java.util.Optional;
 @Service
 public class PedidoServiceImpl implements IPedidoService {
     private final PedidoRepository pedidoRepository;
-    private final UsuarioRepository usuarioRepository;
-    private final ArticuloManufacturadoRepository articuloRepository;
+    private final IUsuarioService usuarioService;
+    private final IArtManufacturadoService artManufacturadoService;
     private final ClienteServiceImpl clienteServiceImpl;
     @Autowired
-    public PedidoServiceImpl(PedidoRepository pedidoRepository, UsuarioRepository usuarioRepository, ArticuloManufacturadoRepository articuloRepository, ClienteServiceImpl clienteServiceImpl) {
+    public PedidoServiceImpl(PedidoRepository pedidoRepository, UsuarioServiceImpl usuarioService, ArtManufacturadoServiceImpl artManufacturadoService, ClienteServiceImpl clienteServiceImpl) {
         this.pedidoRepository = pedidoRepository;
-        this.usuarioRepository = usuarioRepository;
-        this.articuloRepository=articuloRepository;
+        this.usuarioService = usuarioService;
+        this.artManufacturadoService = artManufacturadoService;
         this.clienteServiceImpl = clienteServiceImpl;
     }
     @Override
@@ -39,20 +39,15 @@ public class PedidoServiceImpl implements IPedidoService {
     }
     @Transactional
     public Pedido save(Pedido pedido) {
-        Optional<Usuario> usuarioOp = usuarioRepository.findByUsername(pedido.getCliente().getUsuario().getUsername());
-        if (usuarioOp.isPresent()) {
-            pedido.setCliente(usuarioOp.get().getCliente());
+        Usuario usuarioOp = usuarioService.getUsuarioByUsername(pedido.getCliente().getUsuario().getUsername());
+            pedido.setCliente(usuarioOp.getCliente());
             for (DetallePedido detalle : pedido.getDetallePedidos()) {
-                ArticuloManufacturado articulo = articuloRepository.findById(detalle.getArticulo().getId())
-                        .orElseThrow(() -> new IllegalArgumentException("Artículo no encontrado"));
-
+                ArticuloManufacturado articulo = artManufacturadoService.getArticuloManufacturadoById(detalle.getArticulo().getId());
                 detalle.setArticulo(articulo);
                 detalle.setPedido(pedido);
             }
             return pedidoRepository.save(pedido);
-        } else {
-            throw new IllegalArgumentException("Usuario no encontrado");
-        }
+
     }
     @Override
     @Transactional(readOnly = true)

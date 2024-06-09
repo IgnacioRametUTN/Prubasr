@@ -31,7 +31,6 @@ public class Domicilio extends Base{
     @ManyToMany(mappedBy = "domicilios", fetch = FetchType.LAZY)
     @Builder.Default
     @ToString.Exclude
-    @JsonBackReference
     @JsonIgnore
     private Set<Cliente> clientes = new HashSet<>();
 

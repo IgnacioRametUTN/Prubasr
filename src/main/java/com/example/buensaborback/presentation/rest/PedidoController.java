@@ -23,8 +23,8 @@ public class PedidoController {
         this.pedidoService = pedidoService;
     }
 
-    @PostMapping("/guardar")
-    public ResponseEntity<Long> guardarPedido(@RequestBody Pedido pedido) {
+    @PostMapping("")
+    public ResponseEntity<Long> save(@RequestBody Pedido pedido) {
         try {
             Pedido nuevoPedido = pedidoService.save(pedido);
             return ResponseEntity.ok(nuevoPedido.getId());
@@ -35,19 +35,19 @@ public class PedidoController {
         }
     }
 
-    @GetMapping("/traer/")
-    public ResponseEntity<List<Pedido>> obtenerTodosLosPedidos() {
+    @GetMapping("")
+    public ResponseEntity<List<Pedido>> getAll() {
         List<Pedido> pedidos = pedidoService.getAll();
         return new ResponseEntity<>(pedidos, HttpStatus.OK);
     }
 
-    @GetMapping("/traer/{id}")
-    public ResponseEntity<Pedido> obtenerPedidoPorId(@PathVariable("id") Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Pedido> getOne(@PathVariable("id") Long id) {
         return new ResponseEntity<>(pedidoService.getPedidoById(id), HttpStatus.OK);
 
     }
     @GetMapping("/fecha/{fecha}")
-    public ResponseEntity<List<Pedido>> obtenerPedidoPorDia(@PathVariable("fecha") LocalDate fecha) {
+    public ResponseEntity<List<Pedido>> getAllByFecha(@PathVariable("fecha") LocalDate fecha) {
         List<Pedido> pedidos = pedidoService.getAllByFecha(fecha);
         return new ResponseEntity<>(pedidos, HttpStatus.OK);
     }
