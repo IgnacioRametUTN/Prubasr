@@ -1,4 +1,4 @@
-package com.example.buensaborback.bussines.service;
+package com.example.buensaborback.bussines.service.impl;
 
 import com.example.buensaborback.domain.entities.PromocionDetalle;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
@@ -6,10 +6,10 @@ import com.example.buensaborback.repositories.PromocionDetalleRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PromocionDetalleService {
+public class PromocionDetalleServiceImpl {
     private final PromocionDetalleRepository promocionDetalleRepository;
 
-    public PromocionDetalleService(PromocionDetalleRepository promocionDetalleRepository) {
+    public PromocionDetalleServiceImpl(PromocionDetalleRepository promocionDetalleRepository) {
         this.promocionDetalleRepository = promocionDetalleRepository;
     }
 

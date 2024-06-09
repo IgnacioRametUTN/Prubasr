@@ -1,6 +1,6 @@
 package com.example.buensaborback.bussines.service.impl;
 
-import com.example.buensaborback.bussines.service.EmpresaService;
+import com.example.buensaborback.bussines.service.IEmpresaService;
 import com.example.buensaborback.domain.entities.Empresa;
 
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class EmpresaServiceImpl implements EmpresaService {
+public class IEmpresaServiceImpl implements IEmpresaService {
 
     @Autowired
     private EmpresaRepository empresaRepository;

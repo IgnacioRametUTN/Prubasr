@@ -1,7 +1,6 @@
-package com.example.buensaborback.bussines.service;
+package com.example.buensaborback.bussines.service.impl;
 
-import com.example.buensaborback.bussines.service.impl.CategoriaServiceImpl;
-import com.example.buensaborback.bussines.service.impl.UnidadMedidaServiceImpl;
+import com.example.buensaborback.bussines.service.IArticuloInsumoService;
 import com.example.buensaborback.domain.entities.ArticuloInsumo;
 import com.example.buensaborback.domain.entities.Categoria;
 import com.example.buensaborback.domain.entities.PromocionDetalle;
@@ -15,17 +14,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class ArticuloInsumoService {
+public class ArticuloInsumoServiceImpl implements IArticuloInsumoService {
     private final ArticuloInsumoRepository articuloInsumoRepository;
     private final UnidadMedidaServiceImpl unidadMedidaService;
     private final CategoriaServiceImpl categoriaServiceImpl;
-    private final PromocionDetalleService promocionDetalleService;
+    private final PromocionDetalleServiceImpl promocionDetalleServiceImpl;
 
-    public ArticuloInsumoService(ArticuloInsumoRepository articuloInsumoRepository, UnidadMedidaServiceImpl unidadMedidaService, CategoriaServiceImpl categoriaServiceImpl, PromocionDetalleService promocionDetalleService) {
+    public ArticuloInsumoServiceImpl(ArticuloInsumoRepository articuloInsumoRepository, UnidadMedidaServiceImpl unidadMedidaService, CategoriaServiceImpl categoriaServiceImpl, PromocionDetalleServiceImpl promocionDetalleServiceImpl) {
         this.articuloInsumoRepository = articuloInsumoRepository;
         this.unidadMedidaService = unidadMedidaService;
         this.categoriaServiceImpl = categoriaServiceImpl;
-        this.promocionDetalleService = promocionDetalleService;
+        this.promocionDetalleServiceImpl = promocionDetalleServiceImpl;
     }
 
     public ArticuloInsumo getArticuloInsumoById(Long id){
@@ -49,7 +48,7 @@ public class ArticuloInsumoService {
         // Actualizar la lista de PromocionDetalle
         entity.setPromocionDetalle(entity.getPromocionDetalle().stream()
                 .map(detalle -> {
-                    PromocionDetalle promocionDetalle = promocionDetalleService.getPromocionDetalleById(detalle.getId());
+                    PromocionDetalle promocionDetalle = promocionDetalleServiceImpl.getPromocionDetalleById(detalle.getId());
                     promocionDetalle.setArticulo(entity);
                     return promocionDetalle;
                 })

@@ -28,7 +28,6 @@ public class Categoria extends Base {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "categoria", fetch = FetchType.LAZY)
     @Builder.Default
-    @JsonBackReference(value = "categoria-articulos")
     @JsonIgnore
     private Set<Articulo> articulos = new HashSet<>();
 

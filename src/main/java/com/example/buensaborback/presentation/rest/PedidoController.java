@@ -1,6 +1,7 @@
 package com.example.buensaborback.presentation.rest;
 
-import com.example.buensaborback.bussines.service.PedidoService;
+import com.example.buensaborback.bussines.service.IPedidoService;
+import com.example.buensaborback.bussines.service.impl.PedidoServiceImpl;
 import com.example.buensaborback.domain.entities.Pedido;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,10 +16,10 @@ import java.util.List;
 @RequestMapping("/api/pedidos")
 public class PedidoController {
 
-    private final PedidoService pedidoService;
+    private final IPedidoService pedidoService;
 
     @Autowired
-    public PedidoController(PedidoService pedidoService) {
+    public PedidoController(PedidoServiceImpl pedidoService) {
         this.pedidoService = pedidoService;
     }
 

@@ -1,6 +1,7 @@
 package com.example.buensaborback.presentation.rest;
 
-import com.example.buensaborback.bussines.service.ArticuloInsumoService;
+import com.example.buensaborback.bussines.service.IArticuloInsumoService;
+import com.example.buensaborback.bussines.service.impl.ArticuloInsumoServiceImpl;
 import com.example.buensaborback.domain.entities.ArticuloInsumo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +14,10 @@ import java.util.Optional;
 @CrossOrigin("*")
 public class ArticuloInsumoController {
 
-    private final ArticuloInsumoService articuloInsumoService;
+    private final IArticuloInsumoService articuloInsumoService;
 
     @Autowired
-    public ArticuloInsumoController(ArticuloInsumoService articuloInsumoService) {
+    public ArticuloInsumoController(ArticuloInsumoServiceImpl articuloInsumoService) {
         this.articuloInsumoService = articuloInsumoService;
     }
 

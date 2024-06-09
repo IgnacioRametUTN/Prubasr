@@ -1,5 +1,6 @@
 package com.example.buensaborback.presentation.rest;
 
+import com.example.buensaborback.bussines.service.IDomicilioService;
 import com.example.buensaborback.bussines.service.impl.DomicilioServiceImpl;
 import com.example.buensaborback.domain.entities.Domicilio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import java.util.List;
 @RequestMapping("/api/domicilios")
 @CrossOrigin("*")
 public class DomicilioController {
-    private final DomicilioServiceImpl domicilioService;
+    private final IDomicilioService domicilioService;
 
     @Autowired
     public DomicilioController(DomicilioServiceImpl DomicilioService) {

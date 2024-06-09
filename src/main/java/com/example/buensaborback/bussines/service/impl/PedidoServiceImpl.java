@@ -1,5 +1,7 @@
-package com.example.buensaborback.bussines.service;
+package com.example.buensaborback.bussines.service.impl;
 
+import com.example.buensaborback.bussines.service.IPedidoService;
+import com.example.buensaborback.bussines.service.impl.ClienteServiceImpl;
 import com.example.buensaborback.domain.entities.*;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.ArticuloManufacturadoRepository;
@@ -14,17 +16,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PedidoService implements IPedidoService{
+public class PedidoServiceImpl implements IPedidoService {
     private final PedidoRepository pedidoRepository;
     private final UsuarioRepository usuarioRepository;
     private final ArticuloManufacturadoRepository articuloRepository;
-    private final ClienteService clienteService;
+    private final ClienteServiceImpl clienteServiceImpl;
     @Autowired
-    public PedidoService(PedidoRepository pedidoRepository, UsuarioRepository usuarioRepository, ArticuloManufacturadoRepository articuloRepository, ClienteService clienteService) {
+    public PedidoServiceImpl(PedidoRepository pedidoRepository, UsuarioRepository usuarioRepository, ArticuloManufacturadoRepository articuloRepository, ClienteServiceImpl clienteServiceImpl) {
         this.pedidoRepository = pedidoRepository;
         this.usuarioRepository = usuarioRepository;
         this.articuloRepository=articuloRepository;
-        this.clienteService = clienteService;
+        this.clienteServiceImpl = clienteServiceImpl;
     }
     @Override
     public Pedido getPedidoById(Long id){
@@ -74,7 +76,7 @@ public class PedidoService implements IPedidoService{
 
     @Override
     public List<Pedido> getAllByCliente(Long idCliente){
-        Cliente cliente = this.clienteService.getClienteById(idCliente);
+        Cliente cliente = this.clienteServiceImpl.getClienteById(idCliente);
         return this.pedidoRepository.findByAltaTrueAndCliente(cliente);
     }
 

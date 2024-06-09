@@ -1,7 +1,6 @@
-package com.example.buensaborback.bussines.service;
+package com.example.buensaborback.bussines.service.impl;
 
-import com.example.buensaborback.bussines.service.impl.CategoriaServiceImpl;
-import com.example.buensaborback.bussines.service.impl.UnidadMedidaServiceImpl;
+import com.example.buensaborback.bussines.service.IArtManufacturadoService;
 import com.example.buensaborback.domain.entities.*;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.ArticuloManufacturadoRepository;
@@ -15,21 +14,21 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class ArticuloManufacturadoService {
+public class ArtManufacturadoServiceImpl implements IArtManufacturadoService {
     private final ArticuloManufacturadoRepository articuloManufacturadoRepository;
-    private final ArticuloInsumoService articuloInsumoService;
+    private final ArticuloInsumoServiceImpl articuloInsumoServiceImpl;
     private final CategoriaServiceImpl categoriaServiceImpl;
     private final UnidadMedidaServiceImpl unidadMedidaService;
-    private final ArticuloManufacturadoDetalleService articuloManufacturadoDetalleService;
-    private final PromocionDetalleService promocionDetalleService;
+    private final ArtManufacturadoDetalleServiceImpl artManufacturadoDetalleServiceImpl;
+    private final PromocionDetalleServiceImpl promocionDetalleServiceImpl;
 
-    public ArticuloManufacturadoService(ArticuloManufacturadoRepository articuloManufacturadoRepository, ArticuloInsumoService articuloInsumoService, CategoriaServiceImpl categoriaServiceImpl, UnidadMedidaServiceImpl unidadMedidaService, ArticuloManufacturadoDetalleService articuloManufacturadoDetalleService, PromocionDetalleService promocionDetalleService) {
+    public ArtManufacturadoServiceImpl(ArticuloManufacturadoRepository articuloManufacturadoRepository, ArticuloInsumoServiceImpl articuloInsumoServiceImpl, CategoriaServiceImpl categoriaServiceImpl, UnidadMedidaServiceImpl unidadMedidaService, ArtManufacturadoDetalleServiceImpl artManufacturadoDetalleServiceImpl, PromocionDetalleServiceImpl promocionDetalleServiceImpl) {
         this.articuloManufacturadoRepository = articuloManufacturadoRepository;
-        this.articuloInsumoService = articuloInsumoService;
+        this.articuloInsumoServiceImpl = articuloInsumoServiceImpl;
         this.categoriaServiceImpl = categoriaServiceImpl;
         this.unidadMedidaService = unidadMedidaService;
-        this.articuloManufacturadoDetalleService = articuloManufacturadoDetalleService;
-        this.promocionDetalleService = promocionDetalleService;
+        this.artManufacturadoDetalleServiceImpl = artManufacturadoDetalleServiceImpl;
+        this.promocionDetalleServiceImpl = promocionDetalleServiceImpl;
     }
 
     public ArticuloManufacturado getArticuloManufacturadoById(Long id){
@@ -47,7 +46,7 @@ public class ArticuloManufacturadoService {
         // Actualizar la lista de PromocionDetalle
         entity.setPromocionDetalle(entity.getPromocionDetalle().stream()
                 .map(detalle -> {
-                    PromocionDetalle promocionDetalle = promocionDetalleService.getPromocionDetalleById(detalle.getId());
+                    PromocionDetalle promocionDetalle = promocionDetalleServiceImpl.getPromocionDetalleById(detalle.getId());
                     promocionDetalle.setArticulo(entity);
                     return promocionDetalle;
                 })
@@ -56,7 +55,7 @@ public class ArticuloManufacturadoService {
         // Actualizar la lista de Articulo Manufacturado Detalle
         entity.setArticuloManufacturadoDetalles(entity.getArticuloManufacturadoDetalles().stream()
                 .map(detalle -> {
-                    ArticuloManufacturadoDetalle articuloManufacturadoDetalle = articuloManufacturadoDetalleService.getArticuloManufacturadoDetalleById(detalle.getId());
+                    ArticuloManufacturadoDetalle articuloManufacturadoDetalle = artManufacturadoDetalleServiceImpl.getArticuloManufacturadoDetalleById(detalle.getId());
                     articuloManufacturadoDetalle.setArticuloManufacturado(entity);
                     return articuloManufacturadoDetalle;
                 })
@@ -66,10 +65,11 @@ public class ArticuloManufacturadoService {
         return this.articuloManufacturadoRepository.save(entity);
     }
 
+    @Override
     @Transactional
-    public ArticuloManufacturado update(ArticuloManufacturado entity) {
+    public ArticuloManufacturado update(Long id, ArticuloManufacturado entity) {
         // Obtén el artículo manufacturado existente de la base de datos
-        ArticuloManufacturado existingEntity = articuloManufacturadoRepository.getById(entity.getId());
+        ArticuloManufacturado existingEntity = getArticuloManufacturadoById(id);
 
         // Obtener los detalles antiguos
         Set<ArticuloManufacturadoDetalle> detallesViejo = existingEntity.getArticuloManufacturadoDetalles();
@@ -96,7 +96,7 @@ public class ArticuloManufacturadoService {
             } else {
                 // Si el detalle no existe, crea uno nuevo
                 detalle.setArticuloManufacturado(entity); // Mantén la relación bidireccional
-                detalle.setArticuloInsumo(articuloInsumoService.getArticuloInsumoById(detalle.getArticuloInsumo().getId())); // Si id no se encuentra, lanza una excepción en Repository
+                detalle.setArticuloInsumo(articuloInsumoServiceImpl.getArticuloInsumoById(detalle.getArticuloInsumo().getId())); // Si id no se encuentra, lanza una excepción en Repository
                 detalles.add(detalle);
             }
         }
@@ -106,7 +106,7 @@ public class ArticuloManufacturadoService {
             if (!detalles.contains(detalleViejo)) {
                 System.out.println("Desactivando: " + detalleViejo.toString());
                 detalleViejo.setAlta(false);
-                articuloManufacturadoDetalleService.create(detalleViejo);
+                artManufacturadoDetalleServiceImpl.create(detalleViejo);
             }
         }
 
@@ -116,7 +116,6 @@ public class ArticuloManufacturadoService {
         // Llama al método update de la clase base
         return this.articuloManufacturadoRepository.save(entity);
     }
-
     public List<ArticuloManufacturado> getAll(Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> searchOpt) {
         Categoria categoria = categoriaOpt.map(categoriaServiceImpl::getCategoriaById).orElse(null); //Basicamente funciona así: si el Optional está vacío el map() no hace nada y salta al orElse y devuelve null, caso contrario ejecuta el metodo del map
         UnidadMedida unidadMedida = unidadMedidaOpt.map(unidadMedidaService::getUnidadMedidaById).orElse(null);
@@ -133,5 +132,17 @@ public class ArticuloManufacturadoService {
         } else {
             return articuloManufacturadoRepository.findAll();
         }
+    }
+
+    @Override
+    public List<ArticuloManufacturado> getAll() {
+        return this.articuloManufacturadoRepository.findAll();
+    }
+
+    @Override
+    public ArticuloManufacturado delete(Long id) {
+        ArticuloManufacturado articuloManufacturado = this.getArticuloManufacturadoById(id);
+        articuloManufacturado.setAlta(!articuloManufacturado.isAlta());
+        return this.articuloManufacturadoRepository.save(articuloManufacturado);
     }
 }

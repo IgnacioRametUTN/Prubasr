@@ -1,6 +1,7 @@
 package com.example.buensaborback.presentation.rest;
 
-import com.example.buensaborback.bussines.service.EmpresaService;
+import com.example.buensaborback.bussines.service.IEmpresaService;
+import com.example.buensaborback.bussines.service.impl.IEmpresaServiceImpl;
 import com.example.buensaborback.domain.entities.Empresa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +14,12 @@ import java.util.List;
 @RequestMapping("/api/empresas")
 public class EmpresaController {
 
+    private final IEmpresaService empresaService;
+
     @Autowired
-    private EmpresaService empresaService;
+    public EmpresaController(IEmpresaServiceImpl empresaService) {
+        this.empresaService = empresaService;
+    }
 
     @PostMapping
     public ResponseEntity<Empresa> createEmpresa(@RequestBody Empresa empresa) {
