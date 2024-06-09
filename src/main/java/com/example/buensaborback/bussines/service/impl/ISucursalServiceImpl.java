@@ -1,6 +1,6 @@
 package com.example.buensaborback.bussines.service.impl;
 
-import com.example.buensaborback.bussines.service.SucursalService;
+import com.example.buensaborback.bussines.service.ISucursalService;
 import com.example.buensaborback.domain.entities.Sucursal;
 
 import com.example.buensaborback.repositories.SucursalRepository;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class SucursalServiceImpl implements SucursalService {
+public class ISucursalServiceImpl implements ISucursalService {
 
     @Autowired
     private SucursalRepository sucursalRepository;

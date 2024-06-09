@@ -1,5 +1,6 @@
 package com.example.buensaborback.bussines.service;
 
+import com.example.buensaborback.bussines.service.impl.CategoriaServiceImpl;
 import com.example.buensaborback.bussines.service.impl.UnidadMedidaServiceImpl;
 import com.example.buensaborback.domain.entities.ArticuloInsumo;
 import com.example.buensaborback.domain.entities.Categoria;
@@ -17,13 +18,13 @@ import java.util.stream.Collectors;
 public class ArticuloInsumoService {
     private final ArticuloInsumoRepository articuloInsumoRepository;
     private final UnidadMedidaServiceImpl unidadMedidaService;
-    private final CategoriaService categoriaService;
+    private final CategoriaServiceImpl categoriaServiceImpl;
     private final PromocionDetalleService promocionDetalleService;
 
-    public ArticuloInsumoService(ArticuloInsumoRepository articuloInsumoRepository, UnidadMedidaServiceImpl unidadMedidaService, CategoriaService categoriaService, PromocionDetalleService promocionDetalleService) {
+    public ArticuloInsumoService(ArticuloInsumoRepository articuloInsumoRepository, UnidadMedidaServiceImpl unidadMedidaService, CategoriaServiceImpl categoriaServiceImpl, PromocionDetalleService promocionDetalleService) {
         this.articuloInsumoRepository = articuloInsumoRepository;
         this.unidadMedidaService = unidadMedidaService;
-        this.categoriaService = categoriaService;
+        this.categoriaServiceImpl = categoriaServiceImpl;
         this.promocionDetalleService = promocionDetalleService;
     }
 
@@ -43,7 +44,7 @@ public class ArticuloInsumoService {
         this.getArticuloInsumoById(id); //Verifica si existe unicamente, sino larga expcion
         // Actualizar las referencias a UnidadMedida y Categoria
         entity.setUnidadMedida(unidadMedidaService.getUnidadMedidaById(entity.getUnidadMedida().getId()));
-        entity.setCategoria(categoriaService.getCategoriaById(entity.getCategoria().getId()));
+        entity.setCategoria(categoriaServiceImpl.getCategoriaById(entity.getCategoria().getId()));
 
         // Actualizar la lista de PromocionDetalle
         entity.setPromocionDetalle(entity.getPromocionDetalle().stream()
@@ -67,7 +68,7 @@ public class ArticuloInsumoService {
         return articuloInsumoRepository.findAll();
     }
     public List<ArticuloInsumo> getAll(Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> searchOpt) {
-        Categoria categoria = categoriaOpt.map(categoriaService::getCategoriaById).orElse(null); //Basicamente funciona así: si el Optional está vacío el map() no hace nada y salta al orElse y devuelve null, caso contrario ejecuta el metodo del map
+        Categoria categoria = categoriaOpt.map(categoriaServiceImpl::getCategoriaById).orElse(null); //Basicamente funciona así: si el Optional está vacío el map() no hace nada y salta al orElse y devuelve null, caso contrario ejecuta el metodo del map
         UnidadMedida unidadMedida = unidadMedidaOpt.map(unidadMedidaService::getUnidadMedidaById).orElse(null);
         String search = searchOpt.orElse("");
 

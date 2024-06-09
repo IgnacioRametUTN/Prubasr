@@ -32,7 +32,6 @@ public class Sucursal extends Base{
             joinColumns = @JoinColumn(name = "sucursal_id"),
             inverseJoinColumns = @JoinColumn(name = "categoria_id"))
     @Builder.Default
-    @JsonManagedReference
     private Set<Categoria> categorias = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "sucursal", fetch = FetchType.LAZY)

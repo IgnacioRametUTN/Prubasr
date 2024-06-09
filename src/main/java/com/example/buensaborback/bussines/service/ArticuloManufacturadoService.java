@@ -1,5 +1,6 @@
 package com.example.buensaborback.bussines.service;
 
+import com.example.buensaborback.bussines.service.impl.CategoriaServiceImpl;
 import com.example.buensaborback.bussines.service.impl.UnidadMedidaServiceImpl;
 import com.example.buensaborback.domain.entities.*;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
@@ -17,15 +18,15 @@ import java.util.stream.Collectors;
 public class ArticuloManufacturadoService {
     private final ArticuloManufacturadoRepository articuloManufacturadoRepository;
     private final ArticuloInsumoService articuloInsumoService;
-    private final CategoriaService categoriaService;
+    private final CategoriaServiceImpl categoriaServiceImpl;
     private final UnidadMedidaServiceImpl unidadMedidaService;
     private final ArticuloManufacturadoDetalleService articuloManufacturadoDetalleService;
     private final PromocionDetalleService promocionDetalleService;
 
-    public ArticuloManufacturadoService(ArticuloManufacturadoRepository articuloManufacturadoRepository, ArticuloInsumoService articuloInsumoService, CategoriaService categoriaService, UnidadMedidaServiceImpl unidadMedidaService, ArticuloManufacturadoDetalleService articuloManufacturadoDetalleService, PromocionDetalleService promocionDetalleService) {
+    public ArticuloManufacturadoService(ArticuloManufacturadoRepository articuloManufacturadoRepository, ArticuloInsumoService articuloInsumoService, CategoriaServiceImpl categoriaServiceImpl, UnidadMedidaServiceImpl unidadMedidaService, ArticuloManufacturadoDetalleService articuloManufacturadoDetalleService, PromocionDetalleService promocionDetalleService) {
         this.articuloManufacturadoRepository = articuloManufacturadoRepository;
         this.articuloInsumoService = articuloInsumoService;
-        this.categoriaService = categoriaService;
+        this.categoriaServiceImpl = categoriaServiceImpl;
         this.unidadMedidaService = unidadMedidaService;
         this.articuloManufacturadoDetalleService = articuloManufacturadoDetalleService;
         this.promocionDetalleService = promocionDetalleService;
@@ -40,7 +41,7 @@ public class ArticuloManufacturadoService {
     }
     @Transactional
     public ArticuloManufacturado create(ArticuloManufacturado entity) {
-        entity.setCategoria(categoriaService.getCategoriaById(entity.getCategoria().getId()));
+        entity.setCategoria(categoriaServiceImpl.getCategoriaById(entity.getCategoria().getId()));
         entity.setUnidadMedida(unidadMedidaService.getUnidadMedidaById(entity.getUnidadMedida().getId()));
 
         // Actualizar la lista de PromocionDetalle
@@ -74,7 +75,7 @@ public class ArticuloManufacturadoService {
         Set<ArticuloManufacturadoDetalle> detallesViejo = existingEntity.getArticuloManufacturadoDetalles();
 
         // Asignar las entidades relacionadas
-        entity.setCategoria(categoriaService.getCategoriaById(entity.getCategoria().getId())); // Si id no se encuentra, lanza una excepción en Repository
+        entity.setCategoria(categoriaServiceImpl.getCategoriaById(entity.getCategoria().getId())); // Si id no se encuentra, lanza una excepción en Repository
         entity.setUnidadMedida(unidadMedidaService.getUnidadMedidaById(entity.getUnidadMedida().getId())); // Si id no se encuentra, lanza una excepción en Repository
 
         // Prepara un nuevo conjunto para los detalles
@@ -117,7 +118,7 @@ public class ArticuloManufacturadoService {
     }
 
     public List<ArticuloManufacturado> getAll(Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> searchOpt) {
-        Categoria categoria = categoriaOpt.map(categoriaService::getCategoriaById).orElse(null); //Basicamente funciona así: si el Optional está vacío el map() no hace nada y salta al orElse y devuelve null, caso contrario ejecuta el metodo del map
+        Categoria categoria = categoriaOpt.map(categoriaServiceImpl::getCategoriaById).orElse(null); //Basicamente funciona así: si el Optional está vacío el map() no hace nada y salta al orElse y devuelve null, caso contrario ejecuta el metodo del map
         UnidadMedida unidadMedida = unidadMedidaOpt.map(unidadMedidaService::getUnidadMedidaById).orElse(null);
         String search = searchOpt.orElse("");
 

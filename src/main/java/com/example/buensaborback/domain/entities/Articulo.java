@@ -1,5 +1,6 @@
 package com.example.buensaborback.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -34,7 +35,7 @@ public  class Articulo extends Base {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id")
-    @JsonManagedReference
+    @JsonManagedReference(value = "categoria-articulos")
     protected Categoria categoria;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "articulo")

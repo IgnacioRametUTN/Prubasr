@@ -1,6 +1,6 @@
 package com.example.buensaborback.presentation.rest;
 
-import com.example.buensaborback.bussines.service.SucursalService;
+import com.example.buensaborback.bussines.service.ISucursalService;
 import com.example.buensaborback.domain.entities.Sucursal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,17 +14,17 @@ import java.util.List;
 public class SucursalController {
 
     @Autowired
-    private SucursalService sucursalService;
+    private ISucursalService ISucursalService;
 
     @PostMapping
     public ResponseEntity<Sucursal> createSucursal(@RequestBody Sucursal sucursal) {
-        Sucursal savedSucursal = sucursalService.saveSucursal(sucursal);
+        Sucursal savedSucursal = ISucursalService.saveSucursal(sucursal);
         return ResponseEntity.ok(savedSucursal);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Sucursal> getSucursalById(@PathVariable Long id) {
-        Sucursal sucursal = sucursalService.getSucursalById(id);
+        Sucursal sucursal = ISucursalService.getSucursalById(id);
         if (sucursal != null) {
             return ResponseEntity.ok(sucursal);
         } else {
@@ -34,13 +34,13 @@ public class SucursalController {
 
     @GetMapping
     public ResponseEntity<List<Sucursal>> getAllSucursales() {
-        List<Sucursal> sucursales = sucursalService.getAllSucursales();
+        List<Sucursal> sucursales = ISucursalService.getAllSucursales();
         return ResponseEntity.ok(sucursales);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Sucursal> updateSucursal(@PathVariable Long id, @RequestBody Sucursal sucursal) {
-        Sucursal updatedSucursal = sucursalService.updateSucursal(id, sucursal);
+        Sucursal updatedSucursal = ISucursalService.updateSucursal(id, sucursal);
         if (updatedSucursal != null) {
             return ResponseEntity.ok(updatedSucursal);
         } else {
@@ -50,13 +50,13 @@ public class SucursalController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSucursal(@PathVariable Long id) {
-        sucursalService.deleteSucursal(id);
+        ISucursalService.deleteSucursal(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/empresa/{empresaId}")
     public ResponseEntity<List<Sucursal>> getSucursalesByEmpresaId(@PathVariable Long empresaId) {
-        List<Sucursal> sucursales = sucursalService.getSucursalesByEmpresaId(empresaId);
+        List<Sucursal> sucursales = ISucursalService.getSucursalesByEmpresaId(empresaId);
         return ResponseEntity.ok(sucursales);
     }
 }
