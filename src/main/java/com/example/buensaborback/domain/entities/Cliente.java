@@ -1,5 +1,6 @@
 package com.example.buensaborback.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,17 +26,16 @@ public class Cliente extends Base{
     private LocalDate fechaNacimiento;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "usuario-cliente")
     private Usuario usuario;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JsonManagedReference
     private Imagen imagen;
 
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
     @Builder.Default
     @JsonManagedReference
+    @JsonIgnore
     private Set<Pedido> pedidos = new HashSet<>();
 
 
@@ -46,6 +46,7 @@ public class Cliente extends Base{
             inverseJoinColumns = @JoinColumn(name = "domicilio_id"))
     @Builder.Default
     @JsonManagedReference
+    @JsonIgnore
     private Set<Domicilio> domicilios = new HashSet<>();
 
 

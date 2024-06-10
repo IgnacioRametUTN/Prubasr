@@ -30,8 +30,8 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioNuevo);
     }
 
-    @GetMapping("/validar")
-    public ResponseEntity<Boolean> validarExistenciaUsuario(@RequestParam String nombreUsuario) {
+    @GetMapping("/validar/{nombreUsuario}")
+    public ResponseEntity<Boolean> validarExistenciaUsuario(@PathVariable String nombreUsuario) {
         boolean usuarioExistente = usuarioService.existsUsuarioByUsername(nombreUsuario);
         return ResponseEntity.ok(usuarioExistente);
     }

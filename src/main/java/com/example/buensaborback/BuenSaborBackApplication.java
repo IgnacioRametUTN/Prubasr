@@ -308,7 +308,6 @@ public class BuenSaborBackApplication {
 					.apellido("Bleuss")
 					.nombre("Albert")
 					.email("Bleu@gmail.com")
-					.perfil(Rol.Empleado)
 					.telefono("+54228282")
 					.usuario(usuario2)
 					.build();
