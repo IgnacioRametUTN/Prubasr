@@ -1,5 +1,6 @@
 package com.example.buensaborback.bussines.service;
 
+import com.example.buensaborback.domain.entities.Cliente;
 import com.example.buensaborback.domain.entities.Usuario;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface IUsuarioService {
      Usuario register(Usuario usuario);
 
      String encriptarClaveSHA256(String clave);
+
+     Cliente getClienteByUsername(String username);
 }

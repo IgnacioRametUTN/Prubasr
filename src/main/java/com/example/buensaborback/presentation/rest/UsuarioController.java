@@ -2,6 +2,7 @@ package com.example.buensaborback.presentation.rest;
 
 import com.example.buensaborback.bussines.service.IUsuarioService;
 import com.example.buensaborback.bussines.service.impl.UsuarioServiceImpl;
+import com.example.buensaborback.domain.entities.Cliente;
 import com.example.buensaborback.domain.entities.Usuario;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,16 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioExistente);
     }
 
+    @GetMapping("/cliente/{nombreUsuario}")
+    public ResponseEntity<?> getClienteByNombreUsuario(@PathVariable String nombreUsuario) {
+        Cliente cliente = usuarioService.getClienteByUsername(nombreUsuario);
+        if (cliente != null) {
+            return ResponseEntity.ok(cliente);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
     @GetMapping("")
     public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(this.usuarioService.getAll());
