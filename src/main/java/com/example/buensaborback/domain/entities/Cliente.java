@@ -25,7 +25,7 @@ public class Cliente extends Base{
     private LocalDate fechaNacimiento;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference(value = "usuario-cliente")
     private Usuario usuario;
 
     @OneToOne(cascade = CascadeType.ALL)

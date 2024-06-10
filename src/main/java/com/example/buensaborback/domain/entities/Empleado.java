@@ -9,6 +9,8 @@ import jakarta.persistence.OneToOne;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
+
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,10 +24,10 @@ public class Empleado extends Base {
     private String apellido;
     private String telefono;
     private String email;
-    private Rol perfil;
+    private LocalDate fechaNacimiento;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference(value = "usuario-empleado")
     private Usuario usuario;
 
 
