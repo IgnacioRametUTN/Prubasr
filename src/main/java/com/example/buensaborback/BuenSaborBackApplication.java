@@ -297,8 +297,8 @@ public class BuenSaborBackApplication {
 					.build();
 
 			Usuario usuario1 = Usuario.builder()
-					.auth0Id("MIIJKQIBAAKCAgEAwfUb0nUC0aKB3WiytFhnCIg455BYC+dR3MUGadWpIg7S6lbi")
-					.username("JhoanPerez")
+					.auth0Id("aaaa")
+					.username("gonzaPrueba")
 					.build();
 			Usuario usuario2 = Usuario.builder()
 					.auth0Id("mdadnkNDUHnDJKDKJhdnkJNJkdnKJDNkjbdKJDBkjdbKD+dR3MUGadWpIg7S6lbi")

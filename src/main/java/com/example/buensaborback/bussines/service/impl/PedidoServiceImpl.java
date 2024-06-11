@@ -39,6 +39,8 @@ public class PedidoServiceImpl implements IPedidoService {
     }
     @Transactional
     public Pedido save(Pedido pedido) {
+
+        System.out.println("Pedido recibido: " + pedido.toString());
         Usuario usuarioOp = usuarioService.getUsuarioByUsername(pedido.getCliente().getUsuario().getUsername());
             pedido.setCliente(usuarioOp.getCliente());
             for (DetallePedido detalle : pedido.getDetallePedidos()) {
@@ -73,6 +75,13 @@ public class PedidoServiceImpl implements IPedidoService {
     public List<Pedido> getAllByCliente(Long idCliente){
         Cliente cliente = this.clienteServiceImpl.getClienteById(idCliente);
         return this.pedidoRepository.findByAltaTrueAndCliente(cliente);
+    }
+    public List<Object> findTopProducts(LocalDate startDate, LocalDate endDate) {
+        return pedidoRepository.findTopProducts(startDate, endDate);
+    }
+
+    public List<Pedido> findPedidosBetweenDates(LocalDate startDate, LocalDate endDate) {
+        return pedidoRepository.findByFechaPedidoBetween(startDate, endDate);
     }
 
 }
