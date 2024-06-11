@@ -45,11 +45,7 @@ public class ISucursalServiceImpl implements ISucursalService {
             updatedSucursal.setNombre(sucursal.getNombre());
             updatedSucursal.setHorarioApertura(sucursal.getHorarioApertura());
             updatedSucursal.setHorarioCierre(sucursal.getHorarioCierre());
-            updatedSucursal.setDomicilio(sucursal.getDomicilio());
-            updatedSucursal.setCategorias(sucursal.getCategorias());
-            updatedSucursal.setPedidos(sucursal.getPedidos());
-            updatedSucursal.setPromociones(sucursal.getPromociones());
-            updatedSucursal.setEmpresa(sucursal.getEmpresa());
+           
             return sucursalRepository.save(updatedSucursal);
         } else {
             return null;
