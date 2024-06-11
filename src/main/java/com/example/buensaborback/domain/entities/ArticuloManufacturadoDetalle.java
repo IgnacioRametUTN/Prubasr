@@ -17,7 +17,7 @@ import java.util.Objects;
 @ToString
 @SuperBuilder
 
-@JsonIgnoreProperties({"hibernateLazyInitializer", "articuloManufacturado","articuloInsumo"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "articuloManufacturado"})
 public class ArticuloManufacturadoDetalle extends Base {
     private Double cantidad;
 

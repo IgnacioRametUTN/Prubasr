@@ -1,10 +1,7 @@
 package com.example.buensaborback.presentation.advice;
 
 import com.example.buensaborback.domain.dto.ErrorDto;
-import com.example.buensaborback.presentation.advice.exception.BadRequestException;
-import com.example.buensaborback.presentation.advice.exception.DuplicateEntryException;
-import com.example.buensaborback.presentation.advice.exception.NotFoundException;
-import com.example.buensaborback.presentation.advice.exception.UnauthorizeException;
+import com.example.buensaborback.presentation.advice.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -50,6 +47,16 @@ public class RestControllerAdvice {
 
     @ExceptionHandler(value = DuplicateEntryException.class)
     public ResponseEntity<ErrorDto> handleDuplicateEntryException(DuplicateEntryException e){
+        String errorMsg = e.getClass().getSimpleName()+ " : " + e.getMessage();
+        logger.error(errorMsg);
+        return new ResponseEntity<>(ErrorDto.builder()
+                .message(e.getMessage())
+                .statusCode(HttpStatus.CONFLICT.value())
+                .build(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value = InsufficientStock.class)
+    public ResponseEntity<ErrorDto> handleInsufficientStock(InsufficientStock e){
         String errorMsg = e.getClass().getSimpleName()+ " : " + e.getMessage();
         logger.error(errorMsg);
         return new ResponseEntity<>(ErrorDto.builder()

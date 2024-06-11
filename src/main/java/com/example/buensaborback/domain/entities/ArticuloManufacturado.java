@@ -20,7 +20,6 @@ import java.util.Set;
 @Entity
 @SuperBuilder
 
-@JsonIgnoreProperties({"hibernateLazyInitializer", "articuloManufacturadoDetalles"})
 public class ArticuloManufacturado extends Articulo{
 
     private String descripcion;
@@ -29,5 +28,7 @@ public class ArticuloManufacturado extends Articulo{
 
     @OneToMany(mappedBy = "articuloManufacturado", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "articuloManufacturado"})
     private Set<ArticuloManufacturadoDetalle> articuloManufacturadoDetalles = new HashSet<>();
 }

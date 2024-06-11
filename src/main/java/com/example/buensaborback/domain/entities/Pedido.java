@@ -23,7 +23,7 @@ import java.util.Set;
 @Entity
 @ToString
 @SuperBuilder
-@JsonIgnoreProperties({"hibernateLazyInitializer", "empleado","domicilio","sucursal","factura"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "empleado","domicilio","factura"})
 public class Pedido extends Base{
 
     private LocalTime horaEstimadaFinalizacion;

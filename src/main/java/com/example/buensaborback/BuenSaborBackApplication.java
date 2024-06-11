@@ -68,7 +68,7 @@ public class BuenSaborBackApplication {
 	private UsuarioRepository usuarioRepository;
 
 	@Autowired
-	private FacturaRepository facturaRepository;
+	private FacturaRepository FacturaRepository;
 
 	@Autowired
 	private PedidoRepository pedidoRepository;
@@ -205,8 +205,8 @@ public class BuenSaborBackApplication {
 					.denominacion("Quesito")
 					.precioVenta(500.0)
 					.precioCompra(100.0)
-					.stockActual(50)
-					.stockMaximo(100)
+					.stockActual(50.0)
+					.stockMaximo(100.0)
 					.esParaElaborar(true)
 					.unidadMedida(unidadMedidakg)
 
@@ -228,8 +228,8 @@ public class BuenSaborBackApplication {
 					.denominacion("Harina")
 					.precioVenta(500.0)
 					.precioCompra(100.0)
-					.stockActual(50)
-					.stockMaximo(100)
+					.stockActual(50.0)
+					.stockMaximo(100.0)
 					.esParaElaborar(true)
 					.unidadMedida(unidadMedidakg)
 
@@ -262,8 +262,8 @@ public class BuenSaborBackApplication {
 					.denominacion("Coca-cola")
 					.precioVenta(2500.00)
 					.precioCompra(1000.00)
-					.stockActual(50)
-					.stockMaximo(100)
+					.stockActual(50.0)
+					.stockMaximo(100.0)
 					.esParaElaborar(false)
 					.imagenes(new HashSet<>(Set.of(imagen5)))
 					.unidadMedida(unidadMedidaLitro)
