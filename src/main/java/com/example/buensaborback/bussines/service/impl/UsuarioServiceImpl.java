@@ -1,6 +1,7 @@
 package com.example.buensaborback.bussines.service.impl;
 
 import com.example.buensaborback.bussines.service.IUsuarioService;
+import com.example.buensaborback.domain.entities.Cliente;
 import com.example.buensaborback.domain.entities.Usuario;
 import com.example.buensaborback.presentation.advice.exception.DuplicateEntryException;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioServiceImpl implements IUsuarioService {
@@ -69,5 +71,17 @@ public class UsuarioServiceImpl implements IUsuarioService {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Cliente getClienteByUsername(String username) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByUsername(username);
+        if (usuarioOptional.isPresent()) {
+            Usuario usuario = usuarioOptional.get();
+            if (usuario.getCliente() != null) {
+                return usuario.getCliente();
+            }
+        }
+        return null;
     }
 }

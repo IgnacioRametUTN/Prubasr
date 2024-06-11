@@ -31,6 +31,7 @@ public class ClienteController{
         return ResponseEntity.ok().body(this.clienteService.getClienteById(id));
     }
 
+
     @PostMapping("")
     public ResponseEntity<?> create(@RequestBody Cliente body){
         return ResponseEntity.ok().body(this.clienteService.create(body));
@@ -45,5 +46,7 @@ public class ClienteController{
     public ResponseEntity<?> delete(@PathVariable("id") Long id){
         return ResponseEntity.ok().body(this.clienteService.delete(id));
     }
+
+
 
 }
