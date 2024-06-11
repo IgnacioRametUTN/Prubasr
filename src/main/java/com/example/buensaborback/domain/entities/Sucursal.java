@@ -2,6 +2,7 @@ package com.example.buensaborback.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,6 +18,8 @@ import java.util.Set;
 @Setter
 @Entity
 @SuperBuilder
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "domicilio","categorias","pedidos","promociones","empresa","imagenSucursal"})
 public class Sucursal extends Base{
 
     private String nombre;
@@ -24,7 +27,6 @@ public class Sucursal extends Base{
     private LocalTime horarioCierre;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JsonManagedReference
     private Domicilio domicilio;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -35,7 +37,7 @@ public class Sucursal extends Base{
     private Set<Categoria> categorias = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "sucursal", fetch = FetchType.LAZY)
-    @JsonBackReference
+
     private Set<Pedido> pedidos;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -43,12 +45,10 @@ public class Sucursal extends Base{
             joinColumns = @JoinColumn(name = "sucursal_id"),
             inverseJoinColumns = @JoinColumn(name = "promocion_id"))
     @Builder.Default
-    @JsonManagedReference
     private Set<Promocion> promociones = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "empresa_id")
-    @JsonBackReference
     private Empresa empresa;
 
     @OneToOne(mappedBy = "sucursal", cascade = CascadeType.ALL)

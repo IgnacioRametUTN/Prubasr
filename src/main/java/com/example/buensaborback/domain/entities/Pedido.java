@@ -5,6 +5,7 @@ import com.example.buensaborback.domain.entities.enums.FormaPago;
 import com.example.buensaborback.domain.entities.enums.TipoEnvio;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,6 +23,7 @@ import java.util.Set;
 @Entity
 @ToString
 @SuperBuilder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "empleado","domicilio","sucursal","factura"})
 public class Pedido extends Base{
 
     private LocalTime horaEstimadaFinalizacion;
@@ -34,32 +36,28 @@ public class Pedido extends Base{
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "empleado_id")
-    @JsonBackReference
+
     private Empleado empleado;
 
     @ManyToOne(cascade = CascadeType.ALL) //Dirección a donde se envía el pedido
-    @JsonManagedReference
+
     private Domicilio domicilio;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JsonManagedReference
+
     private Sucursal sucursal;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JsonManagedReference
     private Factura factura;
 
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pedido")
     @Builder.Default
-    @JsonManagedReference
     private Set<DetallePedido> detallePedidos = new HashSet<>();
 
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cliente_id")
-    @ToString.Exclude
-    @JsonBackReference
     private Cliente cliente;
 
 

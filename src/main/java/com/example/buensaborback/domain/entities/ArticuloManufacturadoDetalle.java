@@ -2,7 +2,7 @@ package com.example.buensaborback.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -16,19 +16,21 @@ import java.util.Objects;
 @Entity
 @ToString
 @SuperBuilder
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "articuloManufacturado","articuloInsumo"})
 public class ArticuloManufacturadoDetalle extends Base {
     private Double cantidad;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "articulo_manufacturado_id")
     @ToString.Exclude
-    @JsonBackReference(value = "manufacturado-detalle")
+
     private ArticuloManufacturado articuloManufacturado;
 
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "articulo_insumo_id")
-    @JsonIgnore
+
     private ArticuloInsumo articuloInsumo;
 
     @Override

@@ -2,6 +2,7 @@ package com.example.buensaborback.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,29 +18,29 @@ import java.util.Set;
 @Entity
 @ToString
 @SuperBuilder
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "sucursales","articulos","subCategorias"})
 public class Categoria extends Base {
 
     private String denominacion;
 
     @ManyToMany(mappedBy = "categorias")
     @Builder.Default
-    @JsonIgnore //Se utilizo JsonIgnore porque no respondia bien a JsonBackReference y JsonManagedReference
     private Set<Sucursal> sucursales = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "categoria", fetch = FetchType.LAZY)
     @Builder.Default
-    @JsonIgnore
+
     private Set<Articulo> articulos = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "categoria_padre_id")
-    @JsonBackReference(value = "categoria-categorias")
-    @ToString.Exclude
+
     private Categoria categoriaPadre;
 
     @OneToMany(mappedBy = "categoriaPadre", cascade = CascadeType.ALL)
     @Builder.Default
-    @JsonManagedReference(value = "categoria-categorias")
+
     private Set<Categoria> subCategorias = new HashSet<>();
 
 }
