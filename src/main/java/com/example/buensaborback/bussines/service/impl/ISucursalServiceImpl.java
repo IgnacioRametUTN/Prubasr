@@ -16,8 +16,13 @@ public class ISucursalServiceImpl implements ISucursalService {
     @Autowired
     private SucursalRepository sucursalRepository;
 
+    @Autowired
+    private IEmpresaServiceImpl iEmpresaService;
     @Override
     public Sucursal saveSucursal(Sucursal sucursal) {
+        System.out.println(sucursal);
+        sucursal.setEmpresa(iEmpresaService.getEmpresaById(sucursal.getEmpresa().getId()));
+
         return sucursalRepository.save(sucursal);
     }
 

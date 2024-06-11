@@ -19,7 +19,7 @@ import java.util.Set;
 @Entity
 @SuperBuilder
 
-@JsonIgnoreProperties({"hibernateLazyInitializer", "domicilio","categorias","pedidos","promociones","empresa","imagenSucursal"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "domicilio","categorias","pedidos","promociones","imagenSucursal"})
 public class Sucursal extends Base{
 
     private String nombre;
@@ -49,6 +49,8 @@ public class Sucursal extends Base{
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "empresa_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "sucursales"})
+
     private Empresa empresa;
 
     @OneToOne(mappedBy = "sucursal", cascade = CascadeType.ALL)
