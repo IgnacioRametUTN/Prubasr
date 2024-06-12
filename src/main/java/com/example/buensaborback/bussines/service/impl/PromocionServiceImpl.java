@@ -2,12 +2,15 @@ package com.example.buensaborback.bussines.service.impl;
 
 import com.example.buensaborback.bussines.service.IPromocionService;
 import com.example.buensaborback.domain.entities.ArticuloManufacturado;
+import com.example.buensaborback.domain.entities.Pedido;
 import com.example.buensaborback.domain.entities.Promocion;
 import com.example.buensaborback.domain.entities.PromocionDetalle;
 import com.example.buensaborback.repositories.PromocionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,6 +47,8 @@ public class PromocionServiceImpl implements IPromocionService {
         }
         return promocionRepository.save(entity);
     }
+
+
 
     @Override
     public Promocion update(Long id, Promocion entity) {
