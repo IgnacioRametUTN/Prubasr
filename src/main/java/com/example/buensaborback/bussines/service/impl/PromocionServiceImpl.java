@@ -1,7 +1,9 @@
 package com.example.buensaborback.bussines.service.impl;
 
 import com.example.buensaborback.bussines.service.IPromocionService;
+import com.example.buensaborback.domain.entities.ArticuloManufacturado;
 import com.example.buensaborback.domain.entities.Promocion;
+import com.example.buensaborback.domain.entities.PromocionDetalle;
 import com.example.buensaborback.repositories.PromocionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,8 +14,14 @@ import java.util.Optional;
 @Service
 public class PromocionServiceImpl implements IPromocionService {
 
+
     @Autowired
     private PromocionRepository promocionRepository;
+    private final ArtManufacturadoServiceImpl artManufacturadoService;
+
+    public PromocionServiceImpl(ArtManufacturadoServiceImpl artManufacturadoService) {
+        this.artManufacturadoService = artManufacturadoService;
+    }
 
     @Override
     public Promocion getPromocionById(Long id) {
@@ -27,6 +35,13 @@ public class PromocionServiceImpl implements IPromocionService {
 
     @Override
     public Promocion create(Promocion entity) {
+        System.out.println(entity.toString());
+        for (PromocionDetalle detalle: entity.getDetallesPromocion()) {
+            ArticuloManufacturado articulo = artManufacturadoService.getArticuloManufacturadoById(detalle.getArticulo().getId());
+
+            detalle.setArticulo(articulo);
+            detalle.setPromocion(entity);
+        }
         return promocionRepository.save(entity);
     }
 

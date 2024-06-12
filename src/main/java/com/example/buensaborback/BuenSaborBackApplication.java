@@ -299,10 +299,12 @@ public class BuenSaborBackApplication {
 			Usuario usuario1 = Usuario.builder()
 					.auth0Id("aaaa")
 					.username("gonzaPrueba")
+					.rol(Rol.Cliente)
 					.build();
 			Usuario usuario2 = Usuario.builder()
-					.auth0Id("mdadnkNDUHnDJKDKJhdnkJNJkdnKJDNkjbdKJDBkjdbKD+dR3MUGadWpIg7S6lbi")
-					.username("Bleusa")
+					.auth0Id("admin")
+					.username("admin")
+					.rol(Rol.Admin)
 					.build();
 			Empleado empleado=Empleado.builder()
 					.apellido("Bleuss")

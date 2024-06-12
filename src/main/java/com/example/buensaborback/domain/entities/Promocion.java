@@ -21,7 +21,7 @@ import java.util.Set;
 @ToString
 @SuperBuilder
 
-@JsonIgnoreProperties({"hibernateLazyInitializer", "detallesPromocion","detallePedido","imagenes"})
+@JsonIgnoreProperties({"hibernateLazyInitializer","detallePedido","imagenes"})
 public class Promocion extends Base {
 
     private String denominacion;
