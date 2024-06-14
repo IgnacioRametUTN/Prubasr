@@ -5,83 +5,85 @@ import com.example.buensaborback.domain.entities.ArticuloInsumo;
 import com.example.buensaborback.domain.entities.Categoria;
 import com.example.buensaborback.domain.entities.PromocionDetalle;
 import com.example.buensaborback.domain.entities.UnidadMedida;
+import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.ArticuloInsumoRepository;
-import com.example.buensaborback.repositories.PromocionDetalleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
-public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo,Long> implements IArticuloInsumoService {
-    @Autowired
-    private UnidadMedidaServiceImpl unidadMedidaService;
-    @Autowired
-    private CategoriaServiceImpl categoriaService;
-
-    @Autowired
-    private PromocionDetalleRepository promocionService;
-
-    @Autowired
+public class ArticuloInsumoServiceImpl implements IArticuloInsumoService {
     private final ArticuloInsumoRepository articuloInsumoRepository;
+    private final UnidadMedidaServiceImpl unidadMedidaService;
+    private final CategoriaServiceImpl categoriaServiceImpl;
+    private final PromocionDetalleServiceImpl promocionDetalleServiceImpl;
 
-    public ArticuloInsumoServiceImpl(ArticuloInsumoRepository articuloInsumoRepository) {
+    public ArticuloInsumoServiceImpl(ArticuloInsumoRepository articuloInsumoRepository, UnidadMedidaServiceImpl unidadMedidaService, CategoriaServiceImpl categoriaServiceImpl, PromocionDetalleServiceImpl promocionDetalleServiceImpl) {
         this.articuloInsumoRepository = articuloInsumoRepository;
+        this.unidadMedidaService = unidadMedidaService;
+        this.categoriaServiceImpl = categoriaServiceImpl;
+        this.promocionDetalleServiceImpl = promocionDetalleServiceImpl;
     }
 
-    @Override
-    public ArticuloInsumo update(ArticuloInsumo entity) {
-        entity.setUnidadMedida(unidadMedidaService.getById(entity.getUnidadMedida().getId()));
-        entity.setCategoria(categoriaService.getById(entity.getCategoria().getId()));
-        Set<PromocionDetalle> newDetalles = new HashSet<>();
-        for (PromocionDetalle detalle : entity.getPromocionDetalle()){
-            PromocionDetalle promocionDetalle = promocionService.getById(detalle.getId());
-            promocionDetalle.setArticulo(entity);
-            newDetalles.add(promocionDetalle);
-        }
-
-        entity.setPromocionDetalle(newDetalles);
-
-        return super.update(entity);
+    public ArticuloInsumo getArticuloInsumoById(Long id){
+        return this.articuloInsumoRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Articulo Insumo con ID %d no encontrado", id)));
     }
 
-    @Override
-    public List<ArticuloInsumo> getAll(Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> denominacionOpt) {
-        Categoria categoria = null;
-        UnidadMedida unidadMedida = null;
-        String denominacion = "";
-
-        if(categoriaOpt.isPresent()) {
-            categoria = categoriaService.getById(categoriaOpt.get());
-        }
-
-        if(unidadMedidaOpt.isPresent()) {
-            unidadMedida = unidadMedidaService.getById(unidadMedidaOpt.get());
-        }
-
-        if(denominacionOpt.isPresent()) {
-            denominacion = denominacionOpt.get();
-        }
-
-        if(categoria != null && unidadMedida != null){
-            return this.articuloInsumoRepository.findByCategoriaAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(categoria, unidadMedida, denominacion);
-        }
-
-        if(categoria != null){
-            return this.articuloInsumoRepository.findByCategoriaAndDenominacionStartingWithIgnoreCase(categoria, denominacion);
-        }
-
-        if(unidadMedida != null){
-            return this.articuloInsumoRepository.findByUnidadMedidaAndDenominacionStartingWithIgnoreCase(unidadMedida, denominacion);
-        }
-
-        if(denominacion != null){
-            return this.articuloInsumoRepository.findByDenominacionStartingWithIgnoreCase(denominacion);
-        }
-
-        return super.getAll();
+    public boolean existsArticuloInsumoById(Long id){
+        return this.articuloInsumoRepository.existsById(id);
     }
+
+    public ArticuloInsumo create(ArticuloInsumo entity){
+        return this.articuloInsumoRepository.save(entity);
+    }
+
+    public ArticuloInsumo update(Long id,ArticuloInsumo entity) {
+        this.getArticuloInsumoById(id); //Verifica si existe unicamente, sino larga expcion
+        // Actualizar las referencias a UnidadMedida y Categoria
+        entity.setUnidadMedida(unidadMedidaService.getUnidadMedidaById(entity.getUnidadMedida().getId()));
+        entity.setCategoria(categoriaServiceImpl.getCategoriaById(entity.getCategoria().getId()));
+
+        // Actualizar la lista de PromocionDetalle
+        entity.setPromocionDetalle(entity.getPromocionDetalle().stream()
+                .map(detalle -> {
+                    PromocionDetalle promocionDetalle = promocionDetalleServiceImpl.getPromocionDetalleById(detalle.getId());
+                    promocionDetalle.setArticulo(entity);
+                    return promocionDetalle;
+                })
+                .collect(Collectors.toSet()));
+
+        // Guardar y devolver la entidad actualizada
+        return articuloInsumoRepository.save(entity);
+    }
+
+    public ArticuloInsumo delete(Long id){
+        ArticuloInsumo entity = this.getArticuloInsumoById(id);
+        entity.setAlta(!entity.isAlta());
+        return this.articuloInsumoRepository.save(entity);
+    }
+    public List<ArticuloInsumo> getAll(){
+        return articuloInsumoRepository.findAll();
+    }
+    public List<ArticuloInsumo> getAll(Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> searchOpt) {
+        Categoria categoria = categoriaOpt.map(categoriaServiceImpl::getCategoriaById).orElse(null); //Basicamente funciona así: si el Optional está vacío el map() no hace nada y salta al orElse y devuelve null, caso contrario ejecuta el metodo del map
+        UnidadMedida unidadMedida = unidadMedidaOpt.map(unidadMedidaService::getUnidadMedidaById).orElse(null);
+        String search = searchOpt.orElse("");
+
+        if (categoria != null && unidadMedida != null) {
+            return articuloInsumoRepository.findByCategoriaAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(categoria, unidadMedida, search);
+        } else if (categoria != null) {
+            return articuloInsumoRepository.findByCategoriaAndDenominacionStartingWithIgnoreCase(categoria, search);
+        } else if (unidadMedida != null) {
+            return articuloInsumoRepository.findByUnidadMedidaAndDenominacionStartingWithIgnoreCase(unidadMedida, search);
+        } else if (!search.isEmpty()) {
+            return articuloInsumoRepository.findByDenominacionStartingWithIgnoreCase(search);
+        } else {
+            return articuloInsumoRepository.findAll();
+        }
+    }
+
+
 }

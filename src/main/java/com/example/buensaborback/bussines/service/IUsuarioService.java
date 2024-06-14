@@ -1,0 +1,23 @@
+package com.example.buensaborback.bussines.service;
+
+import com.example.buensaborback.domain.entities.Cliente;
+import com.example.buensaborback.domain.entities.Usuario;
+
+import java.util.List;
+
+public interface IUsuarioService {
+     Usuario getUsuarioById(Long id);
+     Usuario getUsuarioByUsername(String username);
+     List<Usuario> getAll();
+
+     boolean existsUsuarioById(Long id);
+     boolean existsUsuarioByUsername(String username);
+
+     Usuario login(String nombreUsuario, String clave);
+
+     Usuario register(Usuario usuario);
+
+     String encriptarClaveSHA256(String clave);
+
+     Cliente getClienteByUsername(String username);
+}

@@ -9,14 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cglib.core.Local;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @SpringBootApplication
@@ -71,7 +68,7 @@ public class BuenSaborBackApplication {
 	private UsuarioRepository usuarioRepository;
 
 	@Autowired
-	private FacturaRepository facturaRepository;
+	private FacturaRepository FacturaRepository;
 
 	@Autowired
 	private PedidoRepository pedidoRepository;
@@ -187,6 +184,7 @@ public class BuenSaborBackApplication {
 					.subCategorias(new HashSet<>(Set.of(refrescosCola)))
 					.sucursales(new HashSet<>(Set.of(sucursal1, sucursal2)))
 					.build();
+			refrescosCola.setCategoriaPadre(bebidas);
 			//Se crean articulos insumo
 				//Se crea unidad de medida
 			UnidadMedida unidadMedidakg= UnidadMedida.builder()
@@ -207,8 +205,8 @@ public class BuenSaborBackApplication {
 					.denominacion("Quesito")
 					.precioVenta(500.0)
 					.precioCompra(100.0)
-					.stockActual(50)
-					.stockMaximo(100)
+					.stockActual(50.0)
+					.stockMaximo(100.0)
 					.esParaElaborar(true)
 					.unidadMedida(unidadMedidakg)
 
@@ -230,8 +228,8 @@ public class BuenSaborBackApplication {
 					.denominacion("Harina")
 					.precioVenta(500.0)
 					.precioCompra(100.0)
-					.stockActual(50)
-					.stockMaximo(100)
+					.stockActual(50.0)
+					.stockMaximo(100.0)
 					.esParaElaborar(true)
 					.unidadMedida(unidadMedidakg)
 
@@ -264,8 +262,8 @@ public class BuenSaborBackApplication {
 					.denominacion("Coca-cola")
 					.precioVenta(2500.00)
 					.precioCompra(1000.00)
-					.stockActual(50)
-					.stockMaximo(100)
+					.stockActual(50.0)
+					.stockMaximo(100.0)
 					.esParaElaborar(false)
 					.imagenes(new HashSet<>(Set.of(imagen5)))
 					.unidadMedida(unidadMedidaLitro)
@@ -299,18 +297,19 @@ public class BuenSaborBackApplication {
 					.build();
 
 			Usuario usuario1 = Usuario.builder()
-					.auth0Id("MIIJKQIBAAKCAgEAwfUb0nUC0aKB3WiytFhnCIg455BYC+dR3MUGadWpIg7S6lbi")
-					.username("JhoanPerez")
+					.auth0Id("aaaa")
+					.username("gonzaPrueba")
+					.rol(Rol.Cliente)
 					.build();
 			Usuario usuario2 = Usuario.builder()
-					.auth0Id("mdadnkNDUHnDJKDKJhdnkJNJkdnKJDNkjbdKJDBkjdbKD+dR3MUGadWpIg7S6lbi")
-					.username("Bleusa")
+					.auth0Id("admin")
+					.username("admin")
+					.rol(Rol.Admin)
 					.build();
 			Empleado empleado=Empleado.builder()
 					.apellido("Bleuss")
 					.nombre("Albert")
 					.email("Bleu@gmail.com")
-					.perfil(Rol.Empleado)
 					.telefono("+54228282")
 					.usuario(usuario2)
 					.build();

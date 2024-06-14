@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SucursalRepository extends BaseRepository<Sucursal,Long> {
-
-    List<Sucursal> findSucursalByEmpresa(Empresa empresa);
+public interface SucursalRepository extends JpaRepository<Sucursal, Long>{
+    List<Sucursal> findByEmpresaId(Long empresaId);
 }

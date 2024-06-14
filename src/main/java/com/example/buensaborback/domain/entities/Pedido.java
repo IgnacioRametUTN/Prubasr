@@ -3,12 +3,14 @@ package com.example.buensaborback.domain.entities;
 import com.example.buensaborback.domain.entities.enums.Estado;
 import com.example.buensaborback.domain.entities.enums.FormaPago;
 import com.example.buensaborback.domain.entities.enums.TipoEnvio;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-import com.example.buensaborback.domain.entities.Empleado;
 import lombok.experimental.SuperBuilder;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
@@ -21,6 +23,7 @@ import java.util.Set;
 @Entity
 @ToString
 @SuperBuilder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "empleado","domicilio","factura"})
 public class Pedido extends Base{
 
     private LocalTime horaEstimadaFinalizacion;
@@ -33,12 +36,15 @@ public class Pedido extends Base{
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "empleado_id")
+
     private Empleado empleado;
 
     @ManyToOne(cascade = CascadeType.ALL) //Dirección a donde se envía el pedido
+
     private Domicilio domicilio;
 
     @ManyToOne(cascade = CascadeType.ALL)
+
     private Sucursal sucursal;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -52,7 +58,6 @@ public class Pedido extends Base{
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cliente_id")
-    @ToString.Exclude
     private Cliente cliente;
 
 

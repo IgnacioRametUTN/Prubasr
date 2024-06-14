@@ -1,11 +1,17 @@
 package com.example.buensaborback.domain.entities;
 
 import com.example.buensaborback.domain.entities.enums.Rol;
-import jakarta.persistence.Entity;
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToOne;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDate;
 
 
 @NoArgsConstructor
@@ -15,14 +21,16 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @ToString
 @SuperBuilder
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "usuario"})
 public class Empleado extends Base {
     private String nombre;
     private String apellido;
     private String telefono;
     private String email;
-    private Rol perfil;
+    private LocalDate fechaNacimiento;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Usuario usuario;
 
 

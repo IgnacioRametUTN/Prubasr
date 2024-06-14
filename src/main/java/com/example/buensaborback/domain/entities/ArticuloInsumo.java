@@ -1,11 +1,8 @@
 package com.example.buensaborback.domain.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,8 +14,8 @@ import java.util.Set;
 public class ArticuloInsumo extends Articulo {
 
     private Double precioCompra;
-    private Integer stockActual;
-    private Integer stockMaximo;
+    private Double stockActual;
+    private Double stockMaximo;
     private Boolean esParaElaborar;
 
 

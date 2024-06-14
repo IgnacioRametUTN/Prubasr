@@ -8,11 +8,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/MercadoPago")
+@RequestMapping("/api/mercado-pago")
 public class MercadoPagoController {
-    @Autowired
-    private MercadoPagoService mercadoPagoService;
+    private final MercadoPagoService mercadoPagoService;
 
+    @Autowired
+    public MercadoPagoController(MercadoPagoService mercadoPagoService) {
+        this.mercadoPagoService = mercadoPagoService;
+    }
 
     @PostMapping("/crear_preference_mp")
     public PreferenceMP crearPreferenceMP(@RequestBody Pedido pedido) {

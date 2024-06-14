@@ -1,11 +1,11 @@
 package com.example.buensaborback.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,6 +14,8 @@ import java.util.Set;
 @Entity
 @ToString
 @SuperBuilder
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "promocion"})
 public class PromocionDetalle extends Base{
    private Integer cantidad;
 

@@ -1,5 +1,8 @@
 package com.example.buensaborback.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -15,12 +18,12 @@ import java.util.Set;
 @Entity
 @ToString
 @SuperBuilder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "localidades","pais"})
 public class Provincia extends Base{
 
     private String nombre;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "provincia")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "provincia", fetch = FetchType.LAZY)
     @Builder.Default
-    @ToString.Exclude
     private Set<Localidad>localidades=new HashSet<>();
 
 

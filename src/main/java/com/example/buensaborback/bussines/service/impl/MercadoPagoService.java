@@ -51,6 +51,7 @@ public class MercadoPagoService {
             PreferenceMP mpPreference = new PreferenceMP();
             mpPreference.setStatusCode(preference.getResponse().getStatusCode());
             mpPreference.setId(preference.getId());
+            System.out.println(preference.toString());
 
 
             return mpPreference;

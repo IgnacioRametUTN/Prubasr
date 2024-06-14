@@ -1,5 +1,9 @@
 package com.example.buensaborback.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -15,7 +19,8 @@ import java.util.Set;
 @Entity
 @ToString
 @SuperBuilder
-public class DetallePedido extends Base{
+@JsonIgnoreProperties({"hibernateLazyInitializer","pedido","promociones"})
+public class DetallePedido extends Base {
 
     private Integer cantidad;
     private Double subTotal;
@@ -29,7 +34,8 @@ public class DetallePedido extends Base{
     private Pedido pedido;
 
 
-    @OneToMany(cascade=CascadeType.ALL,mappedBy = "detallePedido")
-    private Set<Promocion>promociones=new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "detallePedido", fetch = FetchType.LAZY)
+    @Builder.Default
+    private Set<Promocion>promociones = new HashSet<>();
 
 }

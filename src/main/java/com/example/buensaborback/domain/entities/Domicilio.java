@@ -1,5 +1,9 @@
 package com.example.buensaborback.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -14,6 +18,7 @@ import java.util.Set;
 @Entity
 @ToString
 @SuperBuilder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "localidad","clientes"})
 public class Domicilio extends Base{
 
     private String calle;
@@ -24,10 +29,8 @@ public class Domicilio extends Base{
     @JoinColumn(name = "id_localidad")
     private Localidad localidad;
 
-
-    @ManyToMany(mappedBy = "domicilios")
+    @ManyToMany(mappedBy = "domicilios", fetch = FetchType.LAZY)
     @Builder.Default
-    @ToString.Exclude
     private Set<Cliente> clientes = new HashSet<>();
 
 }

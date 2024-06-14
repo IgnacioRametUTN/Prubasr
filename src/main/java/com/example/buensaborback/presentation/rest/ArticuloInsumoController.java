@@ -1,11 +1,9 @@
 package com.example.buensaborback.presentation.rest;
 
-import com.example.buensaborback.bussines.facade.IArticuloInsumoFacade;
-import com.example.buensaborback.bussines.facade.impl.ArticuloInsumoFacadeImpl;
-import com.example.buensaborback.domain.dtos.articulos.insumo.ArticuloInsumoDto;
+import com.example.buensaborback.bussines.service.IArticuloInsumoService;
+import com.example.buensaborback.bussines.service.impl.ArticuloInsumoServiceImpl;
 import com.example.buensaborback.domain.entities.ArticuloInsumo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,20 +12,46 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/articulos/insumos")
 @CrossOrigin("*")
-public class ArticuloInsumoController extends GenericControllerImpl<ArticuloInsumo, ArticuloInsumoDto,Long, ArticuloInsumoFacadeImpl> {
-    private static final Logger logger = LoggerFactory.getLogger(ClienteController.class);
+public class ArticuloInsumoController {
 
-    private final IArticuloInsumoFacade articuloInsumoFacade;
-    public ArticuloInsumoController(ArticuloInsumoFacadeImpl facade) {
-        super(facade);
-        this.articuloInsumoFacade = facade;
+    private final IArticuloInsumoService articuloInsumoService;
+
+    @Autowired
+    public ArticuloInsumoController(ArticuloInsumoServiceImpl articuloInsumoService) {
+        this.articuloInsumoService = articuloInsumoService;
     }
+
+    @GetMapping("")
+    public ResponseEntity<?> getAll(){
+        return ResponseEntity.ok().body(this.articuloInsumoService.getAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getOne(@PathVariable("id") Long id){
+        return ResponseEntity.ok().body(this.articuloInsumoService.getArticuloInsumoById(id));
+    }
+
+    @PostMapping("")
+    public ResponseEntity<?> create(@RequestBody ArticuloInsumo body){
+        return ResponseEntity.ok().body(this.articuloInsumoService.create(body));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody ArticuloInsumo body){
+        return ResponseEntity.ok().body(this.articuloInsumoService.update(id, body));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id){
+        return ResponseEntity.ok().body(this.articuloInsumoService.delete(id));
+    }
+
 
     @GetMapping("/search")
     public ResponseEntity<?> getAll(@RequestParam("categoria_id") Optional<Long> categoria,
                                     @RequestParam("unidad_id") Optional<Long> unidadMedida,
                                     @RequestParam("denominacion") Optional<String> denominacion){
-        return ResponseEntity.ok().body(this.articuloInsumoFacade.getArticulosInsumos(categoria, unidadMedida, denominacion));
+        return ResponseEntity.ok().body(this.articuloInsumoService.getAll(categoria, unidadMedida, denominacion));
     }
 
 

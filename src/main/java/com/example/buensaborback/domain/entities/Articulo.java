@@ -1,14 +1,14 @@
 package com.example.buensaborback.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.HashSet;
 import java.util.Set;
-
 
 @Entity
 @NoArgsConstructor
@@ -18,22 +18,27 @@ import java.util.Set;
 @ToString
 @SuperBuilder
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public  class Articulo extends Base {
 
+@JsonIgnoreProperties({"hibernateLazyInitializer","imagenes","promocionDetalle"})
+public class Articulo extends Base {
 
     protected String denominacion;
     protected Double precioVenta;
 
-    @OneToMany(cascade = CascadeType.ALL )
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name= "articulo_id")
     @Builder.Default
     protected Set<Imagen> imagenes = new HashSet<Imagen>();
 
     @ManyToOne(cascade = CascadeType.ALL)
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer","imagenes","promocionDetalle"})
     protected UnidadMedida unidadMedida;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "categoria_id")
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer","sucursales","articulos"})
     protected Categoria categoria;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "articulo")

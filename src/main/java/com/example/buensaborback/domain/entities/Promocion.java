@@ -1,6 +1,9 @@
 package com.example.buensaborback.domain.entities;
 
 import com.example.buensaborback.domain.entities.enums.TipoPromocion;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -17,6 +20,8 @@ import java.util.Set;
 @Entity
 @ToString
 @SuperBuilder
+
+@JsonIgnoreProperties({"hibernateLazyInitializer","detallePedido","imagenes"})
 public class Promocion extends Base {
 
     private String denominacion;
@@ -28,16 +33,16 @@ public class Promocion extends Base {
     private Double precioPromocional;
     private TipoPromocion tipoPromocion;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "detallePedido_id")
     private DetallePedido detallePedido;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "promocion_id")
     @Builder.Default
     private Set<Imagen> imagenes= new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "promocion")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "promocion", fetch = FetchType.LAZY)
     @Builder.Default
     private Set<PromocionDetalle> detallesPromocion = new HashSet<>();
 
