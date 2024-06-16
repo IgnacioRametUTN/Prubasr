@@ -46,6 +46,12 @@ public class UnidadMedidaController  {
         return ResponseEntity.ok().body(this.unidadMedidaService.create(body));
     }
 
+    @PostMapping("/bulk")
+    public ResponseEntity<UnidadMedida> save(@RequestBody List<UnidadMedida> bulk){
+        bulk.forEach(this.unidadMedidaService::create);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<UnidadMedida> delete(@PathVariable("id") Long id){
         return ResponseEntity.ok().body(this.unidadMedidaService.delete(id));

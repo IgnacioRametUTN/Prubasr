@@ -37,6 +37,8 @@ public class ArticuloInsumoServiceImpl implements IArticuloInsumoService {
     }
 
     public ArticuloInsumo create(ArticuloInsumo entity){
+       entity.setCategoria(this.categoriaServiceImpl.getCategoriaById( entity.getCategoria().getId()));
+       entity.setUnidadMedida(this.unidadMedidaService.getUnidadMedidaById( entity.getUnidadMedida().getId()));
         return this.articuloInsumoRepository.save(entity);
     }
 
