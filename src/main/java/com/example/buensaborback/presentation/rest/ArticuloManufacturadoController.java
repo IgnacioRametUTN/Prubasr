@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -34,6 +35,12 @@ public class ArticuloManufacturadoController{
     @PostMapping("")
     public ResponseEntity<?> create(@RequestBody ArticuloManufacturado body){
         return ResponseEntity.ok().body(this.artManufacturadoService.create(body));
+    }
+
+    @PostMapping("/bulk")
+    public ResponseEntity<?> create(@RequestBody List<ArticuloManufacturado> body){
+        body.forEach(this.artManufacturadoService::create);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")

@@ -19,7 +19,7 @@ import java.util.Set;
 @ToString
 @SuperBuilder
 
-@JsonIgnoreProperties({"hibernateLazyInitializer", "sucursales","articulos","subCategorias"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "sucursales","articulos"})
 public class Categoria extends Base {
 
     private String denominacion;
@@ -35,12 +35,12 @@ public class Categoria extends Base {
 
     @ManyToOne
     @JoinColumn(name = "categoria_padre_id")
-
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "sucursales","articulos", "subCategorias"})
     private Categoria categoriaPadre;
 
     @OneToMany(mappedBy = "categoriaPadre", cascade = CascadeType.ALL)
     @Builder.Default
-
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "sucursales","articulos"})
     private Set<Categoria> subCategorias = new HashSet<>();
 
 }

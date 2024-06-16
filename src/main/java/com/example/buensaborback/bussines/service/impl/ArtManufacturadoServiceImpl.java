@@ -13,6 +13,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.nonNull;
+
 @Service
 public class ArtManufacturadoServiceImpl implements IArtManufacturadoService {
     private final ArticuloManufacturadoRepository articuloManufacturadoRepository;
@@ -31,37 +33,34 @@ public class ArtManufacturadoServiceImpl implements IArtManufacturadoService {
         this.promocionDetalleServiceImpl = promocionDetalleServiceImpl;
     }
 
-    public ArticuloManufacturado getArticuloManufacturadoById(Long id){
+    public ArticuloManufacturado getArticuloManufacturadoById(Long id) {
         return this.articuloManufacturadoRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Articulo Manufacturado con ID %d no encontrado", id)));
     }
 
-    public boolean existsArticuloManufacturadoById(Long id){
+    public boolean existsArticuloManufacturadoById(Long id) {
         return this.articuloManufacturadoRepository.existsById(id);
     }
+
     @Transactional
     public ArticuloManufacturado create(ArticuloManufacturado entity) {
         entity.setCategoria(categoriaServiceImpl.getCategoriaById(entity.getCategoria().getId()));
         entity.setUnidadMedida(unidadMedidaService.getUnidadMedidaById(entity.getUnidadMedida().getId()));
 
-        // Actualizar la lista de PromocionDetalle
-        entity.setPromocionDetalle(entity.getPromocionDetalle().stream()
-                .map(detalle -> {
-                    PromocionDetalle promocionDetalle = promocionDetalleServiceImpl.getPromocionDetalleById(detalle.getId());
-                    promocionDetalle.setArticulo(entity);
-                    return promocionDetalle;
-                })
-                .collect(Collectors.toSet()));
-
-        // Actualizar la lista de Articulo Manufacturado Detalle
-        entity.setArticuloManufacturadoDetalles(entity.getArticuloManufacturadoDetalles().stream()
-                .map(detalle -> {
-                    ArticuloManufacturadoDetalle articuloManufacturadoDetalle = artManufacturadoDetalleServiceImpl.getArticuloManufacturadoDetalleById(detalle.getId());
-                    articuloManufacturadoDetalle.setArticuloManufacturado(entity);
-                    return articuloManufacturadoDetalle;
-                })
-                .collect(Collectors.toSet()));
-        Set<ArticuloManufacturadoDetalle> detalles = new HashSet<>();
-
+        if (nonNull(entity.getPromocionDetalle())) {
+            // Actualizar la lista de PromocionDetalle
+            entity.setPromocionDetalle(entity.getPromocionDetalle().stream()
+                    .map(detalle -> {
+                        PromocionDetalle promocionDetalle = promocionDetalleServiceImpl.getPromocionDetalleById(detalle.getId());
+                        promocionDetalle.setArticulo(entity);
+                        return promocionDetalle;
+                    })
+                    .collect(Collectors.toSet()));
+        }
+        entity.getArticuloManufacturadoDetalles()
+                .forEach(detalle -> {
+                    detalle.setArticuloInsumo(this.articuloInsumoServiceImpl.getArticuloInsumoById(detalle.getArticuloInsumo().getId()));
+                    detalle.setArticuloManufacturado(entity);
+                });
         return this.articuloManufacturadoRepository.save(entity);
     }
 
@@ -116,6 +115,7 @@ public class ArtManufacturadoServiceImpl implements IArtManufacturadoService {
         // Llama al método update de la clase base
         return this.articuloManufacturadoRepository.save(entity);
     }
+
     public List<ArticuloManufacturado> getAll(Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> searchOpt) {
         Categoria categoria = categoriaOpt.map(categoriaServiceImpl::getCategoriaById).orElse(null); //Basicamente funciona así: si el Optional está vacío el map() no hace nada y salta al orElse y devuelve null, caso contrario ejecuta el metodo del map
         UnidadMedida unidadMedida = unidadMedidaOpt.map(unidadMedidaService::getUnidadMedidaById).orElse(null);

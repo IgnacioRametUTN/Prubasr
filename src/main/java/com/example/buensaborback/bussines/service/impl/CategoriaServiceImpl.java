@@ -59,6 +59,7 @@ public class CategoriaServiceImpl implements ICategoriaService {
     @Override
     public Categoria create(Long idPadre, Categoria body) {
         if(idPadre == 0){
+            body.setCategoriaPadre(null);
             if(existsCategoriaByDenominacion(body.getDenominacion())) throw new DuplicateEntryException(String.format("Ya existe una Categoria con el nombre %s", body.getDenominacion()));
         }else{
             Categoria categoriaPadre = this.getCategoriaById(idPadre);
@@ -77,7 +78,9 @@ public class CategoriaServiceImpl implements ICategoriaService {
     @Override
     public Categoria delete(Long id) {
         Categoria categoria = this.getCategoriaById(id);
-        categoria.setAlta(!categoria.isAlta());
+        boolean alta = !categoria.isAlta();
+        categoria.setAlta(alta);
+        categoria.getSubCategorias().forEach(cat -> cat.setAlta(alta));
         return this.categoriaRepository.save(categoria);
     }
 

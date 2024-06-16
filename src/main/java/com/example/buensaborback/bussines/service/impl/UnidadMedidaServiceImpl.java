@@ -5,6 +5,7 @@ import com.example.buensaborback.domain.entities.UnidadMedida;
 import com.example.buensaborback.presentation.advice.exception.DuplicateEntryException;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.UnidadMedidaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,6 +39,7 @@ public class UnidadMedidaServiceImpl implements IUnidadMedidaService {
         return this.unidadMedidaRepository.save(body);
     }
     @Override
+    @Transactional
     public UnidadMedida create(UnidadMedida body) {
         if(existsUnidadMedidaByDenominacion(body.getDenominacion())) throw new DuplicateEntryException(String.format("Ya existe una Unidad Medida con el nombre %s", body.getDenominacion()));
         return this.unidadMedidaRepository.save(body);

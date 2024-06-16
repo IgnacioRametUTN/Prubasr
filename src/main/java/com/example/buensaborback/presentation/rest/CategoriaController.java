@@ -51,6 +51,12 @@ public class CategoriaController{
         return ResponseEntity.ok().body(this.categoriaService.create(idPadre, body));
     }
 
+    @PostMapping("/bulk")
+    public ResponseEntity<?> save(@RequestBody List<Categoria> bulk){
+        bulk.forEach(categoria -> this.categoriaService.create(categoria.getCategoriaPadre().getId(), categoria));
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Categoria> delete(@PathVariable("id") Long id){
         return ResponseEntity.ok().body(this.categoriaService.delete(id));
