@@ -64,4 +64,14 @@ public class RestControllerAdvice {
                 .statusCode(HttpStatus.CONFLICT.value())
                 .build(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(value = ImageUploadLimitException.class)
+    public ResponseEntity<ErrorDto> handleImageUploadLimitException(ImageUploadLimitException e){
+        String errorMsg = e.getClass().getSimpleName()+ " : " + e.getMessage();
+        logger.error(errorMsg);
+        return new ResponseEntity<>(ErrorDto.builder()
+                .message(e.getMessage())
+                .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value())
+                .build(), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
 }
