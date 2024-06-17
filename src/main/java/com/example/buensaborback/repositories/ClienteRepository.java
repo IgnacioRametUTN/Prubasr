@@ -8,8 +8,8 @@ import java.util.List;
 
 @Repository
 public interface ClienteRepository  extends JpaRepository<Cliente, Long> {
-    List<Cliente> findByNombreContaining(String nombre);
-    List<Cliente> findByApellidoContaining(String apellido);
-    List<Cliente> findByNombreContainingAndApellidoContaining(String nombre, String apellido);
+    List<Cliente> findByNombreStartingWithIgnoreCase(String nombre);
+    List<Cliente> findByApellidoStartingWithIgnoreCase(String apellido);
+    List<Cliente> findByNombreStartingWithIgnoreCaseAndApellidoStartingWithIgnoreCase(String nombre, String apellido);
 
 }
