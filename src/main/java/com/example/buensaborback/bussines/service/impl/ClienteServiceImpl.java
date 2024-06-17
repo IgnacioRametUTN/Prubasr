@@ -46,4 +46,21 @@ public class ClienteServiceImpl implements IClienteService {
         cliente.setAlta(!cliente.isAlta());
         return this.clienteRepository.save(cliente);
     }
+
+    @Override
+    public List<Cliente> findClientes(String nombre, String apellido) {
+        if (nombre != null && apellido != null) {
+            System.out.println("Las 2");
+            return clienteRepository.findByNombreContainingAndApellidoContaining(nombre, apellido);
+        } else if (nombre != null) {
+            System.out.println("Nombre");
+            return clienteRepository.findByNombreContaining(nombre);
+        } else if (apellido != null) {
+            System.out.println("apellido");
+            return clienteRepository.findByApellidoContaining(apellido);
+        } else {
+            System.out.println("Nada");
+            return clienteRepository.findAll();
+        }
+    }
 }
