@@ -37,6 +37,12 @@ dependencies {
 	implementation 'com.cloudinary:cloudinary-http44:1.36.0'
 	implementation 'com.cloudinary:cloudinary-taglib:1.36.0'
 	implementation 'io.github.cdimascio:dotenv-java:2.2.4'
+
+	// Auth0
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
+	implementation 'com.konghq:unirest-java:3.11.12' // Para obtener el token
+	//Seguridad
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {
