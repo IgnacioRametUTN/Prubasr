@@ -3,6 +3,7 @@ package com.example.buensaborback.repositories;
 import com.example.buensaborback.domain.entities.Articulo;
 import com.example.buensaborback.domain.entities.Cliente;
 import com.example.buensaborback.domain.entities.Pedido;
+import com.example.buensaborback.domain.entities.enums.Estado;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,5 +28,7 @@ public interface PedidoRepository  extends JpaRepository<Pedido, Long> {
     List<Object> findTopProducts(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
     List<Pedido> findByFechaPedidoBetween(LocalDate startDate, LocalDate endDate);
+
+    List<Pedido> findByEstado(Estado estado);
 
 }
