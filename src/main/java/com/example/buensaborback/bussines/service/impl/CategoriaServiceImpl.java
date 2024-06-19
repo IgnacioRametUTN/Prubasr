@@ -3,7 +3,7 @@ package com.example.buensaborback.bussines.service.impl;
 
 import com.example.buensaborback.bussines.service.ICategoriaService;
 import com.example.buensaborback.domain.entities.Categoria;
-import com.example.buensaborback.domain.entities.Categoria;
+import com.example.buensaborback.domain.entities.Sucursal;
 import com.example.buensaborback.presentation.advice.exception.DuplicateEntryException;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.CategoriaRepository;
@@ -15,9 +15,11 @@ import java.util.List;
 @Service
 public class CategoriaServiceImpl implements ICategoriaService {
     private final CategoriaRepository categoriaRepository;
+    private final ISucursalServiceImpl sucursalService;
     @Autowired
-    public CategoriaServiceImpl(CategoriaRepository categoriaRepository) {
+    public CategoriaServiceImpl(CategoriaRepository categoriaRepository, ISucursalServiceImpl sucursalService) {
         this.categoriaRepository = categoriaRepository;
+        this.sucursalService = sucursalService;
     }
     @Override
     public Categoria getCategoriaById(Long id){
@@ -57,24 +59,66 @@ public class CategoriaServiceImpl implements ICategoriaService {
         return this.categoriaRepository.save(body);
     }
     @Override
-    public Categoria create(Long idPadre, Categoria body) {
-        if(idPadre == 0){
+    public Categoria create(Long idPadre, Long idSucursal, Categoria body) {
+        // Obtener la sucursal y asegurarse de que esté gestionada por el contexto de persistencia
+        Sucursal sucursal = sucursalService.getSucursalById(idSucursal);
+        System.out.println("Sucursal que trae: " + sucursal.getNombre());
+
+        // Agregar la sucursal a la categoría
+        body.getSucursales().add(sucursal);
+
+        if (idPadre == 0) {
+            // Establecer la categoría padre como null para categorías raíz
             body.setCategoriaPadre(null);
-            if(existsCategoriaByDenominacion(body.getDenominacion())) throw new DuplicateEntryException(String.format("Ya existe una Categoria con el nombre %s", body.getDenominacion()));
-        }else{
+
+            // Verificar duplicados
+            if (existsCategoriaByDenominacion(body.getDenominacion())) {
+                throw new DuplicateEntryException(String.format("Ya existe una Categoria con el nombre %s", body.getDenominacion()));
+            }
+
+            // Guardar la categoría raíz
+            Categoria createCat = this.categoriaRepository.save(body);
+
+            // Agregar la categoría a las categorías de la sucursal
+            sucursal.getCategorias().add(createCat);
+
+            // Guardar la sucursal para actualizar la relación
+            sucursalService.updateSucursal(sucursal.getId(),sucursal);
+
+            System.out.println("sucursal id: " + createCat.getSucursales().toString());
+            return createCat;
+        } else {
+            // Obtener la categoría padre
             Categoria categoriaPadre = this.getCategoriaById(idPadre);
+
+            // Verificar duplicados
             boolean exists = categoriaPadre.getSubCategorias().stream()
                     .anyMatch(categoria -> categoria.getDenominacion().equalsIgnoreCase(body.getDenominacion()));
             if (exists) {
-                throw new DuplicateEntryException(String.format("Ya existe una SubCategoria dentro de %s con el nombre %s", categoriaPadre.getDenominacion() ,body.getDenominacion()));
+                throw new DuplicateEntryException(String.format("Ya existe una SubCategoria dentro de %s con el nombre %s", categoriaPadre.getDenominacion(), body.getDenominacion()));
             }
-            categoriaPadre.getSubCategorias().add(body);
-            body.setCategoriaPadre(categoriaPadre);
-            return this.categoriaRepository.save(categoriaPadre);
-        }
-        return this.categoriaRepository.save(body);
 
+            // Guardar la nueva categoría primero
+            Categoria savedBody = this.categoriaRepository.save(body);
+
+            // Agregar la nueva categoría guardada a la categoría padre
+            categoriaPadre.getSubCategorias().add(savedBody);
+            savedBody.setCategoriaPadre(categoriaPadre);
+
+            // Guardar la categoría padre para actualizar la relación
+            this.categoriaRepository.save(categoriaPadre);
+
+            // Agregar la categoría a las categorías de la sucursal
+            sucursal.getCategorias().add(savedBody);
+
+            // Guardar la sucursal para actualizar la relación
+            sucursalService.updateSucursal(sucursal.getId(),sucursal);
+
+            System.out.println("sucursal id: " + savedBody.getSucursales().toString());
+            return savedBody;
+        }
     }
+
     @Override
     public Categoria delete(Long id) {
         Categoria categoria = this.getCategoriaById(id);
@@ -84,5 +128,8 @@ public class CategoriaServiceImpl implements ICategoriaService {
         return this.categoriaRepository.save(categoria);
     }
 
-
+    @Override
+    public List<Categoria> findAllBySucursal(Long id){
+        return this.categoriaRepository.findAllBySucursal(id);
+    }
 }
