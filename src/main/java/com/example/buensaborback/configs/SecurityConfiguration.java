@@ -6,6 +6,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
@@ -40,9 +41,12 @@ public class SecurityConfiguration {
         http
                 .csrf((csrf) -> csrf.disable())
                 .cors(withDefaults()) //por defecto spring va a buscar un bean con el nombre "corsConfigurationSource".
+                .headers(httpSecurityHeadersConfigurer -> {
+                    httpSecurityHeadersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable);
+                })
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-// TODO agregar rutas
+
                                 // Definir reglas para ArticuloInsumoController
                                 .requestMatchers(HttpMethod.GET, "/api/articulos/insumos").hasAuthority("SCOPE_read:articulos")
                                 .requestMatchers(HttpMethod.GET, "/api/articulos/insumos/**").hasAuthority("SCOPE_read:articulos")
