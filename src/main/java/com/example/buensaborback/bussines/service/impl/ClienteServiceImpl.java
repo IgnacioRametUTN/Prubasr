@@ -2,7 +2,6 @@ package com.example.buensaborback.bussines.service.impl;
 
 import com.example.buensaborback.bussines.service.IClienteService;
 import com.example.buensaborback.domain.entities.Cliente;
-import com.example.buensaborback.domain.entities.Cliente;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.ClienteRepository;
 import org.springframework.stereotype.Service;
@@ -45,5 +44,18 @@ public class ClienteServiceImpl implements IClienteService {
         Cliente cliente = this.getClienteById(id);
         cliente.setAlta(!cliente.isAlta());
         return this.clienteRepository.save(cliente);
+    }
+
+    @Override
+    public List<Cliente> findClientes(String nombre, String apellido) {
+        if (nombre != null && apellido != null) {
+            return clienteRepository.findByNombreStartingWithIgnoreCaseAndApellidoStartingWithIgnoreCase(nombre, apellido);
+        } else if (nombre != null) {
+            return clienteRepository.findByNombreStartingWithIgnoreCase(nombre);
+        } else if (apellido != null) {
+            return clienteRepository.findByApellidoStartingWithIgnoreCase(apellido);
+        } else {
+            return clienteRepository.findAll();
+        }
     }
 }

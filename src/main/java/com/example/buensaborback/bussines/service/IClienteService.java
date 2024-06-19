@@ -13,4 +13,6 @@ public interface IClienteService {
     Cliente update(Long id, Cliente entity);
     List<Cliente> getAll();
     Cliente delete(Long id);
+
+    List<Cliente>findClientes(String nombre,String apellido);
 }

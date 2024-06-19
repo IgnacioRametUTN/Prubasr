@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -47,6 +48,13 @@ public class ClienteController{
         return ResponseEntity.ok().body(this.clienteService.delete(id));
     }
 
+    @GetMapping("/")
+    public ResponseEntity<List<Cliente>> getClientes(
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) String apellido) {
+        List<Cliente> clientes = clienteService.findClientes(nombre, apellido);
+        return ResponseEntity.ok(clientes);
+    }
 
 
 }
