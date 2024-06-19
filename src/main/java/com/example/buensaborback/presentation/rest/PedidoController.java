@@ -3,6 +3,7 @@ package com.example.buensaborback.presentation.rest;
 import com.example.buensaborback.bussines.service.IPedidoService;
 import com.example.buensaborback.bussines.service.impl.PedidoServiceImpl;
 import com.example.buensaborback.domain.entities.Pedido;
+import com.example.buensaborback.domain.entities.enums.Estado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +51,16 @@ public class PedidoController {
     public ResponseEntity<List<Pedido>> getAllByFecha(@PathVariable("fecha") LocalDate fecha) {
         List<Pedido> pedidos = pedidoService.getAllByFecha(fecha);
         return new ResponseEntity<>(pedidos, HttpStatus.OK);
+    }
+    @GetMapping("/estado/{estado}")
+    public ResponseEntity<List<Pedido>> GetByEstado(@PathVariable("estado") Estado estado) {
+        List<Pedido> pedidos = pedidoService.findByEstado(estado);
+        return new ResponseEntity<>(pedidos, HttpStatus.OK);
+    }
+    @PutMapping("/actualizar/{id}/{estado}")
+    public ResponseEntity<Pedido> updateEstado(@PathVariable("id") Long id, @PathVariable("estado") Estado estado) {
+        Pedido pedidoActualizado = pedidoService.actualizarEstado(id, estado);
+        return new ResponseEntity<>(pedidoActualizado, HttpStatus.OK);
     }
 
 }

@@ -129,6 +129,10 @@ public class PedidoServiceImpl implements IPedidoService {
 
     public List<Pedido> findPedidosBetweenDates(LocalDate startDate, LocalDate endDate) {
         return pedidoRepository.findByFechaPedidoBetween(startDate, endDate);
+
+    }
+    public List<Pedido> findByEstado(Estado estado){
+        return pedidoRepository.findByEstado(estado);
     }
 
     public Pedido actualizarEstado(Long id, Estado estado){

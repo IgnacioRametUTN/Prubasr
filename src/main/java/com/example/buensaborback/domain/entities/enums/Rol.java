@@ -3,5 +3,8 @@ package com.example.buensaborback.domain.entities.enums;
 public enum Rol {
     Admin,
     Empleado,
-    Cliente
+    Cliente,
+    Delivery,
+    Cajero,
+    Cocinero
 }

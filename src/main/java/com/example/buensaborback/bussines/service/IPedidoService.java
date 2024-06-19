@@ -2,6 +2,7 @@ package com.example.buensaborback.bussines.service;
 
 import com.example.buensaborback.domain.entities.Articulo;
 import com.example.buensaborback.domain.entities.Pedido;
+import com.example.buensaborback.domain.entities.enums.Estado;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,4 +19,7 @@ public interface IPedidoService {
     List<Object> findTopProducts(LocalDate startDate, LocalDate endDate);
 
     List<Pedido> findPedidosBetweenDates(LocalDate startDate, LocalDate endDate);
+
+    List<Pedido> findByEstado(Estado estado);
+    Pedido actualizarEstado(Long id, Estado estado);
 }
