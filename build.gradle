@@ -32,6 +32,17 @@ dependencies {
 	implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final' //Anotacion para implementar los beans de mapstruct
 	implementation 'com.mercadopago:sdk-java:2.1.24'
+
+	//CLOUDINARY
+	implementation 'com.cloudinary:cloudinary-http44:1.36.0'
+	implementation 'com.cloudinary:cloudinary-taglib:1.36.0'
+	implementation 'io.github.cdimascio:dotenv-java:2.2.4'
+
+	// Auth0
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
+	implementation 'com.konghq:unirest-java:3.11.12' // Para obtener el token
+	//Seguridad
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {

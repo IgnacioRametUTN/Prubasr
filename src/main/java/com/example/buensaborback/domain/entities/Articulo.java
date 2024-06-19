@@ -19,7 +19,7 @@ import java.util.Set;
 @SuperBuilder
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 
-@JsonIgnoreProperties({"hibernateLazyInitializer","imagenes","promocionDetalle"})
+@JsonIgnoreProperties({"hibernateLazyInitializer","promocionDetalle"})
 public class Articulo extends Base {
 
     protected String denominacion;
@@ -42,5 +42,6 @@ public class Articulo extends Base {
     protected Categoria categoria;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "articulo")
-    protected Set<PromocionDetalle> promocionDetalle;
+    @Builder.Default
+    protected Set<PromocionDetalle> promocionDetalle = new HashSet<>();
 }

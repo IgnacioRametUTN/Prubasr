@@ -6,6 +6,7 @@ import com.example.buensaborback.domain.entities.ArticuloInsumo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +43,14 @@ public class ArticuloInsumoController {
         bulk.forEach(this.articuloInsumoService::create);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/uploads")
+    public ResponseEntity<?> uploadImages(@RequestParam(value = "id") Long idArticulo,
+                                          @RequestParam(value = "uploads") MultipartFile[] files) {
+        return ResponseEntity.ok(articuloInsumoService.uploadImages(files, idArticulo));
+
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody ArticuloInsumo body){
