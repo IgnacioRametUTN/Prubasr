@@ -20,9 +20,9 @@ public class CategoriaController{
         this.categoriaService = categoriaService;
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<Categoria>> getAll(){
-        return ResponseEntity.ok().body(this.categoriaService.findAll());
+    @GetMapping("/all/{idSucursal}")
+    public ResponseEntity<List<Categoria>> getAll(@PathVariable("idSucursal") Long idSucursal){
+        return ResponseEntity.ok().body(this.categoriaService.findAllBySucu(idSucursal));
     }
 
     @GetMapping("/padres/{idSucursal}")

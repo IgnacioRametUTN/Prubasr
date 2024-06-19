@@ -16,5 +16,7 @@ public interface ICategoriaService {
     Categoria create(Long idPadre,Long idSucursal, Categoria body);
     Categoria delete(Long id);
 
+    List<Categoria> findAllBySucu(Long id);
+
 
 }

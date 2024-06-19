@@ -132,4 +132,9 @@ public class CategoriaServiceImpl implements ICategoriaService {
     public List<Categoria> findAllBySucursal(Long id){
         return this.categoriaRepository.findAllBySucursal(id);
     }
+
+    @Override
+    public List<Categoria> findAllBySucu(Long id){
+        return this.categoriaRepository.findAllBySucu(id);
+    }
 }

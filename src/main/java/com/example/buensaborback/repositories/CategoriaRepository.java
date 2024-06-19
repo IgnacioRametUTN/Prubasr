@@ -19,4 +19,7 @@ public interface CategoriaRepository  extends JpaRepository<Categoria, Long>{
     boolean existsByDenominacionIgnoreCase(String denominacion);
     @Query("SELECT c FROM Categoria c WHERE c.categoriaPadre IS NULL")
     List<Categoria> findCategoriasPadres();
+
+    @Query("SELECT c FROM Categoria c JOIN c.sucursales s WHERE s.id = :sucursalId")
+    List<Categoria> findAllBySucu(@Param("sucursalId") Long sucursalId);
 }
