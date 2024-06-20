@@ -72,16 +72,9 @@ public class PedidoServiceImpl implements IPedidoService {
     private Double calcularCostoTotal(Set<DetallePedido> detallesPedido ) {
         double total = 0.0;
         for (DetallePedido detallePedido : detallesPedido) {
-            Articulo articulo = null;
-             if(artManufacturadoService.existsArticuloManufacturadoById(detallePedido.getArticulo().getId())){
-                 articulo = artManufacturadoService.getArticuloManufacturadoById(detallePedido.getArticulo().getId());
-             }else{
-                 articulo = artInsumoService.getArticuloInsumoById(detallePedido.getArticulo().getId());
-             }
-            System.out.println(detallePedido.getId());
-            System.out.println(articulo.toString());
+            Articulo articulo = getArticulo(detallePedido);
+
             if (articulo instanceof ArticuloManufacturado) {
-                System.out.println("TENGO UN MANufacturado");
                 double subTotalManufacturados = ((ArticuloManufacturado) articulo)
                         .getArticuloManufacturadoDetalles()
                         .stream()
@@ -96,6 +89,14 @@ public class PedidoServiceImpl implements IPedidoService {
         }
         System.out.println("TOTAL COSTO " + total);
         return total;
+    }
+
+    private Articulo getArticulo(DetallePedido detallePedido){
+        if(artManufacturadoService.existsArticuloManufacturadoById(detallePedido.getArticulo().getId())){
+            return artManufacturadoService.getArticuloManufacturadoById(detallePedido.getArticulo().getId());
+        }else{
+           return artInsumoService.getArticuloInsumoById(detallePedido.getArticulo().getId());
+        }
     }
 
     @Override
@@ -135,11 +136,12 @@ public class PedidoServiceImpl implements IPedidoService {
         return pedidoRepository.findByEstado(estado);
     }
 
+    @Transactional
     public Pedido actualizarEstado(Long id, Estado estado){
         Pedido pedido = this.getPedidoById(id);
         pedido.setEstado(estado);
-        if(estado == Estado.Entregado) facturaService.crearFactura(pedido);
-        return  this.save(pedido);
+       if(estado == Estado.Entregado) facturaService.crearFactura(pedido);
+        return  pedidoRepository.save(pedido);
     }
 
 
