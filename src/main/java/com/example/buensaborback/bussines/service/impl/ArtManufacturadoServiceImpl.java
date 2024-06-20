@@ -116,21 +116,21 @@ public class ArtManufacturadoServiceImpl implements IArtManufacturadoService {
         return this.articuloManufacturadoRepository.save(entity);
     }
 
-    public List<ArticuloManufacturado> getAll(Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> searchOpt) {
+    public List<ArticuloManufacturado> getAll(Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> searchOpt, Long idSucursal) {
         Categoria categoria = categoriaOpt.map(categoriaServiceImpl::getCategoriaById).orElse(null); //Basicamente funciona así: si el Optional está vacío el map() no hace nada y salta al orElse y devuelve null, caso contrario ejecuta el metodo del map
         UnidadMedida unidadMedida = unidadMedidaOpt.map(unidadMedidaService::getUnidadMedidaById).orElse(null);
         String search = searchOpt.orElse("");
 
         if (categoria != null && unidadMedida != null) {
-            return articuloManufacturadoRepository.findBySucursalAndCategoriaAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(categoria, unidadMedida, search);
+            return articuloManufacturadoRepository.findByCategoriaAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(categoria.getId(), unidadMedida.getId(), search,idSucursal);
         } else if (categoria != null) {
-            return articuloManufacturadoRepository.findBySucursalAndCategoriaAndDenominacionStartingWithIgnoreCase(categoria, search);
+            return articuloManufacturadoRepository.findByCategoriaAndDenominacionStartingWithIgnoreCase(categoria.getId(), search,idSucursal);
         } else if (unidadMedida != null) {
-            return articuloManufacturadoRepository.findBySucursalAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(unidadMedida, search);
+            return articuloManufacturadoRepository.findByUnidadMedidaAndDenominacionStartingWithIgnoreCase(unidadMedida.getId(), search,idSucursal);
         } else if (!search.isEmpty()) {
-            return articuloManufacturadoRepository.findBySucursalAndDenominacionStartingWithIgnoreCase(search);
+            return articuloManufacturadoRepository.findByDenominacionStartingWithIgnoreCase(search,idSucursal);
         } else {
-            return articuloManufacturadoRepository.findAll();
+            return articuloManufacturadoRepository.findAllBySucursal(idSucursal);
         }
     }
 

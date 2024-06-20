@@ -34,7 +34,7 @@ public class ArticuloInsumoController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> create(@PathVariable("idSucursal") Long idSucursal, @RequestBody ArticuloInsumo body){
+    public ResponseEntity<?> create( @RequestBody ArticuloInsumo body){
         return ResponseEntity.ok().body(this.articuloInsumoService.create(body));
     }
 
@@ -63,11 +63,13 @@ public class ArticuloInsumoController {
     }
 
 
-    @GetMapping("/{idSucursal}/search")
-    public ResponseEntity<?> getAll(@PathVariable("idSucursal") Long idSucursal,
+    @GetMapping("/{sucursal_id}/search")
+    public ResponseEntity<?> getAll(@PathVariable("sucursal_id") Long idSucursal,
                                     @RequestParam("categoria_id") Optional<Long> categoria,
                                     @RequestParam("unidad_id") Optional<Long> unidadMedida,
                                     @RequestParam("denominacion") Optional<String> denominacion){
+        System.out.println("en controller");
+        System.out.println("sucursal"+idSucursal+"categoria"+categoria+"unidad medida"+unidadMedida+"denomiancion"+denominacion);
         return ResponseEntity.ok().body(this.articuloInsumoService.getAll(idSucursal, categoria, unidadMedida, denominacion));
     }
 

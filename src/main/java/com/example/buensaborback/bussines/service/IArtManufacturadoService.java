@@ -9,7 +9,7 @@ public interface IArtManufacturadoService {
      boolean existsArticuloManufacturadoById(Long id);
      ArticuloManufacturado create(ArticuloManufacturado entity);
      ArticuloManufacturado update(Long id, ArticuloManufacturado entity);
-     List<ArticuloManufacturado> getAll(Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> searchOpt);
+     List<ArticuloManufacturado> getAll(Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> searchOpt,Long idSucursal);
      List<ArticuloManufacturado> getAll();
 
      ArticuloManufacturado delete(Long id);

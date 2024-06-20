@@ -61,6 +61,7 @@ public class CategoriaServiceImpl implements ICategoriaService {
     @Override
     public Categoria create(Long idPadre, Long idSucursal, Categoria body) {
         // Obtener la sucursal y asegurarse de que esté gestionada por el contexto de persistencia
+
         Sucursal sucursal = sucursalService.getSucursalById(idSucursal);
         System.out.println("Sucursal que trae: " + sucursal.getNombre());
 
