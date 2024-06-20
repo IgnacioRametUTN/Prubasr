@@ -46,4 +46,7 @@ public class Promocion extends Base {
     @Builder.Default
     private Set<PromocionDetalle> detallesPromocion = new HashSet<>();
 
+    @ManyToMany(mappedBy = "promociones", cascade = CascadeType.ALL)
+    private Set<Sucursal> sucursales = new HashSet<>();
+
 }

@@ -60,4 +60,5 @@ public class Sucursal extends Base{
     @JoinColumn(name = "sucursal_id")
     @Builder.Default
     private Set<Articulo> articulos = new HashSet<>();
+
 }
