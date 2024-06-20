@@ -40,7 +40,6 @@ public class PromocionController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Promocion> deletePromocion(@PathVariable Long id) {
-        Promocion deletedPromocion = promocionService.delete(id);
-        return deletedPromocion != null ? ResponseEntity.ok(deletedPromocion) : ResponseEntity.notFound().build();
+        return ResponseEntity.ok(promocionService.delete(id));
     }
 }
