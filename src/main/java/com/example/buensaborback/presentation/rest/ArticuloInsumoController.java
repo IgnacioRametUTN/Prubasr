@@ -33,16 +33,11 @@ public class ArticuloInsumoController {
         return ResponseEntity.ok().body(this.articuloInsumoService.getArticuloInsumoById(id));
     }
 
-    @PostMapping("")
-    public ResponseEntity<?> create( @RequestBody ArticuloInsumo body){
-        return ResponseEntity.ok().body(this.articuloInsumoService.create(body));
+    @PostMapping("/{idSucursal}")
+    public ResponseEntity<?> create( @PathVariable("idSucursal") Long idSucursal,@RequestBody ArticuloInsumo body){
+        return ResponseEntity.ok().body(this.articuloInsumoService.create(body,idSucursal));
     }
 
-    @PostMapping("/bulk")
-    public ResponseEntity<?> create(@RequestBody List<ArticuloInsumo> bulk){
-        bulk.forEach(this.articuloInsumoService::create);
-        return ResponseEntity.ok().build();
-    }
 
     @PostMapping("/uploads")
     public ResponseEntity<?> uploadImages(@RequestParam(value = "id") Long idArticulo,
@@ -68,8 +63,6 @@ public class ArticuloInsumoController {
                                     @RequestParam("categoria_id") Optional<Long> categoria,
                                     @RequestParam("unidad_id") Optional<Long> unidadMedida,
                                     @RequestParam("denominacion") Optional<String> denominacion){
-        System.out.println("en controller");
-        System.out.println("sucursal"+idSucursal+"categoria"+categoria+"unidad medida"+unidadMedida+"denomiancion"+denominacion);
         return ResponseEntity.ok().body(this.articuloInsumoService.getAll(idSucursal, categoria, unidadMedida, denominacion));
     }
 

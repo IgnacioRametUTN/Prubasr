@@ -44,4 +44,10 @@ public class Articulo extends Base {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "articulo")
     @Builder.Default
     protected Set<PromocionDetalle> promocionDetalle = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "sucursal_id")
+    @JsonIgnoreProperties("articulos")
+    private Sucursal sucursal;
+
 }

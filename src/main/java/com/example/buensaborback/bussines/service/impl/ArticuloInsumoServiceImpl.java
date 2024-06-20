@@ -26,14 +26,16 @@ public class ArticuloInsumoServiceImpl implements IArticuloInsumoService {
     private final IPromocionDetalleService promocionDetalleServiceImpl;
     private final ICloudinaryService cloudinaryService;
     private final ImagenRepository imagenRepository;
+    private final ISucursalServiceImpl sucursalService;
 
-    public ArticuloInsumoServiceImpl(ArticuloInsumoRepository articuloInsumoRepository, UnidadMedidaServiceImpl unidadMedidaService, CategoriaServiceImpl categoriaServiceImpl, PromocionDetalleServiceImpl promocionDetalleServiceImpl, CloudinaryServiceImpl cloudinaryService, ImagenRepository imagenRepository) {
+    public ArticuloInsumoServiceImpl(ArticuloInsumoRepository articuloInsumoRepository, UnidadMedidaServiceImpl unidadMedidaService, CategoriaServiceImpl categoriaServiceImpl, PromocionDetalleServiceImpl promocionDetalleServiceImpl, CloudinaryServiceImpl cloudinaryService, ImagenRepository imagenRepository, ISucursalServiceImpl sucursalService) {
         this.articuloInsumoRepository = articuloInsumoRepository;
         this.unidadMedidaService = unidadMedidaService;
         this.categoriaServiceImpl = categoriaServiceImpl;
         this.promocionDetalleServiceImpl = promocionDetalleServiceImpl;
         this.cloudinaryService = cloudinaryService;
         this.imagenRepository = imagenRepository;
+        this.sucursalService = sucursalService;
     }
 
     public ArticuloInsumo getArticuloInsumoById(Long id){
@@ -44,9 +46,10 @@ public class ArticuloInsumoServiceImpl implements IArticuloInsumoService {
         return this.articuloInsumoRepository.existsById(id);
     }
 
-    public ArticuloInsumo create(ArticuloInsumo entity){
-       entity.setCategoria(this.categoriaServiceImpl.getCategoriaById( entity.getCategoria().getId()));
-       entity.setUnidadMedida(this.unidadMedidaService.getUnidadMedidaById( entity.getUnidadMedida().getId()));
+    public ArticuloInsumo create(ArticuloInsumo entity,Long idSucursal){
+        entity.setSucursal(this.sucursalService.getSucursalById(idSucursal));
+        entity.setCategoria(this.categoriaServiceImpl.getCategoriaById( entity.getCategoria().getId()));
+        entity.setUnidadMedida(this.unidadMedidaService.getUnidadMedidaById( entity.getUnidadMedida().getId()));
         return this.articuloInsumoRepository.save(entity);
     }
 
@@ -81,20 +84,21 @@ public class ArticuloInsumoServiceImpl implements IArticuloInsumoService {
     }
 
     public List<ArticuloInsumo> getAll(Long idSucursal, Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> searchOpt) {
+        Sucursal sucursal = this.sucursalService.getSucursalById(idSucursal);
         Categoria categoria = categoriaOpt.map(categoriaServiceImpl::getCategoriaById).orElse(null); //Basicamente funciona así: si el Optional está vacío el map() no hace nada y salta al orElse y devuelve null, caso contrario ejecuta el metodo del map
         UnidadMedida unidadMedida = unidadMedidaOpt.map(unidadMedidaService::getUnidadMedidaById).orElse(null);
         String search = searchOpt.orElse("");
 
         if (categoria != null && unidadMedida != null) {
-            return articuloInsumoRepository.findByCategoriaAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(categoria.getId(), unidadMedida.getId(), search, idSucursal);
+            return articuloInsumoRepository.findBySucursalAndCategoriaAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(sucursal, categoria, unidadMedida, search);
         } else if (categoria != null) {
-            return articuloInsumoRepository.buscarByCategoriaAndDenominacionDeSucursal(categoria.getId(), search,idSucursal);
+            return articuloInsumoRepository.findBySucursalAndCategoriaAndDenominacionStartingWithIgnoreCase(sucursal, categoria, search);
         } else if (unidadMedida != null) {
-            return articuloInsumoRepository.findByUnidadMedidaAndDenominacionStartingWithIgnoreCase(unidadMedida.getId(), search,idSucursal);
+            return articuloInsumoRepository.findBySucursalAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(sucursal, unidadMedida, search);
         } else if (!search.isEmpty()) {
-            return articuloInsumoRepository.findByDenominacionStartingWithIgnoreCase(search,idSucursal);
+            return articuloInsumoRepository.findBySucursalAndDenominacionStartingWithIgnoreCase(sucursal, search);
         } else {
-            return articuloInsumoRepository.findAllBySucursal(idSucursal);
+            return articuloInsumoRepository.findBySucursal(sucursal);
         }
     }
 

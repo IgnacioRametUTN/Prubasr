@@ -32,15 +32,9 @@ public class ArticuloManufacturadoController{
         return ResponseEntity.ok().body(this.artManufacturadoService.getArticuloManufacturadoById(id));
     }
 
-    @PostMapping("")
-    public ResponseEntity<?> create(@RequestBody ArticuloManufacturado body){
-        return ResponseEntity.ok().body(this.artManufacturadoService.create(body));
-    }
-
-    @PostMapping("/bulk")
-    public ResponseEntity<?> create(@RequestBody List<ArticuloManufacturado> body){
-        body.forEach(this.artManufacturadoService::create);
-        return ResponseEntity.ok().build();
+    @PostMapping("/{idSucursal}")
+    public ResponseEntity<?> create(@PathVariable("idSucursal") Long idSucursal,@RequestBody ArticuloManufacturado body){
+        return ResponseEntity.ok().body(this.artManufacturadoService.create(body,idSucursal));
     }
 
     @PutMapping("/{id}")

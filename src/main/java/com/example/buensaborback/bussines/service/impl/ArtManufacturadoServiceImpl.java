@@ -23,14 +23,16 @@ public class ArtManufacturadoServiceImpl implements IArtManufacturadoService {
     private final UnidadMedidaServiceImpl unidadMedidaService;
     private final ArtManufacturadoDetalleServiceImpl artManufacturadoDetalleServiceImpl;
     private final PromocionDetalleServiceImpl promocionDetalleServiceImpl;
+    private final ISucursalServiceImpl sucursalService;
 
-    public ArtManufacturadoServiceImpl(ArticuloManufacturadoRepository articuloManufacturadoRepository, ArticuloInsumoServiceImpl articuloInsumoServiceImpl, CategoriaServiceImpl categoriaServiceImpl, UnidadMedidaServiceImpl unidadMedidaService, ArtManufacturadoDetalleServiceImpl artManufacturadoDetalleServiceImpl, PromocionDetalleServiceImpl promocionDetalleServiceImpl) {
+    public ArtManufacturadoServiceImpl(ArticuloManufacturadoRepository articuloManufacturadoRepository, ArticuloInsumoServiceImpl articuloInsumoServiceImpl, CategoriaServiceImpl categoriaServiceImpl, UnidadMedidaServiceImpl unidadMedidaService, ArtManufacturadoDetalleServiceImpl artManufacturadoDetalleServiceImpl, PromocionDetalleServiceImpl promocionDetalleServiceImpl, ISucursalServiceImpl sucursalService) {
         this.articuloManufacturadoRepository = articuloManufacturadoRepository;
         this.articuloInsumoServiceImpl = articuloInsumoServiceImpl;
         this.categoriaServiceImpl = categoriaServiceImpl;
         this.unidadMedidaService = unidadMedidaService;
         this.artManufacturadoDetalleServiceImpl = artManufacturadoDetalleServiceImpl;
         this.promocionDetalleServiceImpl = promocionDetalleServiceImpl;
+        this.sucursalService = sucursalService;
     }
 
     public ArticuloManufacturado getArticuloManufacturadoById(Long id) {
@@ -42,9 +44,10 @@ public class ArtManufacturadoServiceImpl implements IArtManufacturadoService {
     }
 
     @Transactional
-    public ArticuloManufacturado create(ArticuloManufacturado entity) {
-        entity.setCategoria(categoriaServiceImpl.getCategoriaById(entity.getCategoria().getId()));
-        entity.setUnidadMedida(unidadMedidaService.getUnidadMedidaById(entity.getUnidadMedida().getId()));
+    public ArticuloManufacturado create(ArticuloManufacturado entity,Long idSucursal) {
+        entity.setSucursal(this.sucursalService.getSucursalById(idSucursal));
+        entity.setCategoria(this.categoriaServiceImpl.getCategoriaById(entity.getCategoria().getId()));
+        entity.setUnidadMedida(this.unidadMedidaService.getUnidadMedidaById(entity.getUnidadMedida().getId()));
 
         if (nonNull(entity.getPromocionDetalle())) {
             // Actualizar la lista de PromocionDetalle
@@ -117,20 +120,21 @@ public class ArtManufacturadoServiceImpl implements IArtManufacturadoService {
     }
 
     public List<ArticuloManufacturado> getAll(Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> searchOpt, Long idSucursal) {
+        Sucursal sucursal = this.sucursalService.getSucursalById(idSucursal);
         Categoria categoria = categoriaOpt.map(categoriaServiceImpl::getCategoriaById).orElse(null); //Basicamente funciona así: si el Optional está vacío el map() no hace nada y salta al orElse y devuelve null, caso contrario ejecuta el metodo del map
         UnidadMedida unidadMedida = unidadMedidaOpt.map(unidadMedidaService::getUnidadMedidaById).orElse(null);
         String search = searchOpt.orElse("");
 
         if (categoria != null && unidadMedida != null) {
-            return articuloManufacturadoRepository.findByCategoriaAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(categoria.getId(), unidadMedida.getId(), search,idSucursal);
+            return articuloManufacturadoRepository.findBySucursalAndCategoriaAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(sucursal, categoria, unidadMedida, search);
         } else if (categoria != null) {
-            return articuloManufacturadoRepository.findByCategoriaAndDenominacionStartingWithIgnoreCase(categoria.getId(), search,idSucursal);
+            return articuloManufacturadoRepository.findBySucursalAndCategoriaAndDenominacionStartingWithIgnoreCase(sucursal, categoria, search);
         } else if (unidadMedida != null) {
-            return articuloManufacturadoRepository.findByUnidadMedidaAndDenominacionStartingWithIgnoreCase(unidadMedida.getId(), search,idSucursal);
+            return articuloManufacturadoRepository.findBySucursalAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(sucursal, unidadMedida, search);
         } else if (!search.isEmpty()) {
-            return articuloManufacturadoRepository.findByDenominacionStartingWithIgnoreCase(search,idSucursal);
+            return articuloManufacturadoRepository.findBySucursalAndDenominacionStartingWithIgnoreCase(sucursal, search);
         } else {
-            return articuloManufacturadoRepository.findAllBySucursal(idSucursal);
+            return articuloManufacturadoRepository.findBySucursal(sucursal);
         }
     }
 

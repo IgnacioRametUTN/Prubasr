@@ -10,7 +10,7 @@ import java.util.Set;
 public interface IArticuloInsumoService {
      ArticuloInsumo getArticuloInsumoById(Long id);
      boolean existsArticuloInsumoById(Long id);
-     ArticuloInsumo create(ArticuloInsumo entity);
+     ArticuloInsumo create(ArticuloInsumo entity,Long idSucursal);
      ArticuloInsumo update(Long id,ArticuloInsumo entity);
      ArticuloInsumo delete(Long id);
      List<ArticuloInsumo> getAll();
