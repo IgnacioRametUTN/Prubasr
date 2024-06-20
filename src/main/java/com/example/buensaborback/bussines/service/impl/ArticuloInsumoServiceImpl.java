@@ -79,19 +79,19 @@ public class ArticuloInsumoServiceImpl implements IArticuloInsumoService {
     public List<ArticuloInsumo> getAll(){
         return articuloInsumoRepository.findAll();
     }
-    public List<ArticuloInsumo> getAll(Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> searchOpt) {
+    public List<ArticuloInsumo> getAll(Long idSucursal, Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> searchOpt) {
         Categoria categoria = categoriaOpt.map(categoriaServiceImpl::getCategoriaById).orElse(null); //Basicamente funciona así: si el Optional está vacío el map() no hace nada y salta al orElse y devuelve null, caso contrario ejecuta el metodo del map
         UnidadMedida unidadMedida = unidadMedidaOpt.map(unidadMedidaService::getUnidadMedidaById).orElse(null);
         String search = searchOpt.orElse("");
 
         if (categoria != null && unidadMedida != null) {
-            return articuloInsumoRepository.findByCategoriaAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(categoria, unidadMedida, search);
+            return articuloInsumoRepository.findBySucursalAndCategoriaAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(categoria, unidadMedida, search);
         } else if (categoria != null) {
-            return articuloInsumoRepository.findByCategoriaAndDenominacionStartingWithIgnoreCase(categoria, search);
+            return articuloInsumoRepository.findBySucursalAndCategoriaAndDenominacionStartingWithIgnoreCase(categoria, search);
         } else if (unidadMedida != null) {
-            return articuloInsumoRepository.findByUnidadMedidaAndDenominacionStartingWithIgnoreCase(unidadMedida, search);
+            return articuloInsumoRepository.findBySucursalAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(unidadMedida, search);
         } else if (!search.isEmpty()) {
-            return articuloInsumoRepository.findByDenominacionStartingWithIgnoreCase(search);
+            return articuloInsumoRepository.findBySucursalAndDenominacionStartingWithIgnoreCase(search);
         } else {
             return articuloInsumoRepository.findAll();
         }

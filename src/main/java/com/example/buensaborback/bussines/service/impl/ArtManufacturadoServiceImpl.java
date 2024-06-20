@@ -122,13 +122,13 @@ public class ArtManufacturadoServiceImpl implements IArtManufacturadoService {
         String search = searchOpt.orElse("");
 
         if (categoria != null && unidadMedida != null) {
-            return articuloManufacturadoRepository.findByCategoriaAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(categoria, unidadMedida, search);
+            return articuloManufacturadoRepository.findBySucursalAndCategoriaAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(categoria, unidadMedida, search);
         } else if (categoria != null) {
-            return articuloManufacturadoRepository.findByCategoriaAndDenominacionStartingWithIgnoreCase(categoria, search);
+            return articuloManufacturadoRepository.findBySucursalAndCategoriaAndDenominacionStartingWithIgnoreCase(categoria, search);
         } else if (unidadMedida != null) {
-            return articuloManufacturadoRepository.findByUnidadMedidaAndDenominacionStartingWithIgnoreCase(unidadMedida, search);
+            return articuloManufacturadoRepository.findBySucursalAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(unidadMedida, search);
         } else if (!search.isEmpty()) {
-            return articuloManufacturadoRepository.findByDenominacionStartingWithIgnoreCase(search);
+            return articuloManufacturadoRepository.findBySucursalAndDenominacionStartingWithIgnoreCase(search);
         } else {
             return articuloManufacturadoRepository.findAll();
         }

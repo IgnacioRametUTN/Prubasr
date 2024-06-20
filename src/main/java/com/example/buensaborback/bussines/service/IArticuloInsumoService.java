@@ -14,7 +14,7 @@ public interface IArticuloInsumoService {
      ArticuloInsumo update(Long id,ArticuloInsumo entity);
      ArticuloInsumo delete(Long id);
      List<ArticuloInsumo> getAll();
-     List<ArticuloInsumo> getAll(Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> searchOpt);
+     List<ArticuloInsumo> getAll(Long idSucursal, Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> searchOpt);
 
      Set<Imagen> uploadImages(MultipartFile[] files, Long id);
      // Método para eliminar una imagen por su identificador público y Long

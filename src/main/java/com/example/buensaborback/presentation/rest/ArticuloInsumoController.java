@@ -34,7 +34,7 @@ public class ArticuloInsumoController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> create(@RequestBody ArticuloInsumo body){
+    public ResponseEntity<?> create(@PathVariable("idSucursal") Long idSucursal, @RequestBody ArticuloInsumo body){
         return ResponseEntity.ok().body(this.articuloInsumoService.create(body));
     }
 
@@ -63,11 +63,12 @@ public class ArticuloInsumoController {
     }
 
 
-    @GetMapping("/search")
-    public ResponseEntity<?> getAll(@RequestParam("categoria_id") Optional<Long> categoria,
+    @GetMapping("/{idSucursal}/search")
+    public ResponseEntity<?> getAll(@PathVariable("idSucursal") Long idSucursal,
+                                    @RequestParam("categoria_id") Optional<Long> categoria,
                                     @RequestParam("unidad_id") Optional<Long> unidadMedida,
                                     @RequestParam("denominacion") Optional<String> denominacion){
-        return ResponseEntity.ok().body(this.articuloInsumoService.getAll(categoria, unidadMedida, denominacion));
+        return ResponseEntity.ok().body(this.articuloInsumoService.getAll(idSucursal, categoria, unidadMedida, denominacion));
     }
 
 

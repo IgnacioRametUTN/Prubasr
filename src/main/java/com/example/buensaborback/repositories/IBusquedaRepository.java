@@ -14,11 +14,11 @@ public interface IBusquedaRepository<T extends Articulo>{
     c.id =  2 AND
     um.id =2 AND
     LOWER(a.denominacion) LIKE LOWER('p%');*/
-    List<T> findByCategoriaAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(Categoria categoria, UnidadMedida unidadMedida, String denominacion);
+    List<T> findBySucursalAndCategoriaAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(Categoria categoria, UnidadMedida unidadMedida, String denominacion);
 
-    List<T> findByCategoriaAndDenominacionStartingWithIgnoreCase(Categoria categoria, String denominacion);
+    List<T> findBySucursalAndCategoriaAndDenominacionStartingWithIgnoreCase(Categoria categoria, String denominacion);
 
-    List<T> findByUnidadMedidaAndDenominacionStartingWithIgnoreCase(UnidadMedida unidadMedida, String denominacion);
+    List<T> findBySucursalAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(UnidadMedida unidadMedida, String denominacion);
 
-    List<T> findByDenominacionStartingWithIgnoreCase(String denominacion);
+    List<T> findBySucursalAndDenominacionStartingWithIgnoreCase(String denominacion);
 }
