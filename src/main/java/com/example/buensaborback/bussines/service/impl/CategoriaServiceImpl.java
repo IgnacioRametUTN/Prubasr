@@ -60,72 +60,61 @@ public class CategoriaServiceImpl implements ICategoriaService {
     }
     @Override
     public Categoria create(Long idPadre, Long idSucursal, Categoria body) {
-        // Obtener la sucursal y asegurarse de que esté gestionada por el contexto de persistencia
-
         Sucursal sucursal = sucursalService.getSucursalById(idSucursal);
-        System.out.println("Sucursal que trae: " + sucursal.getNombre());
 
-        // Agregar la sucursal a la categoría
-        body.getSucursales().add(sucursal);
-
-        if (idPadre == 0) {
-            // Establecer la categoría padre como null para categorías raíz
-            body.setCategoriaPadre(null);
-
-            // Verificar duplicados
-            if (existsCategoriaByDenominacion(body.getDenominacion())) {
-                throw new DuplicateEntryException(String.format("Ya existe una Categoria con el nombre %s", body.getDenominacion()));
-            }
-
-            // Guardar la categoría raíz
-            Categoria createCat = this.categoriaRepository.save(body);
-
-            // Agregar la categoría a las categorías de la sucursal
-            sucursal.getCategorias().add(createCat);
-
-            // Guardar la sucursal para actualizar la relación
-            sucursalService.updateSucursal(sucursal.getId(),sucursal);
-
-            System.out.println("sucursal id: " + createCat.getSucursales().toString());
-            return createCat;
+        if (existsCategoriaByDenominacion(body.getDenominacion())) {
+            body = categoriaRepository.findByDenominacionIgnoreCase(body.getDenominacion());
+            actualizarCategoriaExistente(body, sucursal);
         } else {
-            // Obtener la categoría padre
-            Categoria categoriaPadre = this.getCategoriaById(idPadre);
-
-            // Verificar duplicados
-            boolean exists = categoriaPadre.getSubCategorias().stream()
-                    .anyMatch(categoria -> categoria.getDenominacion().equalsIgnoreCase(body.getDenominacion()));
-            if (exists) {
-                throw new DuplicateEntryException(String.format("Ya existe una SubCategoria dentro de %s con el nombre %s", categoriaPadre.getDenominacion(), body.getDenominacion()));
+            if (idPadre != 0) {
+                Categoria categoriaPadre = getCategoriaById(idPadre);
+                body.setCategoriaPadre(categoriaPadre);
+                categoriaPadre.getSubCategorias().add(body);
             }
+            body.getSucursales().add(sucursal);
+            sucursal.getCategorias().add(body);
 
-            // Guardar la nueva categoría primero
-            Categoria savedBody = this.categoriaRepository.save(body);
+            sucursalService.updateSucursal(sucursal.getId(), sucursal);
+        }
 
-            // Agregar la nueva categoría guardada a la categoría padre
-            categoriaPadre.getSubCategorias().add(savedBody);
-            savedBody.setCategoriaPadre(categoriaPadre);
+        return categoriaRepository.save(body);
+    }
 
-            // Guardar la categoría padre para actualizar la relación
-            this.categoriaRepository.save(categoriaPadre);
+    private void actualizarCategoriaExistente(Categoria body, Sucursal sucursal) {
+        body.setAlta(true);
+        body.getSucursales().add(sucursal);
+        sucursal.getCategorias().add(body);
 
-            // Agregar la categoría a las categorías de la sucursal
-            sucursal.getCategorias().add(savedBody);
-
-            // Guardar la sucursal para actualizar la relación
-            sucursalService.updateSucursal(sucursal.getId(),sucursal);
-
-            System.out.println("sucursal id: " + savedBody.getSucursales().toString());
-            return savedBody;
+        if (body.getCategoriaPadre() != null) {
+            body.getCategoriaPadre().getSucursales().add(sucursal);
+            sucursal.getCategorias().add(body.getCategoriaPadre());
         }
     }
 
+
+
     @Override
-    public Categoria delete(Long id) {
+    public Categoria delete(Long id,Long idSucursal) {
         Categoria categoria = this.getCategoriaById(id);
-        boolean alta = !categoria.isAlta();
-        categoria.setAlta(alta);
-        categoria.getSubCategorias().forEach(cat -> cat.setAlta(alta));
+        Sucursal sucursal=this.sucursalService.getSucursalById((idSucursal));
+        categoria.getSucursales().remove(sucursal);
+        sucursal.getCategorias().remove(categoria);
+        categoria.getSubCategorias().forEach(cat -> {
+            cat.getSucursales().remove(sucursal);
+            sucursal.getCategorias().remove(cat);
+            this.categoriaRepository.save(cat);
+        });
+        if (categoria.getSucursales().isEmpty()) {
+            boolean alta = false;
+            categoria.setAlta(alta);
+            categoria.getSubCategorias().forEach(cat -> {
+                cat.setAlta(alta);
+                cat.getSucursales().remove(sucursal);
+                sucursal.getCategorias().remove(cat);
+            });
+
+        }
+        this.sucursalService.saveSucursal(sucursal);
         return this.categoriaRepository.save(categoria);
     }
 

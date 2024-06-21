@@ -25,6 +25,16 @@ public class RestControllerAdvice {
                 .build(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = EntityInUseException .class)
+    public ResponseEntity<ErrorDto> handleEntityInUseException (EntityInUseException  e){
+        String errorMsg = e.getClass().getSimpleName()+ " : " + e.getMessage();
+        logger.error(errorMsg);
+        return new ResponseEntity<>(ErrorDto.builder()
+                .message(e.getMessage())
+                .statusCode(HttpStatus.CONFLICT.value())
+                .build(), HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(value = BadRequestException.class)
     public ResponseEntity<ErrorDto> handleBadRequestException(BadRequestException e){
         String errorMsg = e.getClass().getSimpleName()+ " : " + e.getMessage();

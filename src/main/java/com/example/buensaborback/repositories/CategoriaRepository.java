@@ -22,4 +22,7 @@ public interface CategoriaRepository  extends JpaRepository<Categoria, Long>{
 
     @Query("SELECT c FROM Categoria c JOIN c.sucursales s WHERE s.id = :sucursalId")
     List<Categoria> findAllBySucu(@Param("sucursalId") Long sucursalId);
+
+    Categoria findByDenominacionIgnoreCase(String denominacion);
+
 }

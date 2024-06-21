@@ -75,7 +75,6 @@ public class PromocionServiceImpl implements IPromocionService {
                 promocionDetalleExistente.setArticulo(getArticulo(promocionDetalle));
                 promocionDetalles.add(promocionDetalleExistente);
             }else{
-                System.out.println("AAAAAAAAAAAAAAAAA");
                 promocionDetalle.setArticulo(getArticulo(promocionDetalle));
                 promocionDetalle.setPromocion(entity);
                 promocionDetalles.add(promocionDetalle);
