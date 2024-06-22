@@ -79,7 +79,9 @@ public class BuenSaborBackApplication {
 		logger.info("Estoy activo en el main");
 	}
 
-@Bean
+
+
+	//@Bean
 	CommandLineRunner init() {
 		return args -> {
 			logger.info("----------------Persistiendo los modelos---------------------");

@@ -14,7 +14,9 @@
 build/
 # AWS User-specific
 .idea/**/aws.xml
-.env
+# Ignore environment files, except .env.example
+!.env.example
+.env.**
 # Generated files
 .idea/**/contentModel.xml
 
