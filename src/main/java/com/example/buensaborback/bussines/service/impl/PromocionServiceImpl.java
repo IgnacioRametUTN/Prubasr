@@ -75,7 +75,6 @@ public class PromocionServiceImpl implements IPromocionService {
                 promocionDetalleExistente.setArticulo(getArticulo(promocionDetalle));
                 promocionDetalles.add(promocionDetalleExistente);
             }else{
-                System.out.println("AAAAAAAAAAAAAAAAA");
                 promocionDetalle.setArticulo(getArticulo(promocionDetalle));
                 promocionDetalle.setPromocion(entity);
                 promocionDetalles.add(promocionDetalle);
@@ -93,12 +92,8 @@ public class PromocionServiceImpl implements IPromocionService {
 
     @Override
     public Promocion delete(Long id) {
-        Optional<Promocion> promocionOpt = promocionRepository.findById(id);
-        if (promocionOpt.isPresent()) {
-            Promocion promocion = promocionOpt.get();
-            promocionRepository.delete(promocion);
-            return promocion;
-        }
-        return null;
+        Promocion promocion = this.getPromocionById(id);
+        promocion.setAlta(!promocion.isAlta());
+        return this.promocionRepository.save(promocion);
     }
 }

@@ -21,7 +21,6 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@ToString
 @SuperBuilder
 @JsonIgnoreProperties({"hibernateLazyInitializer", "empleado","domicilio","factura"})
 public class Pedido extends Base{

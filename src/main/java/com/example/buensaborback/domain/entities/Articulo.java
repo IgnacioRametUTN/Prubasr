@@ -25,7 +25,7 @@ public class Articulo extends Base {
     protected String denominacion;
     protected Double precioVenta;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name= "articulo_id")
     @Builder.Default
     protected Set<Imagen> imagenes = new HashSet<Imagen>();
@@ -44,4 +44,10 @@ public class Articulo extends Base {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "articulo")
     @Builder.Default
     protected Set<PromocionDetalle> promocionDetalle = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "sucursal_id")
+    @JsonIgnoreProperties("articulos")
+    private Sucursal sucursal;
+
 }

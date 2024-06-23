@@ -6,6 +6,7 @@ import com.example.buensaborback.domain.entities.Sucursal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -62,5 +63,12 @@ public class SucursalController {
     public ResponseEntity<List<Sucursal>> getSucursalesByEmpresaId(@PathVariable Long empresaId) {
         List<Sucursal> sucursales = sucursalService.getSucursalesByEmpresaId(empresaId);
         return ResponseEntity.ok(sucursales);
+    }
+
+    @PostMapping("/uploads")
+    public ResponseEntity<?> uploadImages(@RequestParam(value = "id") Long idArticulo,
+                                          @RequestParam(value = "uploads") MultipartFile[] files) {
+        return ResponseEntity.ok(sucursalService.uploadImages(files, idArticulo));
+
     }
 }

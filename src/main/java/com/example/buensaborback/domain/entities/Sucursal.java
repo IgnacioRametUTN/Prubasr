@@ -53,6 +53,14 @@ public class Sucursal extends Base{
 
     private Empresa empresa;
 
-    @OneToOne(mappedBy = "sucursal", cascade = CascadeType.ALL)
-    private ImagenSucursal imagenSucursal;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name= "sucursal_id")
+    @Builder.Default
+    protected Set<Imagen> imagenes = new HashSet<Imagen>();
+
+    @OneToMany
+    @JoinColumn(name = "sucursal_id")
+    @Builder.Default
+    private Set<Articulo> articulos = new HashSet<>();
+
 }

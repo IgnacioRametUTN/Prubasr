@@ -39,24 +39,18 @@ public class CloudinaryServiceImpl implements ICloudinaryService {
 
     // Método para eliminar una imagen de Cloudinary
     @Override
-    public ResponseEntity<String> deleteImage(String publicId, Long idBd) {
+    public boolean deleteImage(String publicId) {
         try {
             // Eliminar la imagen en Cloudinary
             Map response = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
             JSONObject json = new JSONObject(response);
 
             // Verificar si la eliminación fue exitosa
-            if ("ok".equals(json.getString("result"))) {
-                // Devolver una respuesta exitosa si la eliminación fue exitosa
-                return new ResponseEntity<>("{\"status\":\"OK\", \"message\":\"Image deleted successfully.\"}", HttpStatus.OK);
-            } else {
-                // Devolver un error si la eliminación no fue exitosa
-                return new ResponseEntity<>("{\"status\":\"ERROR\", \"message\":\"Failed to delete image.\"}", HttpStatus.BAD_REQUEST);
-            }
+            return "ok".equals(json.getString("result"));
         } catch (Exception e) {
             e.printStackTrace();
             // Devolver un error en caso de excepción durante la eliminación
-            return new ResponseEntity<>("{\"status\":\"ERROR\", \"message\":\"" + e.getMessage() + "\"}", HttpStatus.BAD_REQUEST);
+            return false;
         }
     }
 }

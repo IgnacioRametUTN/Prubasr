@@ -26,14 +26,21 @@ public class ArticuloInsumoServiceImpl implements IArticuloInsumoService {
     private final IPromocionDetalleService promocionDetalleServiceImpl;
     private final ICloudinaryService cloudinaryService;
     private final ImagenRepository imagenRepository;
+    private final ISucursalServiceImpl sucursalService;
+    private final IImagenService imagenService;
 
-    public ArticuloInsumoServiceImpl(ArticuloInsumoRepository articuloInsumoRepository, UnidadMedidaServiceImpl unidadMedidaService, CategoriaServiceImpl categoriaServiceImpl, PromocionDetalleServiceImpl promocionDetalleServiceImpl, CloudinaryServiceImpl cloudinaryService, ImagenRepository imagenRepository) {
+    public ArticuloInsumoServiceImpl(ArticuloInsumoRepository articuloInsumoRepository, UnidadMedidaServiceImpl unidadMedidaService,
+                                     CategoriaServiceImpl categoriaServiceImpl, PromocionDetalleServiceImpl promocionDetalleServiceImpl,
+                                     CloudinaryServiceImpl cloudinaryService, ImagenRepository imagenRepository,
+                                     ISucursalServiceImpl sucursalService, ImagenServiceImpl imagenService) {
         this.articuloInsumoRepository = articuloInsumoRepository;
         this.unidadMedidaService = unidadMedidaService;
         this.categoriaServiceImpl = categoriaServiceImpl;
         this.promocionDetalleServiceImpl = promocionDetalleServiceImpl;
         this.cloudinaryService = cloudinaryService;
         this.imagenRepository = imagenRepository;
+        this.sucursalService = sucursalService;
+        this.imagenService = imagenService;
     }
 
     public ArticuloInsumo getArticuloInsumoById(Long id){
@@ -44,14 +51,15 @@ public class ArticuloInsumoServiceImpl implements IArticuloInsumoService {
         return this.articuloInsumoRepository.existsById(id);
     }
 
-    public ArticuloInsumo create(ArticuloInsumo entity){
-       entity.setCategoria(this.categoriaServiceImpl.getCategoriaById( entity.getCategoria().getId()));
-       entity.setUnidadMedida(this.unidadMedidaService.getUnidadMedidaById( entity.getUnidadMedida().getId()));
+    public ArticuloInsumo create(ArticuloInsumo entity,Long idSucursal){
+        entity.setSucursal(this.sucursalService.getSucursalById(idSucursal));
+        entity.setCategoria(this.categoriaServiceImpl.getCategoriaById( entity.getCategoria().getId()));
+        entity.setUnidadMedida(this.unidadMedidaService.getUnidadMedidaById( entity.getUnidadMedida().getId()));
         return this.articuloInsumoRepository.save(entity);
     }
 
     public ArticuloInsumo update(Long id,ArticuloInsumo entity) {
-        this.getArticuloInsumoById(id); //Verifica si existe unicamente, sino larga expcion
+        ArticuloInsumo articuloInsumo = this.getArticuloInsumoById(id); //Verifica si existe unicamente, sino larga expcion
         // Actualizar las referencias a UnidadMedida y Categoria
         entity.setUnidadMedida(unidadMedidaService.getUnidadMedidaById(entity.getUnidadMedida().getId()));
         entity.setCategoria(categoriaServiceImpl.getCategoriaById(entity.getCategoria().getId()));
@@ -67,6 +75,8 @@ public class ArticuloInsumoServiceImpl implements IArticuloInsumoService {
                     .collect(Collectors.toSet()));
         }
 
+        //Verificar cambios en imagenes de ser asi eliminar de cloudinary las que se dejan de usar
+       imagenService.updateImagenes(articuloInsumo.getImagenes(), entity.getImagenes());
         // Guardar y devolver la entidad actualizada
         return articuloInsumoRepository.save(entity);
     }
@@ -79,28 +89,29 @@ public class ArticuloInsumoServiceImpl implements IArticuloInsumoService {
     public List<ArticuloInsumo> getAll(){
         return articuloInsumoRepository.findAll();
     }
-    public List<ArticuloInsumo> getAll(Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> searchOpt) {
+
+    public List<ArticuloInsumo> getAll(Long idSucursal, Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> searchOpt) {
+        Sucursal sucursal = this.sucursalService.getSucursalById(idSucursal);
         Categoria categoria = categoriaOpt.map(categoriaServiceImpl::getCategoriaById).orElse(null); //Basicamente funciona así: si el Optional está vacío el map() no hace nada y salta al orElse y devuelve null, caso contrario ejecuta el metodo del map
         UnidadMedida unidadMedida = unidadMedidaOpt.map(unidadMedidaService::getUnidadMedidaById).orElse(null);
         String search = searchOpt.orElse("");
 
         if (categoria != null && unidadMedida != null) {
-            return articuloInsumoRepository.findByCategoriaAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(categoria, unidadMedida, search);
+            return articuloInsumoRepository.findBySucursalAndCategoriaAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(sucursal, categoria, unidadMedida, search);
         } else if (categoria != null) {
-            return articuloInsumoRepository.findByCategoriaAndDenominacionStartingWithIgnoreCase(categoria, search);
+            return articuloInsumoRepository.findBySucursalAndCategoriaAndDenominacionStartingWithIgnoreCase(sucursal, categoria, search);
         } else if (unidadMedida != null) {
-            return articuloInsumoRepository.findByUnidadMedidaAndDenominacionStartingWithIgnoreCase(unidadMedida, search);
+            return articuloInsumoRepository.findBySucursalAndUnidadMedidaAndDenominacionStartingWithIgnoreCase(sucursal, unidadMedida, search);
         } else if (!search.isEmpty()) {
-            return articuloInsumoRepository.findByDenominacionStartingWithIgnoreCase(search);
+            return articuloInsumoRepository.findBySucursalAndDenominacionStartingWithIgnoreCase(sucursal, search);
         } else {
-            return articuloInsumoRepository.findAll();
+            return articuloInsumoRepository.findBySucursal(sucursal);
         }
     }
 
     @Override
     public Set<Imagen> uploadImages(MultipartFile[] files, Long idArticuloInsumo) {
-        List<String> urls = new ArrayList<>();
-        var insumo = getArticuloInsumoById(idArticuloInsumo);
+        ArticuloInsumo insumo = getArticuloInsumoById(idArticuloInsumo);
         //Se limita a un maximo de 3 imagenes por entidad
         if (insumo.getImagenes().size() > 3)
             throw new ImageUploadLimitException("La maxima cantidad de imagens a subir son 3");
@@ -126,33 +137,13 @@ public class ArticuloInsumoServiceImpl implements IArticuloInsumoService {
             insumo.getImagenes().add(image);
             //Se guarda la imagen en la base de datos
             imagenRepository.save(image);
-            // Agregar la URL de la imagen a la lista de URLs subidas
-            urls.add(image.getUrl());
         }
 
         //se actualiza el insumo en la base de datos con las imagenes
         articuloInsumoRepository.save(insumo);
 
-        // Convertir la lista de URLs a un objeto JSON y devolver como ResponseEntity con estado OK (200)
         return insumo.getImagenes();
-
     }
-
-//    @Override
-//    public List<Imagen> deleteImage(String publicId, Long id) {
-//        try {
-//            // Eliminar la imagen de la base de datos usando su identificador
-//            imagenArticuloRepository.deleteById(id);
-//
-//            // Llamar al servicio de Cloudinary para eliminar la imagen por su publicId
-//            return cloudinaryService.deleteImage(publicId, id);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            // Devolver un error (400) si ocurre alguna excepción durante la eliminación
-//            return new ResponseEntity<>("{\"status\":\"ERROR\", \"message\":\"" + e.getMessage() + "\"}", HttpStatus.BAD_REQUEST);
-//        }
-//    }
 
 
 }

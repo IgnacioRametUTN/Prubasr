@@ -80,6 +80,8 @@ public class BuenSaborBackApplication {
 	}
 
 
+
+	@Bean
 	CommandLineRunner init() {
 		return args -> {
 			logger.info("----------------Persistiendo los modelos---------------------");
@@ -209,8 +211,10 @@ public class BuenSaborBackApplication {
 					.stockMaximo(100.0)
 					.esParaElaborar(true)
 					.unidadMedida(unidadMedidakg)
-
 					.build();
+			queso.setSucursal(sucursal1);
+			sucursal1.getArticulos().add(queso);
+
 			queso.getImagenes().add(imagen3);
 			queso.setCategoria(lacteos);
 			lacteos.getArticulos().add(queso);
@@ -234,6 +238,8 @@ public class BuenSaborBackApplication {
 					.unidadMedida(unidadMedidakg)
 
 					.build();
+			harina.setSucursal(sucursal1);
+			sucursal1.getArticulos().add(harina);
 			harina.getImagenes().add(imagen2);
 			harinas.getArticulos().add(harina);
 			harina.setCategoria(harinas);
@@ -257,7 +263,8 @@ public class BuenSaborBackApplication {
 					.build();
 			pizza.getArticulos().add(pizzaNapolitana);
 			pizzaNapolitana.setCategoria(pizza);
-
+			pizzaNapolitana.setSucursal(sucursal1);
+			sucursal1.getArticulos().add(pizzaNapolitana);
 			ArticuloInsumo coca = ArticuloInsumo.builder()
 					.denominacion("Coca-cola")
 					.precioVenta(2500.00)
@@ -270,6 +277,9 @@ public class BuenSaborBackApplication {
 					.build();
 			refrescosCola.getArticulos().add(coca);
 			coca.setCategoria(refrescosCola);
+
+			coca.setSucursal(sucursal2);
+			sucursal2.getArticulos().add(coca);
 
 			ArticuloManufacturadoDetalle artManufacDetalleQueso = ArticuloManufacturadoDetalle.builder()
 					.articuloInsumo(queso)
@@ -366,7 +376,7 @@ public class BuenSaborBackApplication {
 					.telefono("2615854785")
 					.email("juanperez@gmail.com")
 					.fechaNacimiento(LocalDate.of(1990,11,12))
-					.imagen(imagen4)
+					.imagenes(Set.of(imagen4))
 					.usuario(usuario1)
 					.pedidos(new HashSet<>(Set.of(pedido1)))
 					.domicilios(new HashSet<>(Set.of(domicilioCliente)))

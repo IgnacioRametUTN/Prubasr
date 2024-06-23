@@ -6,6 +6,7 @@ import com.example.buensaborback.domain.entities.ArticuloManufacturado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,15 +33,15 @@ public class ArticuloManufacturadoController{
         return ResponseEntity.ok().body(this.artManufacturadoService.getArticuloManufacturadoById(id));
     }
 
-    @PostMapping("")
-    public ResponseEntity<?> create(@RequestBody ArticuloManufacturado body){
-        return ResponseEntity.ok().body(this.artManufacturadoService.create(body));
+    @PostMapping("/{idSucursal}")
+    public ResponseEntity<?> create(@PathVariable("idSucursal") Long idSucursal,@RequestBody ArticuloManufacturado body){
+        return ResponseEntity.ok().body(this.artManufacturadoService.create(body,idSucursal));
     }
+    @PostMapping("/uploads")
+    public ResponseEntity<?> uploadImages(@RequestParam(value = "id") Long idArticulo,
+                                          @RequestParam(value = "uploads") MultipartFile[] files) {
+        return ResponseEntity.ok(artManufacturadoService.uploadImages(files, idArticulo));
 
-    @PostMapping("/bulk")
-    public ResponseEntity<?> create(@RequestBody List<ArticuloManufacturado> body){
-        body.forEach(this.artManufacturadoService::create);
-        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
@@ -54,11 +55,12 @@ public class ArticuloManufacturadoController{
     }
 
 
-    @GetMapping("/search")
-    public ResponseEntity<?> getAll(@RequestParam("categoria_id") Optional<Long> categoria,
+    @GetMapping("/{idSucursal}/search")
+    public ResponseEntity<?> getAll(@PathVariable("idSucursal") Long idSucursal,
+                                    @RequestParam("categoria_id") Optional<Long> categoria,
                                     @RequestParam("unidad_id") Optional<Long> unidadMedida,
                                     @RequestParam("denominacion") Optional<String> denominacion){
-        return ResponseEntity.ok().body(this.artManufacturadoService.getAll(categoria, unidadMedida, denominacion));
+        return ResponseEntity.ok().body(this.artManufacturadoService.getAll(categoria, unidadMedida, denominacion,idSucursal));
     }
 
 }

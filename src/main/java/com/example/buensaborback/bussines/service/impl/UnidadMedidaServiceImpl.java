@@ -3,6 +3,7 @@ package com.example.buensaborback.bussines.service.impl;
 import com.example.buensaborback.bussines.service.IUnidadMedidaService;
 import com.example.buensaborback.domain.entities.UnidadMedida;
 import com.example.buensaborback.presentation.advice.exception.DuplicateEntryException;
+import com.example.buensaborback.presentation.advice.exception.EntityInUseException;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.UnidadMedidaRepository;
 import jakarta.transaction.Transactional;
@@ -46,6 +47,9 @@ public class UnidadMedidaServiceImpl implements IUnidadMedidaService {
     }
     @Override
     public UnidadMedida delete(Long id) {
+        if (unidadMedidaRepository.existsInArticuloInsumoByUnidadMedida(id)||unidadMedidaRepository.existsInArticuloManufacturadoByUnidadMedida(id)){
+            throw new EntityInUseException("La unidad de medida tiene articulos relacionados");
+        }
         UnidadMedida unidadMedidaExistente = this.getUnidadMedidaById(id);
         unidadMedidaExistente.setAlta(!unidadMedidaExistente.isAlta());
         return this.unidadMedidaRepository.save(unidadMedidaExistente);

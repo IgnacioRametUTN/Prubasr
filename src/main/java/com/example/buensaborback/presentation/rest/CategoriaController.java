@@ -20,14 +20,14 @@ public class CategoriaController{
         this.categoriaService = categoriaService;
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<Categoria>> getAll(){
-        return ResponseEntity.ok().body(this.categoriaService.findAll());
+    @GetMapping("/all/{idSucursal}")
+    public ResponseEntity<List<Categoria>> getAll(@PathVariable("idSucursal") Long idSucursal){
+        return ResponseEntity.ok().body(this.categoriaService.findAllBySucu(idSucursal));
     }
 
-    @GetMapping("/padres")
-    public ResponseEntity<List<Categoria>> getAllCategoriasPadres(){
-        return ResponseEntity.ok().body(this.categoriaService.findAllCategoriasPadre());
+    @GetMapping("/padres/{idSucursal}")
+    public ResponseEntity<List<Categoria>> getAllCategoriasPadres(@PathVariable("idSucursal") Long idSucursal){
+        return ResponseEntity.ok().body(this.categoriaService.findAllBySucursal(idSucursal));
     }
 
     @GetMapping("/alta")
@@ -46,20 +46,20 @@ public class CategoriaController{
         return ResponseEntity.ok().body(this.categoriaService.update(id, body));
     }
 
-    @PostMapping("/{idCategoriaPadre}")
-    public ResponseEntity<Categoria> save(@PathVariable("idCategoriaPadre") Long idPadre, @RequestBody Categoria body){
-        return ResponseEntity.ok().body(this.categoriaService.create(idPadre, body));
+    @PostMapping("/{idSucursal}/{idCategoriaPadre}")
+    public ResponseEntity<Categoria> save(@PathVariable("idCategoriaPadre") Long idPadre,@PathVariable("idSucursal") Long idSucursal, @RequestBody Categoria body){
+        return ResponseEntity.ok().body(this.categoriaService.create(idPadre, idSucursal,body));
     }
 
-    @PostMapping("/bulk")
+    /*@PostMapping("/bulk")
     public ResponseEntity<?> save(@RequestBody List<Categoria> bulk){
         bulk.forEach(categoria -> this.categoriaService.create(categoria.getCategoriaPadre().getId(), categoria));
         return ResponseEntity.ok().build();
-    }
+    }*/
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Categoria> delete(@PathVariable("id") Long id){
-        return ResponseEntity.ok().body(this.categoriaService.delete(id));
+    @DeleteMapping("/{idSucursal}/{id}")
+    public ResponseEntity<Categoria> delete(@PathVariable("idSucursal") Long idSucursal,@PathVariable("id") Long id){
+        return ResponseEntity.ok().body(this.categoriaService.delete(id,idSucursal));
     }
 }
     

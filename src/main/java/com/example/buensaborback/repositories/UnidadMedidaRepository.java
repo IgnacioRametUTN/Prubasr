@@ -4,6 +4,7 @@ import com.example.buensaborback.domain.entities.UnidadMedida;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,4 +22,12 @@ public interface UnidadMedidaRepository extends JpaRepository<UnidadMedida, Long
     boolean existsByDenominacionIgnoreCaseAllIgnoreCase(String denominacion);
 
     boolean existsByDenominacionIgnoreCase(String denominacion);
+
+
+    @Query("SELECT CASE WHEN COUNT(ai) > 0 THEN true ELSE false END FROM ArticuloInsumo ai WHERE ai.unidadMedida.id = :unidadMedida AND ai.alta = true ")
+    boolean existsInArticuloInsumoByUnidadMedida(@Param("unidadMedida") Long unidadMedida);
+
+    @Query("SELECT CASE WHEN COUNT(am) > 0 THEN true ELSE false END FROM ArticuloManufacturado am WHERE am.unidadMedida.id = :unidadMedida AND am.alta = true")
+    boolean existsInArticuloManufacturadoByUnidadMedida(@Param("unidadMedida") Long unidadMedida);
+
 }

@@ -33,16 +33,11 @@ public class ArticuloInsumoController {
         return ResponseEntity.ok().body(this.articuloInsumoService.getArticuloInsumoById(id));
     }
 
-    @PostMapping("")
-    public ResponseEntity<?> create(@RequestBody ArticuloInsumo body){
-        return ResponseEntity.ok().body(this.articuloInsumoService.create(body));
+    @PostMapping("/{idSucursal}")
+    public ResponseEntity<?> create( @PathVariable("idSucursal") Long idSucursal,@RequestBody ArticuloInsumo body){
+        return ResponseEntity.ok().body(this.articuloInsumoService.create(body,idSucursal));
     }
 
-    @PostMapping("/bulk")
-    public ResponseEntity<?> create(@RequestBody List<ArticuloInsumo> bulk){
-        bulk.forEach(this.articuloInsumoService::create);
-        return ResponseEntity.ok().build();
-    }
 
     @PostMapping("/uploads")
     public ResponseEntity<?> uploadImages(@RequestParam(value = "id") Long idArticulo,
@@ -63,11 +58,12 @@ public class ArticuloInsumoController {
     }
 
 
-    @GetMapping("/search")
-    public ResponseEntity<?> getAll(@RequestParam("categoria_id") Optional<Long> categoria,
+    @GetMapping("/{sucursal_id}/search")
+    public ResponseEntity<?> getAll(@PathVariable("sucursal_id") Long idSucursal,
+                                    @RequestParam("categoria_id") Optional<Long> categoria,
                                     @RequestParam("unidad_id") Optional<Long> unidadMedida,
                                     @RequestParam("denominacion") Optional<String> denominacion){
-        return ResponseEntity.ok().body(this.articuloInsumoService.getAll(categoria, unidadMedida, denominacion));
+        return ResponseEntity.ok().body(this.articuloInsumoService.getAll(idSucursal, categoria, unidadMedida, denominacion));
     }
 
 

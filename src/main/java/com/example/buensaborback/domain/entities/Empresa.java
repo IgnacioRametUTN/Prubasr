@@ -28,9 +28,10 @@ public class Empresa extends Base {
     @Builder.Default
     private Set<Sucursal> sucursales = new HashSet<>();
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "imagen_id")
-    protected ImagenEmpresa imagen;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name= "empresa_id")
+    @Builder.Default
+    protected Set<Imagen> imagenes = new HashSet<Imagen>();
 }
 
 
