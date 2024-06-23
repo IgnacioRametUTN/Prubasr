@@ -6,6 +6,7 @@ import com.example.buensaborback.domain.entities.Empresa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -57,5 +58,12 @@ public class EmpresaController {
     public ResponseEntity<Void> deleteEmpresa(@PathVariable Long id) {
         empresaService.deleteEmpresa(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/uploads")
+    public ResponseEntity<?> uploadImages(@RequestParam(value = "id") Long idArticulo,
+                                          @RequestParam(value = "uploads") MultipartFile[] files) {
+        return ResponseEntity.ok(empresaService.uploadImages(files, idArticulo));
+
     }
 }

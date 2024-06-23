@@ -81,7 +81,7 @@ public class BuenSaborBackApplication {
 
 
 
-	//@Bean
+	@Bean
 	CommandLineRunner init() {
 		return args -> {
 			logger.info("----------------Persistiendo los modelos---------------------");
@@ -376,7 +376,7 @@ public class BuenSaborBackApplication {
 					.telefono("2615854785")
 					.email("juanperez@gmail.com")
 					.fechaNacimiento(LocalDate.of(1990,11,12))
-					.imagen(imagen4)
+					.imagenes(Set.of(imagen4))
 					.usuario(usuario1)
 					.pedidos(new HashSet<>(Set.of(pedido1)))
 					.domicilios(new HashSet<>(Set.of(domicilioCliente)))

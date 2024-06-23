@@ -32,8 +32,10 @@ public class Cliente extends Base{
     @OneToOne(cascade = CascadeType.ALL)
     private Usuario usuario;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Imagen imagen;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name= "cliente_id")
+    @Builder.Default
+    protected Set<Imagen> imagenes = new HashSet<Imagen>();
 
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")

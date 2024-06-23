@@ -14,7 +14,7 @@
 build/
 # AWS User-specific
 .idea/**/aws.xml
-# Ignore environment files, except .env.example
+# Ignore environment files, except .env.dev.example
 !.env.example
 .env.**
 # Generated files

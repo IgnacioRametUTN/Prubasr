@@ -4,14 +4,13 @@ import com.example.buensaborback.domain.entities.enums.Rol;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @NoArgsConstructor
@@ -19,9 +18,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@ToString
 @SuperBuilder
-
 @JsonIgnoreProperties({"hibernateLazyInitializer", "usuario"})
 public class Empleado extends Base {
     private String nombre;
@@ -32,6 +29,11 @@ public class Empleado extends Base {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Usuario usuario;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name= "empleado_id")
+    @Builder.Default
+    protected Set<Imagen> imagenes = new HashSet<Imagen>();
 
 
 }

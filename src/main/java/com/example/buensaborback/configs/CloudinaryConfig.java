@@ -2,6 +2,7 @@ package com.example.buensaborback.configs;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,9 +11,10 @@ public class CloudinaryConfig {
 
     @Bean
     public Cloudinary cloudinary() {
-        String cloudName = System.getProperty("CLOUDINARY_CLOUD_NAME");
-        String apiKey = System.getProperty("CLOUDINARY_API_KEY");
-        String apiSecret = System.getProperty("CLOUDINARY_SECRET");
+        Dotenv dotenv = Dotenv.load();
+        String cloudName = dotenv.get("CLOUDINARY_CLOUD_NAME");
+        String apiKey = dotenv.get("CLOUDINARY_API_KEY");
+        String apiSecret = dotenv.get("CLOUDINARY_SECRET");
 
         return new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", cloudName,
