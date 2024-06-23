@@ -19,5 +19,4 @@ public interface IUsuarioService {
 
      String encriptarClaveSHA256(String clave);
 
-     Cliente getClienteByUsername(String username);
 }

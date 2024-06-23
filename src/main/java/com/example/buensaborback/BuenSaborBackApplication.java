@@ -81,7 +81,7 @@ public class BuenSaborBackApplication {
 
 
 
-	//@Bean
+	@Bean
 	CommandLineRunner init() {
 		return args -> {
 			logger.info("----------------Persistiendo los modelos---------------------");

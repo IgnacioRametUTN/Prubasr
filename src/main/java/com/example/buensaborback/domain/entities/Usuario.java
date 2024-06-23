@@ -25,6 +25,7 @@ public class Usuario extends Base{
 
     private String auth0Id;
     private String username;
+    private String email;
     private Rol rol;
 
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
