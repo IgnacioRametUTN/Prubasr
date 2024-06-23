@@ -39,12 +39,7 @@ public class UsuarioController {
 
     @GetMapping("/cliente/{nombreUsuario}")
     public ResponseEntity<?> getClienteByNombreUsuario(@PathVariable String nombreUsuario) {
-        Cliente cliente = usuarioService.getClienteByUsername(nombreUsuario);
-        if (cliente != null) {
-            return ResponseEntity.ok(cliente);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(usuarioService.getUsuarioByUsername(nombreUsuario).getCliente());
     }
     
     @GetMapping("")
