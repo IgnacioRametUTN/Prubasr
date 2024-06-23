@@ -16,6 +16,7 @@ build/
 .idea/**/aws.xml
 # Ignore environment files, except .env.dev.example
 !.env.example
+.env
 .env.**
 # Generated files
 .idea/**/contentModel.xml
