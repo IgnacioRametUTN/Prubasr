@@ -22,7 +22,6 @@ public class UsuarioController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Usuario usuario) {
-
         return ResponseEntity.ok().body(usuarioService.login(usuario.getUsername(), usuario.getAuth0Id()));
     }
 
@@ -43,7 +42,17 @@ public class UsuarioController {
     public ResponseEntity<?> getClienteByNombreUsuario(@PathVariable String nombreUsuario) {
         return ResponseEntity.ok(usuarioService.getUsuarioByUsername(nombreUsuario).getCliente());
     }
-    
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUsuario(@PathVariable Long id) {
+        try {
+            usuarioService.delete(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el usuario: " + e.getMessage());
+        }
+    }
+
     @GetMapping("")
     public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(this.usuarioService.getAll());
