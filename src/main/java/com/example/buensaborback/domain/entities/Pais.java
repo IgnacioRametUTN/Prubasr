@@ -18,7 +18,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@ToString
+@ToString(callSuper = true)
 @SuperBuilder
 @JsonIgnoreProperties({"hibernateLazyInitializer", "provincias"})
 public class Pais extends Base{

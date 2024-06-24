@@ -3,6 +3,9 @@ package com.example.buensaborback.presentation.rest;
 import com.example.buensaborback.bussines.service.IDomicilioService;
 import com.example.buensaborback.bussines.service.impl.DomicilioServiceImpl;
 import com.example.buensaborback.domain.entities.Domicilio;
+import com.example.buensaborback.domain.entities.Localidad;
+import com.example.buensaborback.domain.entities.Pais;
+import com.example.buensaborback.domain.entities.Provincia;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,22 @@ public class DomicilioController {
     @GetMapping("")
     public ResponseEntity<List<Domicilio>> getAll(){
         return ResponseEntity.ok().body(this.domicilioService.findAll());
+    }
+
+    @GetMapping("/localidades")
+    public ResponseEntity<List<Localidad>> getAllLocalidad(){
+        return ResponseEntity.ok().body(this.domicilioService.findAllLocalidad());
+    }
+
+
+    @GetMapping("/provincias")
+    public ResponseEntity<List<Provincia>> getAllProvincia(){
+        return ResponseEntity.ok().body(this.domicilioService.findAllProvincia());
+    }
+
+    @GetMapping("/paises")
+    public ResponseEntity<List<Pais>> getAllPaises(){
+        return ResponseEntity.ok().body(this.domicilioService.findAllPais());
     }
 
     @GetMapping("/alta")

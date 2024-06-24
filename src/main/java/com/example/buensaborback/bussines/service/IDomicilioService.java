@@ -1,7 +1,6 @@
 package com.example.buensaborback.bussines.service;
 
-import com.example.buensaborback.domain.entities.Domicilio;
-import com.example.buensaborback.domain.entities.UnidadMedida;
+import com.example.buensaborback.domain.entities.*;
 
 import java.util.List;
 
@@ -13,5 +12,9 @@ public interface IDomicilioService {
     Domicilio create(Domicilio body);
     Domicilio delete(Long id);
     List<Domicilio> findAll() ;
+    List<Localidad> findAllLocalidad();
+    List<Provincia> findAllProvincia();
     List<Domicilio> findAllAlta();
+
+    List<Pais> findAllPais();
 }

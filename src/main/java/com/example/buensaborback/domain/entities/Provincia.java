@@ -16,7 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@ToString
+@ToString(callSuper = true)
 @SuperBuilder
 @JsonIgnoreProperties({"hibernateLazyInitializer", "localidades","pais"})
 public class Provincia extends Base{
@@ -24,11 +24,13 @@ public class Provincia extends Base{
     private String nombre;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "provincia", fetch = FetchType.LAZY)
     @Builder.Default
+    @ToString.Exclude
     private Set<Localidad>localidades=new HashSet<>();
 
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_pais")
     private Pais pais;
+
 
 }
