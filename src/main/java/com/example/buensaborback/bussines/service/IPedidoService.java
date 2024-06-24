@@ -1,6 +1,7 @@
 package com.example.buensaborback.bussines.service;
 
 import com.example.buensaborback.domain.entities.Articulo;
+import com.example.buensaborback.domain.entities.Factura;
 import com.example.buensaborback.domain.entities.Pedido;
 import com.example.buensaborback.domain.entities.enums.Estado;
 
@@ -22,4 +23,5 @@ public interface IPedidoService {
 
     List<Pedido> findByEstado(Estado estado);
     Pedido actualizarEstado(Long id, Estado estado);
+    Pedido findByFactura(Factura factura);
 }
