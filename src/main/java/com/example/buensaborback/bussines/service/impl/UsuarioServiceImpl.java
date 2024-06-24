@@ -28,6 +28,13 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     @Override
+    public void delete(Long id) {
+        if (!existsUsuarioById(id)) {
+            throw new NotFoundException(String.format("Usuario con ID %d no encontrado", id));
+        }
+        usuarioRepository.deleteById(id);
+    }
+    @Override
     public Usuario getUsuarioByUsername(String username) {
         return this.usuarioRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException(String.format("Usuario con Username %s no encontrado", username)));

@@ -19,4 +19,6 @@ public interface IUsuarioService {
 
      String encriptarClaveSHA256(String clave);
 
+     void delete(Long id);
+
 }
