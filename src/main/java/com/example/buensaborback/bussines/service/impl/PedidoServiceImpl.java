@@ -144,6 +144,10 @@ public class PedidoServiceImpl implements IPedidoService {
         return  pedidoRepository.save(pedido);
     }
 
+    @Override
+    public Pedido findByFactura(Factura factura){
+        return  pedidoRepository.findByFactura(factura);
+    }
 
 
 }

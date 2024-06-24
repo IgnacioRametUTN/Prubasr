@@ -6,6 +6,8 @@ import com.example.buensaborback.domain.entities.Pedido;
 import com.example.buensaborback.repositories.FacturaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class FacturaServiceImpl  implements IFacturaService {
 
@@ -23,5 +25,8 @@ public class FacturaServiceImpl  implements IFacturaService {
         this.facturaRepository.save(factura);
         //mandarCorreoFactura(pedido.getCliente().getEmail(), factura);
 
+    }
+    public Optional<Factura> findById(Long facturaId) {
+        return facturaRepository.findById(facturaId);
     }
 }
