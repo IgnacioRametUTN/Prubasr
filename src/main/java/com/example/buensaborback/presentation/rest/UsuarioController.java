@@ -22,6 +22,7 @@ public class UsuarioController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Usuario usuario) {
+
         return ResponseEntity.ok().body(usuarioService.login(usuario.getUsername(), usuario.getAuth0Id()));
     }
 
@@ -34,6 +35,7 @@ public class UsuarioController {
     @GetMapping("/validar/{nombreUsuario}")
     public ResponseEntity<Boolean> validarExistenciaUsuario(@PathVariable String nombreUsuario) {
         boolean usuarioExistente = usuarioService.existsUsuarioByUsername(nombreUsuario);
+        System.out.println("LO ENCONTRE????????? "+ usuarioExistente);
         return ResponseEntity.ok(usuarioExistente);
     }
 

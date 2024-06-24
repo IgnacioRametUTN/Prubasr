@@ -309,11 +309,13 @@ public class BuenSaborBackApplication {
 			Usuario usuario1 = Usuario.builder()
 					.auth0Id("aaaa")
 					.username("gonzaPrueba")
+					.email("juanperez@gmail.com")
 					.rol(Rol.Cliente)
 					.build();
 			Usuario usuario2 = Usuario.builder()
 					.auth0Id("admin")
 					.username("admin")
+					.email("admin@gmail.com")
 					.rol(Rol.Admin)
 					.build();
 			Empleado empleado=Empleado.builder()
@@ -374,7 +376,6 @@ public class BuenSaborBackApplication {
 					.nombre("Juan")
 					.apellido("Perez")
 					.telefono("2615854785")
-					.email("juanperez@gmail.com")
 					.fechaNacimiento(LocalDate.of(1990,11,12))
 					.imagenes(Set.of(imagen4))
 					.usuario(usuario1)

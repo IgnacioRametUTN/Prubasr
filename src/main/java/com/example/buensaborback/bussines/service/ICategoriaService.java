@@ -1,8 +1,11 @@
 package com.example.buensaborback.bussines.service;
 
 import com.example.buensaborback.domain.entities.Categoria;
+import com.example.buensaborback.domain.entities.Imagen;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ICategoriaService {
     Categoria getCategoriaById(Long id);
@@ -17,6 +20,6 @@ public interface ICategoriaService {
     Categoria delete(Long id,Long idSucursal);
 
     List<Categoria> findAllBySucu(Long id);
-
+    Set<Imagen> uploadImages(MultipartFile[] files, Long id);
 
 }
