@@ -20,7 +20,7 @@ import java.util.Set;
 @SuperBuilder
 @Entity
 
-@JsonIgnoreProperties({"hibernateLazyInitializer", "domicilios","pedidos"})
+@JsonIgnoreProperties({"hibernateLazyInitializer","pedidos"})
 public class Cliente extends Base{
 
     private String nombre;

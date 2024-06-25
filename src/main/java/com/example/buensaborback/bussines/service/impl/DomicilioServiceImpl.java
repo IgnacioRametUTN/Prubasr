@@ -29,7 +29,7 @@ public class DomicilioServiceImpl implements IDomicilioService {
         this.paisRepository = paisRepository;
     }
 
-    @Autowired
+
 
 
     @Override
@@ -52,9 +52,22 @@ public class DomicilioServiceImpl implements IDomicilioService {
     }
 
     @Override
+    public List<Localidad> findAllLocalidadByProvincia(Long idProvincia) {
+        Provincia provincia =  this.provinciaRepository.findById(idProvincia).orElseThrow(() -> new NotFoundException(String.format("Provincia con ID %d no encontrado", idProvincia)));
+        return this.localidadRepository.findByProvincia(provincia);
+    }
+
+    @Override
     public List<Provincia> findAllProvincia() {
         return this.provinciaRepository.findAll();
     }
+
+
+    @Override
+    public List<Provincia> findAllProvinciaByPais(Long idPais){
+       Pais pais =  this.paisRepository.findById(idPais).orElseThrow(() -> new NotFoundException(String.format("Pais con ID %d no encontrado", idPais)));
+        return this.provinciaRepository.findByPais(pais);
+    };
 
     @Override
     public List<Domicilio> findAllAlta() {

@@ -25,6 +25,7 @@ public class ClienteServiceImpl implements IClienteService {
 
     @Override
     public Cliente create(Cliente entity) {
+        System.out.println(entity);
         return this.clienteRepository.save(entity);
     }
 

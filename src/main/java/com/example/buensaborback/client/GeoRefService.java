@@ -58,7 +58,6 @@ public class GeoRefService {
             System.out.println("Hubo un error");
             System.out.println(e.getMessage());
         }
-        System.out.println("TAMAAAAAAAAAAAAANIOOOOOOOOOOO " + localidades.size());
         return localidades;
 
     }

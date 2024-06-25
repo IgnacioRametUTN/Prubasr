@@ -34,7 +34,6 @@ public class UsuarioController {
     @GetMapping("/validar/{nombreUsuario}")
     public ResponseEntity<Boolean> validarExistenciaUsuario(@PathVariable String nombreUsuario) {
         boolean usuarioExistente = usuarioService.existsUsuarioByUsername(nombreUsuario);
-        System.out.println("LO ENCONTRE????????? "+ usuarioExistente);
         return ResponseEntity.ok(usuarioExistente);
     }
 

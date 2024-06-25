@@ -33,10 +33,20 @@ public class DomicilioController {
         return ResponseEntity.ok().body(this.domicilioService.findAllLocalidad());
     }
 
+    @GetMapping("/localidades/{idProvincia}")
+    public ResponseEntity<List<Localidad>> getAllLocalidad(@PathVariable("idProvincia") Long id){
+        return ResponseEntity.ok().body(this.domicilioService.findAllLocalidadByProvincia(id));
+    }
+
 
     @GetMapping("/provincias")
     public ResponseEntity<List<Provincia>> getAllProvincia(){
         return ResponseEntity.ok().body(this.domicilioService.findAllProvincia());
+    }
+
+    @GetMapping("/provincias/{idPais}")
+    public ResponseEntity<List<Provincia>> getAllProvinciaByPais(@PathVariable("idPais") Long id){
+        return ResponseEntity.ok().body(this.domicilioService.findAllProvinciaByPais(id));
     }
 
     @GetMapping("/paises")
