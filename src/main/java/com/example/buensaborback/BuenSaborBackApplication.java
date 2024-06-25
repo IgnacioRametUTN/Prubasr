@@ -82,7 +82,7 @@ public class BuenSaborBackApplication {
 		logger.info("Estoy activo en el main");
 	}
 
-	@Bean
+	//@Bean
 	CommandLineRunner init2() {
 		return args -> {
 			System.out.println("Guardando Datos Domicilio");
@@ -107,7 +107,7 @@ public class BuenSaborBackApplication {
 	}
 
 
-	@Bean
+	//@Bean
 	CommandLineRunner init() {
 		return args -> {
 			logger.info("----------------Persistiendo los modelos---------------------");

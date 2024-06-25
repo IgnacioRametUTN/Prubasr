@@ -21,10 +21,15 @@ public class ReportesController {
 
     @GetMapping("/top-products")
     public List<Object> findTopProducts(@RequestParam("startDate") LocalDate startDate, @RequestParam("endDate") LocalDate endDate) {
-        return reporteService.FindTopProducts(startDate, endDate);
+        return reporteService.findTopProducts(startDate, endDate);
     }
 
-    @GetMapping("/ReporteTotales")
+    @GetMapping("/reporte-diario")
+    public List<Object> findMovimientosMonetariosBetween(@RequestParam("startDate") LocalDate startDate, @RequestParam("endDate") LocalDate endDate) {
+        return reporteService.findMovimientosBetween(startDate, endDate);
+    }
+
+    @GetMapping("/reporte-totales")
     public ReporteDTO findPedidosBetweenDates(@RequestParam("startDate") LocalDate startDate, @RequestParam("endDate") LocalDate endDate) {
         return reporteService.findPedidosBetweenDates(startDate, endDate);
     }

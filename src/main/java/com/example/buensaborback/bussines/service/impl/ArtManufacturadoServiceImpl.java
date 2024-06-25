@@ -60,7 +60,7 @@ private final IImagenService imagenService;
         return this.articuloManufacturadoRepository.existsById(id);
     }
 
-    @Transactional
+//    @Transactional
     public ArticuloManufacturado create(ArticuloManufacturado entity,Long idSucursal) {
         entity.setSucursal(this.sucursalService.getSucursalById(idSucursal));
         entity.setCategoria(this.categoriaServiceImpl.getCategoriaById(entity.getCategoria().getId()));
@@ -85,7 +85,7 @@ private final IImagenService imagenService;
     }
 
     @Override
-    @Transactional
+    //@Transactional
     public ArticuloManufacturado update(Long id, ArticuloManufacturado entity) {
         // Obtén el artículo manufacturado existente de la base de datos
         ArticuloManufacturado existingEntity = getArticuloManufacturadoById(id);

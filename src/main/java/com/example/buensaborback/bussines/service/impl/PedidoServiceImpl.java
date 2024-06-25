@@ -40,7 +40,7 @@ public class PedidoServiceImpl implements IPedidoService {
     public boolean existsPedidoById(Long id){
         return this.pedidoRepository.existsById(id);
     }
-    @Transactional
+//    @Transactional
     public Pedido save(Pedido pedido) {
         pedido.setEstado(Estado.Preparacion);
 
@@ -100,19 +100,19 @@ public class PedidoServiceImpl implements IPedidoService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public List<Pedido> getAll() {
         return pedidoRepository.findAll();
     }
 
     @Override
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public List<Pedido> getAllByFecha(LocalDate fecha) {
         return pedidoRepository.findByFechaPedido(fecha);
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public Pedido delete(Long id) {
         Pedido pedido = this.getPedidoById(id);
         pedido.setAlta(pedido.isAlta());
@@ -136,7 +136,7 @@ public class PedidoServiceImpl implements IPedidoService {
         return pedidoRepository.findByEstado(estado);
     }
 
-    @Transactional
+    //@Transactional
     public Pedido actualizarEstado(Long id, Estado estado){
         Pedido pedido = this.getPedidoById(id);
         pedido.setEstado(estado);

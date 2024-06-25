@@ -12,8 +12,8 @@ import java.util.List;
 
 @Repository
 public interface UnidadMedidaRepository extends JpaRepository<UnidadMedida, Long> {
-    @Transactional
-    @Modifying
+//    @Transactional
+//    @Modifying
     @Query("update UnidadMedida u set u.denominacion = ?1 where u.denominacion = ?2")
     int updateDenominacionByDenominacion(String denominacion, String denominacion1);
 

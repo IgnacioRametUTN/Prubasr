@@ -40,7 +40,7 @@ public class UnidadMedidaServiceImpl implements IUnidadMedidaService {
         return this.unidadMedidaRepository.save(body);
     }
     @Override
-    @Transactional
+//    @Transactional
     public UnidadMedida create(UnidadMedida body) {
         if(existsUnidadMedidaByDenominacion(body.getDenominacion())) throw new DuplicateEntryException(String.format("Ya existe una Unidad Medida con el nombre %s", body.getDenominacion()));
         return this.unidadMedidaRepository.save(body);
