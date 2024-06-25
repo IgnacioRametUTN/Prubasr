@@ -17,6 +17,8 @@ public interface IArticuloInsumoService {
      List<ArticuloInsumo> getAll(Long idSucursal, Optional<Long> categoriaOpt, Optional<Long> unidadMedidaOpt, Optional<String> searchOpt);
 
      Set<Imagen> uploadImages(MultipartFile[] files, Long id);
-     // Método para eliminar una imagen por su identificador público y Long
+
+    List<ArticuloInsumo> findArtInsumoFromCategoryAndSubcategories(Long idSucursal, Long idCategoria);
+    // Método para eliminar una imagen por su identificador público y Long
      //List<Imagen> deleteImage(String publicId, Long id);
 }

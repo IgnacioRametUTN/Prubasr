@@ -145,5 +145,28 @@ public class ArticuloInsumoServiceImpl implements IArticuloInsumoService {
         return insumo.getImagenes();
     }
 
+    @Override
+    public List<ArticuloInsumo> findArtInsumoFromCategoryAndSubcategories(Long idSucursal, Long idCategoria) {
+        Sucursal sucursal = this.sucursalService.getSucursalById(idSucursal);
+        Categoria categoria = this.categoriaServiceImpl.getCategoriaById(idCategoria);
+
+        // Recoge los IDs de las subcategorías que pertenecen a la sucursal específica
+        List<Long> subCategoriasIds = categoria.getSubCategorias().stream()
+                .filter(subcategoria -> subcategoria.getSucursales().stream().anyMatch(s -> s.getId().equals(sucursal.getId())))
+                .map(Base::getId)
+                .collect(Collectors.toList());
+
+        System.out.println("insumos");
+        System.out.println("subcategorias validas " + subCategoriasIds.size());
+
+        // Consulta en el repositorio
+        List<ArticuloInsumo> lista = this.articuloInsumoRepository.findBySucursalCategoriaAndSubCategoriasAndEsParaElaborar(sucursal.getId(), categoria.getId(), subCategoriasIds);
+
+        System.out.println(lista.size());
+
+        return lista;
+    }
+
+
 
 }

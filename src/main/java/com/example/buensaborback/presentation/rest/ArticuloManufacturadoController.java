@@ -63,4 +63,10 @@ public class ArticuloManufacturadoController{
         return ResponseEntity.ok().body(this.artManufacturadoService.getAll(categoria, unidadMedida, denominacion,idSucursal));
     }
 
+    @GetMapping("/{idSucursal}/categoria/{idCategoria}")
+    public ResponseEntity<List<ArticuloManufacturado>> getArticuloManufacturadoParaCategoriaYSubcategorias
+            (@PathVariable("idSucursal") Long idSucursal, @PathVariable("idCategoria") Long idCategoria){
+        return ResponseEntity.ok().body(this.artManufacturadoService.findArtManufacturadosFromCategoryAndSubcategories(idSucursal, idCategoria));
+    }
+
 }
