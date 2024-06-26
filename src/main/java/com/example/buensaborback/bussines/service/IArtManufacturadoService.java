@@ -17,5 +17,7 @@ public interface IArtManufacturadoService {
      ArticuloManufacturado delete(Long id);
      Set<Imagen> uploadImages(MultipartFile[] files, Long id);
 
+     List<ArticuloManufacturado> getAllBySucursal(Long idSucursal);
+
      List<ArticuloManufacturado> findArtManufacturadosFromCategoryAndSubcategories(Long idSucursal, Long idCategoria);
 }

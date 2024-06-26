@@ -32,7 +32,6 @@ public class ClienteController{
         return ResponseEntity.ok().body(this.clienteService.getClienteById(id));
     }
 
-
     @PostMapping("")
     public ResponseEntity<?> create(@RequestBody Cliente body){
         return ResponseEntity.ok().body(this.clienteService.create(body));
@@ -56,5 +55,9 @@ public class ClienteController{
         return ResponseEntity.ok(clientes);
     }
 
+    @GetMapping("/username/{username}")
+    public ResponseEntity<?> getOne(@PathVariable("username") String username){
+        return ResponseEntity.ok().body(this.clienteService.getClienteByUsername(username));
+    }
 
 }

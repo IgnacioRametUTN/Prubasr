@@ -60,6 +60,12 @@ private final IImagenService imagenService;
         return this.articuloManufacturadoRepository.existsById(id);
     }
 
+    @Override
+    public List<ArticuloManufacturado> getAllBySucursal(Long idSucursal) {
+        Sucursal sucursal = this.sucursalService.getSucursalById(idSucursal);
+        return articuloManufacturadoRepository.findBySucursal(sucursal);
+    }
+
 //    @Transactional
     public ArticuloManufacturado create(ArticuloManufacturado entity,Long idSucursal) {
         entity.setSucursal(this.sucursalService.getSucursalById(idSucursal));

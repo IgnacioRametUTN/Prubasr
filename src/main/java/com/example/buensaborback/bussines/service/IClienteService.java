@@ -15,4 +15,6 @@ public interface IClienteService {
     Cliente delete(Long id);
 
     List<Cliente>findClientes(String nombre,String apellido);
+
+    Cliente getClienteByUsername(String username);
 }

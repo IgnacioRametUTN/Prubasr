@@ -12,12 +12,8 @@ public interface IDomicilioService {
     Domicilio create(Domicilio body);
     Domicilio delete(Long id);
     List<Domicilio> findAll() ;
-    List<Localidad> findAllLocalidad();
-    List<Provincia> findAllProvincia();
     List<Domicilio> findAllAlta();
 
-    List<Pais> findAllPais();
 
-    List<Provincia> findAllProvinciaByPais(Long id);
-    List<Localidad> findAllLocalidadByProvincia(Long idProvincia);
+
 }

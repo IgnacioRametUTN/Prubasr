@@ -1,7 +1,13 @@
 package com.example.buensaborback.presentation.rest;
 
 import com.example.buensaborback.bussines.service.IDomicilioService;
+import com.example.buensaborback.bussines.service.ILocalidadService;
+import com.example.buensaborback.bussines.service.IPaisService;
+import com.example.buensaborback.bussines.service.IProvinciaService;
 import com.example.buensaborback.bussines.service.impl.DomicilioServiceImpl;
+import com.example.buensaborback.bussines.service.impl.LocalidadServiceImpl;
+import com.example.buensaborback.bussines.service.impl.PaisServiceImpl;
+import com.example.buensaborback.bussines.service.impl.ProvinciaServiceImpl;
 import com.example.buensaborback.domain.entities.Domicilio;
 import com.example.buensaborback.domain.entities.Localidad;
 import com.example.buensaborback.domain.entities.Pais;
@@ -17,10 +23,17 @@ import java.util.List;
 @CrossOrigin("*")
 public class DomicilioController {
     private final IDomicilioService domicilioService;
+    private final IPaisService paisService;
+    private final IProvinciaService provinciaService;
+    private final ILocalidadService localidadService;
 
     @Autowired
-    public DomicilioController(DomicilioServiceImpl DomicilioService) {
+    public DomicilioController(DomicilioServiceImpl DomicilioService, PaisServiceImpl paisService, ProvinciaServiceImpl provinciaService,
+                               LocalidadServiceImpl localidadService) {
         this.domicilioService = DomicilioService;
+        this.paisService = paisService;
+        this.provinciaService = provinciaService;
+        this.localidadService = localidadService;
     }
 
     @GetMapping("")
@@ -28,30 +41,22 @@ public class DomicilioController {
         return ResponseEntity.ok().body(this.domicilioService.findAll());
     }
 
-    @GetMapping("/localidades")
-    public ResponseEntity<List<Localidad>> getAllLocalidad(){
-        return ResponseEntity.ok().body(this.domicilioService.findAllLocalidad());
-    }
 
     @GetMapping("/localidades/{idProvincia}")
-    public ResponseEntity<List<Localidad>> getAllLocalidad(@PathVariable("idProvincia") Long id){
-        return ResponseEntity.ok().body(this.domicilioService.findAllLocalidadByProvincia(id));
+    public ResponseEntity<List<Localidad>> getLocalidadesByProvincias(@PathVariable("idProvincia") Long id){
+        return ResponseEntity.ok().body(this.localidadService.findLocalidadesByProvincia(id));
     }
 
 
-    @GetMapping("/provincias")
-    public ResponseEntity<List<Provincia>> getAllProvincia(){
-        return ResponseEntity.ok().body(this.domicilioService.findAllProvincia());
-    }
 
     @GetMapping("/provincias/{idPais}")
-    public ResponseEntity<List<Provincia>> getAllProvinciaByPais(@PathVariable("idPais") Long id){
-        return ResponseEntity.ok().body(this.domicilioService.findAllProvinciaByPais(id));
+    public ResponseEntity<List<Provincia>> getProvinciasByPais(@PathVariable("idPais") Long id){
+        return ResponseEntity.ok().body(this.provinciaService.findProvinciasByPais(id));
     }
 
     @GetMapping("/paises")
     public ResponseEntity<List<Pais>> getAllPaises(){
-        return ResponseEntity.ok().body(this.domicilioService.findAllPais());
+        return ResponseEntity.ok().body(this.paisService.findAllPais());
     }
 
     @GetMapping("/alta")

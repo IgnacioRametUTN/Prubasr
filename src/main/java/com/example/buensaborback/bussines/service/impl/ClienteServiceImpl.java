@@ -1,19 +1,29 @@
 package com.example.buensaborback.bussines.service.impl;
 
 import com.example.buensaborback.bussines.service.IClienteService;
+import com.example.buensaborback.bussines.service.IDomicilioService;
+import com.example.buensaborback.bussines.service.IUsuarioService;
 import com.example.buensaborback.domain.entities.Cliente;
+import com.example.buensaborback.domain.entities.Domicilio;
+import com.example.buensaborback.domain.entities.Usuario;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.ClienteRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ClienteServiceImpl implements IClienteService {
     private final ClienteRepository clienteRepository;
+    private final IUsuarioService usuarioService;
+    private final IDomicilioService domicilioService;
 
-    public ClienteServiceImpl(ClienteRepository clienteRepository) {
+    public ClienteServiceImpl(ClienteRepository clienteRepository, UsuarioServiceImpl usuarioService, DomicilioServiceImpl domicilioService) {
         this.clienteRepository = clienteRepository;
+        this.usuarioService = usuarioService;
+        this.domicilioService = domicilioService;
     }
     public Cliente getClienteById(Long id){
         return this.clienteRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Cliente con ID %d no encontrado", id)));
@@ -32,8 +42,21 @@ public class ClienteServiceImpl implements IClienteService {
     @Override
     public Cliente update(Long id, Cliente entity) {
         this.getClienteById(id);
+
+        Set<Domicilio> updatedDomicilios = entity.getDomicilios().stream().map(domicilio -> {
+            if (domicilio.getId() != 0) {
+                return domicilioService.getDomicilioById(domicilio.getId());
+            }else{
+                domicilio.getClientes().add(entity);
+                return domicilioService.create(domicilio);
+            }
+        }).collect(Collectors.toSet());
+
+        entity.setDomicilios(updatedDomicilios);
+
         return this.clienteRepository.save(entity);
     }
+
 
     @Override
     public List<Cliente> getAll() {
@@ -58,5 +81,11 @@ public class ClienteServiceImpl implements IClienteService {
         } else {
             return clienteRepository.findAll();
         }
+    }
+
+    @Override
+    public Cliente getClienteByUsername(String username){
+        Usuario usuario = this.usuarioService.getUsuarioByUsername(username);
+        return this.clienteRepository.findByUsuario(usuario);
     }
 }

@@ -18,15 +18,11 @@ import java.util.List;
 @Service
 public class DomicilioServiceImpl implements IDomicilioService {
     private final DomicilioRepository domicilioRepository;
-    private final LocalidadRepository localidadRepository;
-    private final ProvinciaRepository provinciaRepository;
-    private final PaisRepository paisRepository;
+
 
     public DomicilioServiceImpl(DomicilioRepository domicilioRepository, LocalidadRepository localidadRepository, ProvinciaRepository provinciaRepository, PaisRepository paisRepository) {
         this.domicilioRepository = domicilioRepository;
-        this.localidadRepository = localidadRepository;
-        this.provinciaRepository = provinciaRepository;
-        this.paisRepository = paisRepository;
+
     }
 
 
@@ -46,38 +42,12 @@ public class DomicilioServiceImpl implements IDomicilioService {
         return this.domicilioRepository.findAll();
     }
 
-    @Override
-    public List<Localidad> findAllLocalidad() {
-        return this.localidadRepository.findAll();
-    }
-
-    @Override
-    public List<Localidad> findAllLocalidadByProvincia(Long idProvincia) {
-        Provincia provincia =  this.provinciaRepository.findById(idProvincia).orElseThrow(() -> new NotFoundException(String.format("Provincia con ID %d no encontrado", idProvincia)));
-        return this.localidadRepository.findByProvincia(provincia);
-    }
-
-    @Override
-    public List<Provincia> findAllProvincia() {
-        return this.provinciaRepository.findAll();
-    }
-
-
-    @Override
-    public List<Provincia> findAllProvinciaByPais(Long idPais){
-       Pais pais =  this.paisRepository.findById(idPais).orElseThrow(() -> new NotFoundException(String.format("Pais con ID %d no encontrado", idPais)));
-        return this.provinciaRepository.findByPais(pais);
-    };
 
     @Override
     public List<Domicilio> findAllAlta() {
         return this.domicilioRepository.findByAltaTrue();
     }
 
-    @Override
-    public List<Pais> findAllPais() {
-        return this.paisRepository.findAll();
-    }
 
     @Override
     public Domicilio update(Long id, Domicilio body) {
@@ -95,4 +65,3 @@ public class DomicilioServiceImpl implements IDomicilioService {
         return domicilio;
     }
 }
-//se te murio e
