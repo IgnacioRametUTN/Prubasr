@@ -73,7 +73,7 @@ public class ReporteServiceImpl implements ReporteService {
     }
 
 
-    public ByteArrayInputStream generateExcelMovimientos(LocalDate startDate, LocalDate endDate){
+    public ByteArrayInputStream generateExcelMovimientos(LocalDate startDate, LocalDate endDate) {
         try {
             return generateExcelReport(startDate, endDate);
         } catch (IOException e) {
@@ -82,16 +82,22 @@ public class ReporteServiceImpl implements ReporteService {
         }
     }
 
-    private  ByteArrayInputStream generateExcelReport(LocalDate startDate, LocalDate endDate) throws IOException {
-        try (Workbook workbook = new XSSFWorkbook()) {
+    private ByteArrayInputStream generateExcelReport(LocalDate startDate, LocalDate endDate) throws IOException {
+        Workbook workbook = new XSSFWorkbook();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.out.println("BBBBBBBBBBBBBBBBBBBBBBBB");
+        try {
             Sheet sheet = workbook.createSheet("Movimientos");
             createHeaderRow(sheet, List.of("Fecha", "Ingresos", "Gastos", "Ganancias"));
-            int rowNum = 1; //Avanzamos a la segunda fila porque la primera ya tiene el header
+            int rowNum = 1; // Avanzamos a la segunda fila porque la primera ya tiene el header
             List<Object[]> data = this.findMovimientosBetween(startDate, endDate);
-            createPedidoRows(data,sheet, rowNum);
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            createPedidoRows(data, sheet, rowNum);
+
             workbook.write(outputStream);
             return new ByteArrayInputStream(outputStream.toByteArray());
+        } finally {
+            workbook.close();
+            outputStream.close();
         }
     }
 
@@ -100,23 +106,19 @@ public class ReporteServiceImpl implements ReporteService {
         for (int column = 0; column < headers.size(); column++) {
             headerRow.createCell(column).setCellValue(headers.get(column));
         }
-
     }
-
 
     private void createPedidoRows(List<Object[]> data, Sheet sheet, int rowIndex) {
         int row2 = rowIndex;
-        Double total = 0.0;
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        System.out.println(data);
         for (Object[] rowData : data) {
             Row row = sheet.createRow(row2);
             row.createCell(0).setCellValue(String.valueOf(rowData[0]));
             row.createCell(1).setCellValue(String.valueOf(rowData[1]));
             row.createCell(2).setCellValue(String.valueOf(rowData[2]));
-            row.createCell(0).setCellValue(String.valueOf(rowData[3]));
+            row.createCell(3).setCellValue(String.valueOf(rowData[3]));
             row2++;
         }
-
-
-
     }
 }

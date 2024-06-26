@@ -37,15 +37,17 @@ public class ReportesController {
     }
     @GetMapping("/reporte-diario/excel")
     public ResponseEntity<?> generateExcelMovimientosMonetariosBetween(@RequestParam("startDate") LocalDate startDate, @RequestParam("endDate") LocalDate endDate) {
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         try {
+            System.out.println("EEEEEEEEEEEEEEEEE");
             ByteArrayInputStream excelStream = reporteService.generateExcelMovimientos(startDate, endDate);
             byte[] excelBytes = IOUtils.toByteArray(excelStream);
-
+            System.out.println("CCCCCCCCCCCCCCCCC");
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
             headers.setContentDispositionFormData("attachment", "reporte_pedidos.xlsx");
             headers.setContentLength(excelBytes.length);
-
+            System.out.println("DDDDDDDDDDDDDDDDDDDDDD");
             return new ResponseEntity<>(excelBytes, headers, HttpStatus.OK);
         } catch (IOException e) {
             e.printStackTrace();
