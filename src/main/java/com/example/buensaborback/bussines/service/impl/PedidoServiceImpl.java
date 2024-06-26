@@ -7,6 +7,7 @@ import com.example.buensaborback.presentation.advice.exception.InsufficientStock
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,7 +23,7 @@ public class PedidoServiceImpl implements IPedidoService {
     private final IClienteService clienteService;
     private final IFacturaService facturaService;
     private final ISucursalService sucursalService;
-    @Autowired
+@Autowired
     public PedidoServiceImpl(PedidoRepository pedidoRepository, UsuarioServiceImpl usuarioService, ArtManufacturadoServiceImpl artManufacturadoService, ClienteServiceImpl clienteServiceImpl, ArticuloInsumoServiceImpl artInsumoService, FacturaServiceImpl facturaService, ISucursalService sucursalService) {
         this.pedidoRepository = pedidoRepository;
         this.usuarioService = usuarioService;
@@ -146,7 +147,11 @@ public class PedidoServiceImpl implements IPedidoService {
        if(estado == Estado.Entregado) {
            Factura factura = facturaService.crearFactura(pedido);
            pedido.setFactura(factura);
+           Pedido pedidoFactura=pedidoRepository.save(pedido);
+           facturaService.enviarFacturaPorEmail(pedidoFactura.getCliente().getUsuario().getEmail(),factura);
+           return pedidoFactura;
        }
+
         return  pedidoRepository.save(pedido);
     }
 
