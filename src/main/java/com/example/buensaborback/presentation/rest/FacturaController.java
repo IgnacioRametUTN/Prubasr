@@ -23,7 +23,7 @@ public class FacturaController {
     @Autowired
     private FacturaServiceImpl facturaService;
 
-    @GetMapping("/pdf/factura/{facturaId}")
+    @GetMapping("/api/factura/{facturaId}")
     public ResponseEntity<byte[]> generatePdfFactura(@PathVariable Long facturaId) {
         try {
             Optional<Factura> optionalFactura = facturaService.findById(facturaId);
