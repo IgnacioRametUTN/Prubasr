@@ -1,5 +1,6 @@
 package com.example.buensaborback.bussines.service.impl;
 
+import com.example.buensaborback.bussines.service.IPedidoService;
 import com.example.buensaborback.domain.entities.Factura;
 
 import java.io.ByteArrayOutputStream;
@@ -14,10 +15,19 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PDFGenerator {
-    static PedidoServiceImpl pedidoService;
-    public static ByteArrayOutputStream generateFacturaPDF(Factura factura) throws DocumentException, IOException {
+    private final IPedidoService pedidoService;
+
+    @Autowired
+    public PDFGenerator(IPedidoService pedidoService) {
+        this.pedidoService = pedidoService;
+    }
+
+    public ByteArrayOutputStream generateFacturaPDF(Factura factura) throws DocumentException, IOException {
         Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         PdfWriter.getInstance(document, out);
@@ -39,7 +49,7 @@ public class PDFGenerator {
         return out;
     }
 
-    private static void addTableHeader(PdfPTable table) {
+    private void addTableHeader(PdfPTable table) {
         Stream.of("Artículo", "Cantidad", "Subtotal").forEach(columnTitle -> {
             PdfPCell header = new PdfPCell();
             header.setPhrase(new Paragraph(columnTitle));

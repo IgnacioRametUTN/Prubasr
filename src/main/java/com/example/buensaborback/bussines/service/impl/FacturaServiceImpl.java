@@ -18,11 +18,12 @@ public class FacturaServiceImpl  implements IFacturaService {
     }
 
     @Override
-    public void crearFactura(Pedido pedido) {
+    public Factura crearFactura(Pedido pedido) {
         Factura factura = Factura.builder().build();
         factura.setFechaFacturacion(pedido.getFechaPedido());
+        factura.setFormaPago(pedido.getFormaPago());
         factura.setTotalVenta(pedido.getTotal());
-        this.facturaRepository.save(factura);
+        return this.facturaRepository.save(factura);
         //mandarCorreoFactura(pedido.getCliente().getEmail(), factura);
 
     }

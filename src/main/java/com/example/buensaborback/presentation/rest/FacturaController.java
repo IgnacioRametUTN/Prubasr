@@ -23,13 +23,16 @@ public class FacturaController {
     @Autowired
     private FacturaServiceImpl facturaService;
 
+    @Autowired
+    private PDFGenerator pdfGenerator;
+
     @GetMapping("/api/factura/{facturaId}")
     public ResponseEntity<byte[]> generatePdfFactura(@PathVariable Long facturaId) {
         try {
             Optional<Factura> optionalFactura = facturaService.findById(facturaId);
             if (optionalFactura.isPresent()) {
                 Factura factura = optionalFactura.get();
-                ByteArrayOutputStream pdfStream = PDFGenerator.generateFacturaPDF(factura);
+                ByteArrayOutputStream pdfStream = pdfGenerator.generateFacturaPDF(factura);
 
                 byte[] pdfBytes = pdfStream.toByteArray();
 

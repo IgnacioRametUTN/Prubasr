@@ -143,7 +143,10 @@ public class PedidoServiceImpl implements IPedidoService {
     public Pedido actualizarEstado(Long id, Estado estado){
         Pedido pedido = this.getPedidoById(id);
         pedido.setEstado(estado);
-       if(estado == Estado.Entregado) facturaService.crearFactura(pedido);
+       if(estado == Estado.Entregado) {
+           Factura factura = facturaService.crearFactura(pedido);
+           pedido.setFactura(factura);
+       }
         return  pedidoRepository.save(pedido);
     }
 

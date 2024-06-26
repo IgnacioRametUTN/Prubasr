@@ -6,6 +6,6 @@ import com.example.buensaborback.domain.entities.Pedido;
 import java.util.Optional;
 
 public interface IFacturaService {
-   void crearFactura(Pedido pedido);
+   Factura crearFactura(Pedido pedido);
    Optional<Factura> findById(Long facturaId);
 }
