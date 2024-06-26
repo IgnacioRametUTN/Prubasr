@@ -8,7 +8,6 @@ import com.example.buensaborback.presentation.advice.exception.NotFoundException
 import com.example.buensaborback.repositories.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,14 +21,16 @@ public class PedidoServiceImpl implements IPedidoService {
     private final IArticuloInsumoService artInsumoService;
     private final IClienteService clienteService;
     private final IFacturaService facturaService;
+    private final ISucursalService sucursalService;
     @Autowired
-    public PedidoServiceImpl(PedidoRepository pedidoRepository, UsuarioServiceImpl usuarioService, ArtManufacturadoServiceImpl artManufacturadoService, ClienteServiceImpl clienteServiceImpl, ArticuloInsumoServiceImpl artInsumoService, FacturaServiceImpl facturaService) {
+    public PedidoServiceImpl(PedidoRepository pedidoRepository, UsuarioServiceImpl usuarioService, ArtManufacturadoServiceImpl artManufacturadoService, ClienteServiceImpl clienteServiceImpl, ArticuloInsumoServiceImpl artInsumoService, FacturaServiceImpl facturaService, ISucursalService sucursalService) {
         this.pedidoRepository = pedidoRepository;
         this.usuarioService = usuarioService;
         this.artManufacturadoService = artManufacturadoService;
         this.clienteService = clienteServiceImpl;
         this.artInsumoService = artInsumoService;
         this.facturaService = facturaService;
+        this.sucursalService = sucursalService;
     }
     @Override
     public Pedido getPedidoById(Long id){
@@ -43,7 +44,8 @@ public class PedidoServiceImpl implements IPedidoService {
 //    @Transactional
     public Pedido save(Pedido pedido) {
         pedido.setEstado(Estado.Preparacion);
-
+        Sucursal sucursal = sucursalService.getSucursalById(pedido.getSucursal().getId());
+        pedido.setSucursal(sucursal);
         System.out.println("Pedido recibido: " + pedido.toString());
         Usuario usuarioOp = usuarioService.getUsuarioByUsername(pedido.getCliente().getUsuario().getUsername());
             pedido.setCliente(usuarioOp.getCliente());
