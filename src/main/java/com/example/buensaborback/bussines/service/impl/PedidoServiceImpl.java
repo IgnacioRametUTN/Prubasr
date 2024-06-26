@@ -49,18 +49,20 @@ public class PedidoServiceImpl implements IPedidoService {
             pedido.setCliente(usuarioOp.getCliente());
             for (DetallePedido detalle : pedido.getDetallePedidos()) {
                 //Preguntar si existe, sino Falla
-                ArticuloManufacturado articulo = artManufacturadoService.getArticuloManufacturadoById(detalle.getArticulo().getId());
+                Articulo articulo = getArticulo(detalle);
 
                 //Revisar cantidades actuales de los insumos
-                articulo.getArticuloManufacturadoDetalles().forEach(detalleManufacturado -> {      //Cantidad que necesito para 1      //Cantidad que pide
-                    double stockRestante =  detalleManufacturado.getArticuloInsumo().getStockActual() - detalleManufacturado.getCantidad() * detalle.getCantidad();
-                    if(stockRestante < 0) {
-                        throw new InsufficientStock("No hay suficiente cantidad de ");
-                    }
+                if(articulo instanceof ArticuloManufacturado){
+                    ((ArticuloManufacturado) articulo).getArticuloManufacturadoDetalles().forEach(detalleManufacturado -> {      //Cantidad que necesito para 1      //Cantidad que pide
+                        double stockRestante =  detalleManufacturado.getArticuloInsumo().getStockActual() - detalleManufacturado.getCantidad() * detalle.getCantidad();
+                        if(stockRestante < 0) {
+                            throw new InsufficientStock("No hay suficiente cantidad de ");
+                        }
 
-                   //Hay que guardar el nuevo stock
-                    detalleManufacturado.getArticuloInsumo().setStockActual(stockRestante);
-                });
+                        //Hay que guardar el nuevo stock
+                        detalleManufacturado.getArticuloInsumo().setStockActual(stockRestante);
+                    });
+                }
                 pedido.setTotalCosto(calcularCostoTotal(pedido.getDetallePedidos()));
                 detalle.setArticulo(articulo);
                 detalle.setPedido(pedido);
@@ -83,7 +85,6 @@ public class PedidoServiceImpl implements IPedidoService {
                 total += subTotalManufacturados;
 
             } else if (articulo instanceof ArticuloInsumo) {
-                System.out.println("TENGO UN INSUMO");
                 total += ((ArticuloInsumo) articulo).getPrecioCompra() * detallePedido.getCantidad();
             }
         }

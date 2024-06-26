@@ -83,20 +83,20 @@ public class CategoriaServiceImpl implements ICategoriaService {
 
         if (existsCategoriaByDenominacion(body.getDenominacion())) {
             body = categoriaRepository.findByDenominacionIgnoreCase(body.getDenominacion());
-            actualizarCategoriaExistente(body, sucursal);
+            System.out.println("Ya existe");
         } else {
             if (idPadre != 0) {
+                System.out.println("No existe y es hija");
                 Categoria categoriaPadre = getCategoriaById(idPadre);
                 body.setCategoriaPadre(categoriaPadre);
                 categoriaPadre.getSubCategorias().add(body);
             }
-            body.getSucursales().add(sucursal);
-            sucursal.getCategorias().add(body);
-
-            sucursalService.updateSucursal(sucursal.getId(), sucursal);
+            System.out.println("No existe y es padre");
+           // sucursalService.updateSucursal(sucursal.getId(), sucursal);
         }
-
-        return categoriaRepository.save(body);
+        actualizarCategoriaExistente(body, sucursal);
+        String denominacion = body.getDenominacion();
+        return sucursalService.saveSucursal(sucursal).getCategorias().stream().filter(categoria -> categoria.getDenominacion().equals(denominacion)).findFirst().orElse(null);
     }
 
     private void actualizarCategoriaExistente(Categoria body, Sucursal sucursal) {
@@ -105,6 +105,7 @@ public class CategoriaServiceImpl implements ICategoriaService {
         sucursal.getCategorias().add(body);
 
         if (body.getCategoriaPadre() != null) {
+            body.getCategoriaPadre().setAlta(true);
             body.getCategoriaPadre().getSucursales().add(sucursal);
             sucursal.getCategorias().add(body.getCategoriaPadre());
         }

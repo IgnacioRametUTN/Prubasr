@@ -19,7 +19,6 @@ import java.util.Set;
 @ToString
 @SuperBuilder
 @Entity
-
 @JsonIgnoreProperties({"hibernateLazyInitializer","pedidos"})
 public class Cliente extends Base{
 

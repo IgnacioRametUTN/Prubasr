@@ -42,7 +42,7 @@ public class ClienteServiceImpl implements IClienteService {
     @Override
     public Cliente update(Long id, Cliente entity) {
         this.getClienteById(id);
-
+        entity.getDomicilios().forEach(System.out::println);
         Set<Domicilio> updatedDomicilios = entity.getDomicilios().stream().map(domicilio -> {
             if (domicilio.getId() != 0) {
                 return domicilioService.getDomicilioById(domicilio.getId());
