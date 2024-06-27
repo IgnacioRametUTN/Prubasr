@@ -3,6 +3,7 @@ package com.example.buensaborback.presentation.rest;
 import com.example.buensaborback.bussines.service.IArticuloInsumoService;
 import com.example.buensaborback.bussines.service.impl.ArticuloInsumoServiceImpl;
 import com.example.buensaborback.domain.entities.ArticuloInsumo;
+import com.example.buensaborback.domain.entities.ArticuloManufacturado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -66,6 +67,11 @@ public class ArticuloInsumoController {
         return ResponseEntity.ok().body(this.articuloInsumoService.getAll(idSucursal, categoria, unidadMedida, denominacion));
     }
 
+    @GetMapping("/{idSucursal}/categoria/{idCategoria}")
+    public ResponseEntity<List<ArticuloInsumo>> getArticuloManufacturadoParaCategoriaYSubcategorias
+            (@PathVariable("idSucursal") Long idSucursal, @PathVariable("idCategoria") Long idCategoria){
+        return ResponseEntity.ok().body(this.articuloInsumoService.findArtInsumoFromCategoryAndSubcategories(idSucursal, idCategoria));
+    }
 
 }
     

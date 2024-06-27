@@ -1,5 +1,6 @@
 package com.example.buensaborback;
 
+import com.example.buensaborback.client.GeoRefService;
 import com.example.buensaborback.domain.entities.*;
 import com.example.buensaborback.domain.entities.enums.*;
 import com.example.buensaborback.repositories.*;
@@ -73,12 +74,37 @@ public class BuenSaborBackApplication {
 	@Autowired
 	private PedidoRepository pedidoRepository;
 
+	@Autowired
+	GeoRefService geoRefService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(BuenSaborBackApplication.class, args);
 		logger.info("Estoy activo en el main");
 	}
 
+	@Bean
+	CommandLineRunner init2() {
+		return args -> {
+			System.out.println("Guardando Datos Domicilio");
+			Pais argentina = Pais.builder()
+					.nombre("Argentina")
+					.provincias(geoRefService.getProvincias())
+					.build();
+			argentina.getProvincias().forEach(provincia -> {
+				provincia.setId(null);
+				provincia.setPais(argentina);
+				provincia.setLocalidades(geoRefService.getLocalidadesByProvincia(provincia));
+			});
+			argentina.getProvincias().forEach(provincia -> provincia.getLocalidades().forEach(localidad -> {
+				localidad.setId(null);
+				localidad.setProvincia(provincia);
+			}));
+			System.out.println(argentina);
+			System.out.println(argentina.getProvincias());
+			paisRepository.save(argentina);
+
+		};
+	}
 
 
 	@Bean
@@ -90,6 +116,7 @@ public class BuenSaborBackApplication {
 					.cuil(2012334675L)
 					.razonSocial("Empresa de ejemplo A")
 					.nombre("Domodin de dimsdale")
+					.imagenes(Set.of(Imagen.builder().name("empresa").url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdCvWpOJHdRix0RYrdYDm3PneoLl8xcfJ87A&s").build()))
 					.build();
 
 			//Se crea provincia
@@ -132,6 +159,7 @@ public class BuenSaborBackApplication {
 					.horarioCierre(LocalTime.of(23,30,00))
 					.domicilio(domicilio1)
 					.empresa(empresa)
+					.imagenes(Set.of(Imagen.builder().url("https://res.cloudinary.com/dnjlersq5/image/upload/v1719285019/emqjoymiqeyreskyeiv2.jpg").name("emqjoymiqeyreskyeiv2").build()))
 					.build();
 
 			//Se crea domicilio para sucursal
@@ -152,6 +180,7 @@ public class BuenSaborBackApplication {
 					.empresa(empresa)
 					.horarioApertura(LocalTime.of(10,30,00))
 					.horarioCierre(LocalTime.of(23,30,00))
+					.imagenes(Set.of(Imagen.builder().url("https://res.cloudinary.com/dnjlersq5/image/upload/v1719285019/vbv3xbu8jqoacnraq6kc.jpg").name("vbv3xbu8jqoacnraq6kc").build()))
 					.build();
 
 
@@ -163,10 +192,12 @@ public class BuenSaborBackApplication {
 			Categoria lacteos = Categoria.builder()
 					.denominacion("Lacteos")
 					.sucursales(new HashSet<>(Set.of(sucursal1, sucursal2)))
+					.imagenes(Set.of(Imagen.builder().name("lacteos").url("https://infoalimentos.org.ar/images/temas/el_rol_del_consumidor/TEMAS_lacteos_interna_horiz_840x410.jpg").build()))
 					.build();
 			Categoria harinas = Categoria.builder()
 					.denominacion("Harina")
 					.sucursales(new HashSet<>(Set.of(sucursal1, sucursal2)))
+					.imagenes(Set.of(Imagen.builder().name("harinas").url("https://www.recetasderechupete.com/wp-content/uploads/2018/11/Harina-de-fuerza.jpg").build()))
 					.build();
 
 
@@ -174,17 +205,20 @@ public class BuenSaborBackApplication {
 			Categoria pizza = Categoria.builder()
 					.denominacion("Pizzas")
 					.sucursales(new HashSet<>(Set.of(sucursal1, sucursal2)))
+					.imagenes(Set.of(Imagen.builder().name("pizzas").url("https://media.ambito.com/p/e24c324a419cc678f936ac0cdda5209b/adjuntos/239/imagenes/040/952/0040952827/730x0/smart/santo-bar-pizzasjpg.jpg").build()))
 					.build();
 
 			Categoria refrescosCola = Categoria.builder()
 					.denominacion("Refrescos de Cola")
-					.sucursales(new HashSet<>(Set.of(sucursal1, sucursal2)))
+					.sucursales(new HashSet<>(Set.of(sucursal1)))
+					.imagenes(Set.of(Imagen.builder().name("colas").url("https://www.marketingdirecto.com/wp-content/uploads/2016/05/cola.jpg").build()))
 					.build();
 
 			Categoria bebidas = Categoria.builder()
 					.denominacion("Bebidas")
 					.subCategorias(new HashSet<>(Set.of(refrescosCola)))
-					.sucursales(new HashSet<>(Set.of(sucursal1, sucursal2)))
+					.sucursales(new HashSet<>(Set.of(sucursal1)))
+					.imagenes(Set.of(Imagen.builder().name("bebidas").url("https://i.pinimg.com/originals/17/53/07/17530782da06b17d1e6654526dbde2be.jpg").build()))
 					.build();
 			refrescosCola.setCategoriaPadre(bebidas);
 			//Se crean articulos insumo
@@ -278,8 +312,8 @@ public class BuenSaborBackApplication {
 			refrescosCola.getArticulos().add(coca);
 			coca.setCategoria(refrescosCola);
 
-			coca.setSucursal(sucursal2);
-			sucursal2.getArticulos().add(coca);
+			coca.setSucursal(sucursal1);
+			sucursal1.getArticulos().add(coca);
 
 			ArticuloManufacturadoDetalle artManufacDetalleQueso = ArticuloManufacturadoDetalle.builder()
 					.articuloInsumo(queso)
@@ -298,7 +332,7 @@ public class BuenSaborBackApplication {
 
 			// Se agregan las categorias a la sucursal
 			sucursal1.setCategorias(new HashSet<>(Set.of(lacteos,harinas,pizza,bebidas, refrescosCola)));
-			sucursal2.setCategorias(new HashSet<>(Set.of(lacteos,harinas,pizza,bebidas, refrescosCola)));
+			sucursal2.setCategorias(new HashSet<>(Set.of(lacteos,harinas,pizza)));
 
 
 			//se crea la imagen cliente
@@ -309,11 +343,13 @@ public class BuenSaborBackApplication {
 			Usuario usuario1 = Usuario.builder()
 					.auth0Id("aaaa")
 					.username("gonzaPrueba")
+					.email("juanperez@gmail.com")
 					.rol(Rol.Cliente)
 					.build();
 			Usuario usuario2 = Usuario.builder()
 					.auth0Id("admin")
 					.username("admin")
+					.email("admin@gmail.com")
 					.rol(Rol.Admin)
 					.build();
 			Empleado empleado=Empleado.builder()
@@ -374,7 +410,6 @@ public class BuenSaborBackApplication {
 					.nombre("Juan")
 					.apellido("Perez")
 					.telefono("2615854785")
-					.email("juanperez@gmail.com")
 					.fechaNacimiento(LocalDate.of(1990,11,12))
 					.imagenes(Set.of(imagen4))
 					.usuario(usuario1)

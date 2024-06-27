@@ -1,7 +1,6 @@
 package com.example.buensaborback.bussines.service;
 
-import com.example.buensaborback.domain.entities.Domicilio;
-import com.example.buensaborback.domain.entities.UnidadMedida;
+import com.example.buensaborback.domain.entities.*;
 
 import java.util.List;
 
@@ -14,4 +13,7 @@ public interface IDomicilioService {
     Domicilio delete(Long id);
     List<Domicilio> findAll() ;
     List<Domicilio> findAllAlta();
+
+
+
 }

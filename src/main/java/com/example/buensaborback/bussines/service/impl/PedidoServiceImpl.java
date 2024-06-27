@@ -7,8 +7,8 @@ import com.example.buensaborback.presentation.advice.exception.InsufficientStock
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,14 +22,16 @@ public class PedidoServiceImpl implements IPedidoService {
     private final IArticuloInsumoService artInsumoService;
     private final IClienteService clienteService;
     private final IFacturaService facturaService;
-    @Autowired
-    public PedidoServiceImpl(PedidoRepository pedidoRepository, UsuarioServiceImpl usuarioService, ArtManufacturadoServiceImpl artManufacturadoService, ClienteServiceImpl clienteServiceImpl, ArticuloInsumoServiceImpl artInsumoService, FacturaServiceImpl facturaService) {
+    private final ISucursalService sucursalService;
+@Autowired
+    public PedidoServiceImpl(PedidoRepository pedidoRepository, UsuarioServiceImpl usuarioService, ArtManufacturadoServiceImpl artManufacturadoService, ClienteServiceImpl clienteServiceImpl, ArticuloInsumoServiceImpl artInsumoService, FacturaServiceImpl facturaService, ISucursalService sucursalService) {
         this.pedidoRepository = pedidoRepository;
         this.usuarioService = usuarioService;
         this.artManufacturadoService = artManufacturadoService;
         this.clienteService = clienteServiceImpl;
         this.artInsumoService = artInsumoService;
         this.facturaService = facturaService;
+        this.sucursalService = sucursalService;
     }
     @Override
     public Pedido getPedidoById(Long id){
@@ -40,27 +42,30 @@ public class PedidoServiceImpl implements IPedidoService {
     public boolean existsPedidoById(Long id){
         return this.pedidoRepository.existsById(id);
     }
-    @Transactional
+//    @Transactional
     public Pedido save(Pedido pedido) {
         pedido.setEstado(Estado.Preparacion);
-
+        Sucursal sucursal = sucursalService.getSucursalById(pedido.getSucursal().getId());
+        pedido.setSucursal(sucursal);
         System.out.println("Pedido recibido: " + pedido.toString());
         Usuario usuarioOp = usuarioService.getUsuarioByUsername(pedido.getCliente().getUsuario().getUsername());
             pedido.setCliente(usuarioOp.getCliente());
             for (DetallePedido detalle : pedido.getDetallePedidos()) {
                 //Preguntar si existe, sino Falla
-                ArticuloManufacturado articulo = artManufacturadoService.getArticuloManufacturadoById(detalle.getArticulo().getId());
+                Articulo articulo = getArticulo(detalle);
 
                 //Revisar cantidades actuales de los insumos
-                articulo.getArticuloManufacturadoDetalles().forEach(detalleManufacturado -> {      //Cantidad que necesito para 1      //Cantidad que pide
-                    double stockRestante =  detalleManufacturado.getArticuloInsumo().getStockActual() - detalleManufacturado.getCantidad() * detalle.getCantidad();
-                    if(stockRestante < 0) {
-                        throw new InsufficientStock("No hay suficiente cantidad de ");
-                    }
+                if(articulo instanceof ArticuloManufacturado){
+                    ((ArticuloManufacturado) articulo).getArticuloManufacturadoDetalles().forEach(detalleManufacturado -> {      //Cantidad que necesito para 1      //Cantidad que pide
+                        double stockRestante =  detalleManufacturado.getArticuloInsumo().getStockActual() - detalleManufacturado.getCantidad() * detalle.getCantidad();
+                        if(stockRestante < 0) {
+                            throw new InsufficientStock("No hay suficiente cantidad de ");
+                        }
 
-                   //Hay que guardar el nuevo stock
-                    detalleManufacturado.getArticuloInsumo().setStockActual(stockRestante);
-                });
+                        //Hay que guardar el nuevo stock
+                        detalleManufacturado.getArticuloInsumo().setStockActual(stockRestante);
+                    });
+                }
                 pedido.setTotalCosto(calcularCostoTotal(pedido.getDetallePedidos()));
                 detalle.setArticulo(articulo);
                 detalle.setPedido(pedido);
@@ -83,7 +88,6 @@ public class PedidoServiceImpl implements IPedidoService {
                 total += subTotalManufacturados;
 
             } else if (articulo instanceof ArticuloInsumo) {
-                System.out.println("TENGO UN INSUMO");
                 total += ((ArticuloInsumo) articulo).getPrecioCompra() * detallePedido.getCantidad();
             }
         }
@@ -100,19 +104,19 @@ public class PedidoServiceImpl implements IPedidoService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public List<Pedido> getAll() {
         return pedidoRepository.findAll();
     }
 
     @Override
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public List<Pedido> getAllByFecha(LocalDate fecha) {
         return pedidoRepository.findByFechaPedido(fecha);
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public Pedido delete(Long id) {
         Pedido pedido = this.getPedidoById(id);
         pedido.setAlta(pedido.isAlta());
@@ -136,14 +140,25 @@ public class PedidoServiceImpl implements IPedidoService {
         return pedidoRepository.findByEstado(estado);
     }
 
-    @Transactional
+    //@Transactional
     public Pedido actualizarEstado(Long id, Estado estado){
         Pedido pedido = this.getPedidoById(id);
         pedido.setEstado(estado);
-       if(estado == Estado.Entregado) facturaService.crearFactura(pedido);
+       if(estado == Estado.Entregado) {
+           Factura factura = facturaService.crearFactura(pedido);
+           pedido.setFactura(factura);
+           Pedido pedidoFactura=pedidoRepository.save(pedido);
+           facturaService.enviarFacturaPorEmail(pedidoFactura.getCliente().getUsuario().getEmail(),factura);
+           return pedidoFactura;
+       }
+
         return  pedidoRepository.save(pedido);
     }
 
+    @Override
+    public Pedido findByFactura(Factura factura){
+        return  pedidoRepository.findByFactura(factura);
+    }
 
 
 }

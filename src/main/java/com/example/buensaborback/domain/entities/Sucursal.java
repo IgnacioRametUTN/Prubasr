@@ -19,7 +19,7 @@ import java.util.Set;
 @Entity
 @SuperBuilder
 
-@JsonIgnoreProperties({"hibernateLazyInitializer", "domicilio","categorias","pedidos","promociones","imagenSucursal"})
+@JsonIgnoreProperties({"hibernateLazyInitializer","categorias","pedidos","promociones","imagenSucursal"})
 public class Sucursal extends Base{
 
     private String nombre;

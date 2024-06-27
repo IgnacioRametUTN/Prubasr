@@ -46,6 +46,15 @@ dependencies {
 
 	// PostGreSQL
 	implementation 'org.postgresql:postgresql:42.7.2'
+	//PDF
+	implementation 'com.itextpdf:itextpdf:5.5.13.3'
+
+	//Email
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	//Excel
+	implementation 'org.apache.poi:poi-ooxml:5.2.4'
+
 
 }
 

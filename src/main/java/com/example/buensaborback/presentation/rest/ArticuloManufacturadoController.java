@@ -37,6 +37,7 @@ public class ArticuloManufacturadoController{
     public ResponseEntity<?> create(@PathVariable("idSucursal") Long idSucursal,@RequestBody ArticuloManufacturado body){
         return ResponseEntity.ok().body(this.artManufacturadoService.create(body,idSucursal));
     }
+
     @PostMapping("/uploads")
     public ResponseEntity<?> uploadImages(@RequestParam(value = "id") Long idArticulo,
                                           @RequestParam(value = "uploads") MultipartFile[] files) {
@@ -61,6 +62,17 @@ public class ArticuloManufacturadoController{
                                     @RequestParam("unidad_id") Optional<Long> unidadMedida,
                                     @RequestParam("denominacion") Optional<String> denominacion){
         return ResponseEntity.ok().body(this.artManufacturadoService.getAll(categoria, unidadMedida, denominacion,idSucursal));
+    }
+
+    @GetMapping("/{idSucursal}/categoria/{idCategoria}")
+    public ResponseEntity<List<ArticuloManufacturado>> getArticuloManufacturadoParaCategoriaYSubcategorias
+            (@PathVariable("idSucursal") Long idSucursal, @PathVariable("idCategoria") Long idCategoria){
+        return ResponseEntity.ok().body(this.artManufacturadoService.findArtManufacturadosFromCategoryAndSubcategories(idSucursal, idCategoria));
+    }
+
+    @GetMapping("/sucursal/{idSucursal}")
+    public ResponseEntity<List<ArticuloManufacturado>> getAllBySucursal(@PathVariable("idSucursal") Long idSucursal) {
+        return ResponseEntity.ok().body(this.artManufacturadoService.getAllBySucursal(idSucursal));
     }
 
 }

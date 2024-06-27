@@ -2,8 +2,14 @@ package com.example.buensaborback.bussines.service.impl;
 
 import com.example.buensaborback.bussines.service.IDomicilioService;
 import com.example.buensaborback.domain.entities.Domicilio;
+import com.example.buensaborback.domain.entities.Localidad;
+import com.example.buensaborback.domain.entities.Pais;
+import com.example.buensaborback.domain.entities.Provincia;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.DomicilioRepository;
+import com.example.buensaborback.repositories.LocalidadRepository;
+import com.example.buensaborback.repositories.PaisRepository;
+import com.example.buensaborback.repositories.ProvinciaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +18,15 @@ import java.util.List;
 @Service
 public class DomicilioServiceImpl implements IDomicilioService {
     private final DomicilioRepository domicilioRepository;
-    @Autowired
-    public DomicilioServiceImpl(DomicilioRepository domicilioRepository) {
+
+
+    public DomicilioServiceImpl(DomicilioRepository domicilioRepository, LocalidadRepository localidadRepository, ProvinciaRepository provinciaRepository, PaisRepository paisRepository) {
         this.domicilioRepository = domicilioRepository;
+
     }
+
+
+
 
     @Override
     public Domicilio getDomicilioById(Long id){
@@ -31,10 +42,13 @@ public class DomicilioServiceImpl implements IDomicilioService {
         return this.domicilioRepository.findAll();
     }
 
+
     @Override
     public List<Domicilio> findAllAlta() {
         return this.domicilioRepository.findByAltaTrue();
     }
+
+
     @Override
     public Domicilio update(Long id, Domicilio body) {
         this.existsDomicilioById(id);
@@ -51,4 +65,3 @@ public class DomicilioServiceImpl implements IDomicilioService {
         return domicilio;
     }
 }
-//se te murio e

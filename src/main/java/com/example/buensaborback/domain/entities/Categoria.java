@@ -43,4 +43,8 @@ public class Categoria extends Base {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "sucursales","articulos"})
     private Set<Categoria> subCategorias = new HashSet<>();
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name= "categoria_id")
+    @Builder.Default
+    protected Set<Imagen> imagenes = new HashSet<Imagen>();
 }

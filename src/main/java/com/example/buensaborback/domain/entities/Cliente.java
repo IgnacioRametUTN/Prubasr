@@ -19,14 +19,12 @@ import java.util.Set;
 @ToString
 @SuperBuilder
 @Entity
-
-@JsonIgnoreProperties({"hibernateLazyInitializer", "domicilios","pedidos"})
+@JsonIgnoreProperties({"hibernateLazyInitializer","pedidos"})
 public class Cliente extends Base{
 
     private String nombre;
     private String apellido;
     private String telefono;
-    private String email;
     private LocalDate fechaNacimiento;
 
     @OneToOne(cascade = CascadeType.ALL)

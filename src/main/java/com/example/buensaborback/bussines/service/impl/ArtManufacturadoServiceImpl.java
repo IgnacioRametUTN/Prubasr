@@ -60,7 +60,13 @@ private final IImagenService imagenService;
         return this.articuloManufacturadoRepository.existsById(id);
     }
 
-    @Transactional
+    @Override
+    public List<ArticuloManufacturado> getAllBySucursal(Long idSucursal) {
+        Sucursal sucursal = this.sucursalService.getSucursalById(idSucursal);
+        return articuloManufacturadoRepository.findBySucursal(sucursal);
+    }
+
+//    @Transactional
     public ArticuloManufacturado create(ArticuloManufacturado entity,Long idSucursal) {
         entity.setSucursal(this.sucursalService.getSucursalById(idSucursal));
         entity.setCategoria(this.categoriaServiceImpl.getCategoriaById(entity.getCategoria().getId()));
@@ -85,7 +91,7 @@ private final IImagenService imagenService;
     }
 
     @Override
-    @Transactional
+    //@Transactional
     public ArticuloManufacturado update(Long id, ArticuloManufacturado entity) {
         // Obtén el artículo manufacturado existente de la base de datos
         ArticuloManufacturado existingEntity = getArticuloManufacturadoById(id);
@@ -205,4 +211,27 @@ private final IImagenService imagenService;
 
         return insumo.getImagenes();
     }
+
+    @Override
+    public List<ArticuloManufacturado> findArtManufacturadosFromCategoryAndSubcategories(Long idSucursal, Long idCategoria) {
+        Sucursal sucursal = this.sucursalService.getSucursalById(idSucursal);
+        Categoria categoria = this.categoriaServiceImpl.getCategoriaById(idCategoria);
+
+        // Recoge los IDs de las subcategorías que pertenecen a la sucursal específica
+        List<Long> subCategoriasIds = categoria.getSubCategorias().stream()
+                .filter(subcategoria -> subcategoria.getSucursales().stream().anyMatch(s -> s.getId().equals(sucursal.getId())))
+                .map(Base::getId)
+                .collect(Collectors.toList());
+
+        System.out.println("Manufacturados");
+        System.out.println("subcategorias validas " + subCategoriasIds.size());
+
+        // Consulta en el repositorio
+        List<ArticuloManufacturado> lista = this.articuloManufacturadoRepository.findBySucursalCategoriaAndSubCategorias(sucursal.getId(), categoria.getId(), subCategoriasIds);
+
+        System.out.println(lista.size());
+
+        return lista;
+    }
+
 }

@@ -17,7 +17,7 @@ import java.util.Set;
 @Entity
 @ToString
 @SuperBuilder
-@JsonIgnoreProperties({"hibernateLazyInitializer", "provincia","domicilios"})
+@JsonIgnoreProperties({"hibernateLazyInitializer","domicilios"})
 public class Localidad extends Base{
 
     private String nombre;

@@ -22,7 +22,7 @@ import java.util.Set;
 @Setter
 @Entity
 @SuperBuilder
-@JsonIgnoreProperties({"hibernateLazyInitializer", "empleado","domicilio","factura"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "empleado","factura"})
 public class Pedido extends Base{
 
     private LocalTime horaEstimadaFinalizacion;
@@ -39,7 +39,7 @@ public class Pedido extends Base{
     private Empleado empleado;
 
     @ManyToOne(cascade = CascadeType.ALL) //Dirección a donde se envía el pedido
-
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "localidad","clientes"})
     private Domicilio domicilio;
 
     @ManyToOne(cascade = CascadeType.ALL)

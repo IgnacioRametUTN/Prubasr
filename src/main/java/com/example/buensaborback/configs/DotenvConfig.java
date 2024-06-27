@@ -16,8 +16,6 @@ public class DotenvConfig {
             activeProfile = "dev"; // Valor predeterminado si no se establece ningún perfil
         }
 
-        System.out.println("AAAAAAAAAAAAAAAAAAA"  + activeProfile);
-
         String envFileName = ".env." + activeProfile;
         return Dotenv.configure()
                 .filename(envFileName)
