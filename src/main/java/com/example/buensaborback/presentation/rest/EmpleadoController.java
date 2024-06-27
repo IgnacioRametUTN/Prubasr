@@ -1,6 +1,9 @@
 package com.example.buensaborback.presentation.rest;
 
+import com.example.buensaborback.bussines.service.IEmpleadoService;
+import com.example.buensaborback.bussines.service.impl.EmpleadoServiceImpl;
 import com.example.buensaborback.domain.dto.RedirectDto;
+import com.example.buensaborback.domain.entities.Empleado;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +17,12 @@ import java.net.URI;
 @CrossOrigin("*")
 public class EmpleadoController {
 
+    private final IEmpleadoService empleadoService;
+
+    public EmpleadoController(EmpleadoServiceImpl empleadoService) {
+        this.empleadoService = empleadoService;
+    }
+
     @GetMapping ("/formulario/{empleado}")
     public ResponseEntity<RedirectDto> redirectToExternalUrl(@PathVariable("empleado") String email) {
         System.out.println("entre al redirect");
@@ -22,6 +31,11 @@ public class EmpleadoController {
         }catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @PostMapping("")
+    public ResponseEntity<?> create(@RequestBody Empleado empleado){
+        return ResponseEntity.ok(empleadoService.create(empleado));
     }
 
 
