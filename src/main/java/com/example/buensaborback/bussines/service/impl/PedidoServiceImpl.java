@@ -7,7 +7,6 @@ import com.example.buensaborback.presentation.advice.exception.InsufficientStock
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,8 +22,9 @@ public class PedidoServiceImpl implements IPedidoService {
     private final IClienteService clienteService;
     private final IFacturaService facturaService;
     private final ISucursalService sucursalService;
+    private final IDomicilioService domicilioService;
 @Autowired
-    public PedidoServiceImpl(PedidoRepository pedidoRepository, UsuarioServiceImpl usuarioService, ArtManufacturadoServiceImpl artManufacturadoService, ClienteServiceImpl clienteServiceImpl, ArticuloInsumoServiceImpl artInsumoService, FacturaServiceImpl facturaService, ISucursalService sucursalService) {
+    public PedidoServiceImpl(PedidoRepository pedidoRepository, UsuarioServiceImpl usuarioService, ArtManufacturadoServiceImpl artManufacturadoService, ClienteServiceImpl clienteServiceImpl, ArticuloInsumoServiceImpl artInsumoService, FacturaServiceImpl facturaService, ISucursalService sucursalService, IDomicilioService domicilioService) {
         this.pedidoRepository = pedidoRepository;
         this.usuarioService = usuarioService;
         this.artManufacturadoService = artManufacturadoService;
@@ -32,7 +32,8 @@ public class PedidoServiceImpl implements IPedidoService {
         this.artInsumoService = artInsumoService;
         this.facturaService = facturaService;
         this.sucursalService = sucursalService;
-    }
+    this.domicilioService = domicilioService;
+}
     @Override
     public Pedido getPedidoById(Long id){
         return this.pedidoRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Pedido con ID %d no encontrado", id)));
@@ -45,6 +46,8 @@ public class PedidoServiceImpl implements IPedidoService {
 //    @Transactional
     public Pedido save(Pedido pedido) {
         pedido.setEstado(Estado.Preparacion);
+        Domicilio domicilio =domicilioService.getDomicilioById(pedido.getDomicilio().getId());
+        pedido.setDomicilio(domicilio);
         Sucursal sucursal = sucursalService.getSucursalById(pedido.getSucursal().getId());
         pedido.setSucursal(sucursal);
         System.out.println("Pedido recibido: " + pedido.toString());
