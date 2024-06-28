@@ -11,6 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.DependsOn;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -108,6 +109,7 @@ public class BuenSaborBackApplication {
 
 
 	@Bean
+	@DependsOn({"init2"})
 	CommandLineRunner init() {
 		return args -> {
 			logger.info("----------------Persistiendo los modelos---------------------");
@@ -121,9 +123,9 @@ public class BuenSaborBackApplication {
 
 			//Se crea provincia
 			Provincia provincia = Provincia.builder()
-					.nombre("Mendoza")
+					.nombre("ProvinciaFalsa")
 					.pais(Pais.builder()
-							.nombre("Argentina")
+							.nombre("PaisPruebas")
 							.build())
 					.build();
 			//Se crea domicilio para clientes
