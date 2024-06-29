@@ -3,7 +3,6 @@ package com.example.buensaborback.presentation.rest;
 import com.example.buensaborback.bussines.service.IUsuarioService;
 import com.example.buensaborback.domain.entities.Usuario;
 import com.example.buensaborback.domain.entities.enums.Rol;
-import com.example.buensaborback.presentation.advice.exception.UnauthorizeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -29,28 +29,43 @@ public class UsuarioController {
             String auth0Id = jwt.getSubject();
             String username = jwt.getClaim("preferred_username");
             String email = jwt.getClaim("email");
+            List<String> roles = jwt.getClaim("https://apiprueba/roles");
 
+            // Assuming we take the first role if there are multiple
+            String role = roles != null && !roles.isEmpty() ? roles.get(0) : "Cliente";
 
+            // Map the role obtained from Auth0 to your Rol enum
+            Rol userRole;
+            switch (role) {
+                case "Cliente":
+                    userRole = Rol.Cliente;
+                    break;
+                case "Admin":
+                    userRole = Rol.Admin;
+                    break;
+                default:
+                    userRole = Rol.Cliente; // Default to Cliente if role is unrecognized
+                    break;
+            }
 
             Usuario usuario = new Usuario();
             usuario.setAuth0Id(auth0Id);
             usuario.setUsername(username);
             usuario.setEmail(email);
-
-
+            usuario.setRol(userRole);
 
             Usuario usuarioLogueado = usuarioService.login(username, auth0Id);
 
-            // Si el usuario no existía y fue creado, o si existía y fue actualizado
-            if (!Objects.equals(usuarioLogueado.getEmail(), email) ){
+            // If the user was newly created or if email or role has changed
+            if (!Objects.equals(usuarioLogueado.getEmail(), email) || usuarioLogueado.getRol() != userRole) {
                 usuarioLogueado.setEmail(email);
+                usuarioLogueado.setRol(userRole);
 
                 usuarioLogueado = usuarioService.register(usuarioLogueado);
             }
 
             return ResponseEntity.ok().body(usuarioLogueado);
-        } catch (UnauthorizeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", e.getMessage()));
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Error en el proceso de login: " + e.getMessage()));
         }
