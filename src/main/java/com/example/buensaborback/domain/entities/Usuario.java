@@ -1,13 +1,8 @@
 package com.example.buensaborback.domain.entities;
 
 import com.example.buensaborback.domain.entities.enums.Rol;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToOne;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -19,9 +14,7 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @ToString
 @SuperBuilder
-
-@JsonIgnoreProperties({"hibernateLazyInitializer", "cliente","empleado"})
-public class Usuario extends Base{
+public class Usuario extends Base {
 
     private String auth0Id;
     private String username;
