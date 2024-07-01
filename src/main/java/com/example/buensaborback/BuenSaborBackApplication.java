@@ -1,5 +1,6 @@
 package com.example.buensaborback;
 
+import com.example.buensaborback.bussines.service.impl.LocalidadServiceImpl;
 import com.example.buensaborback.client.GeoRefService;
 import com.example.buensaborback.domain.entities.*;
 import com.example.buensaborback.domain.entities.enums.*;
@@ -11,12 +12,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.annotation.Order;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @SpringBootApplication
@@ -75,6 +76,8 @@ public class BuenSaborBackApplication {
 
     @Autowired
     private PedidoRepository pedidoRepository;
+    @Autowired
+    private LocalidadServiceImpl localidadService;
 
     @Autowired
     GeoRefService geoRefService;
@@ -102,8 +105,6 @@ public class BuenSaborBackApplication {
                 localidad.setId(null);
                 localidad.setProvincia(provincia);
             }));
-            System.out.println(argentina);
-            System.out.println(argentina.getProvincias());
             paisRepository.save(argentina);
 
         };
@@ -124,30 +125,22 @@ public class BuenSaborBackApplication {
                     .build();
 
             //Se crea domicilio para clientes
-            Localidad localidadCliente = this.localidadRepository.findById(5L).orElse(null);
             Domicilio domicilioCliente = Domicilio.builder()
                     .calle("Avenida siempre viva")
                     .numero(76)
                     .cp(55)
                     //se crea localidad
-                    .localidad(localidadCliente)
+                    .localidad(null)
                     .build();
-            if (localidadCliente != null) {
-                localidadCliente.getDomicilios().add(domicilioCliente);
-            }
 
             //Se crea domicilio para sucursal
-            Localidad localidadSucursal = this.localidadRepository.findById(10L).orElse(null);
             Domicilio domicilio1 = Domicilio.builder()
                     .calle("Falsa")
                     .numero(123)
                     .cp(123)
                     //se crea localidad
-                    .localidad(localidadSucursal)
+                    .localidad(null)
                     .build();
-            if (localidadSucursal != null) {
-                localidadSucursal.getDomicilios().add(domicilio1);
-            }
 
             //Se crean sucursal 1
             Sucursal sucursal1 = Sucursal.builder()
@@ -160,16 +153,13 @@ public class BuenSaborBackApplication {
                     .build();
 
             //Se crea domicilio para sucursal
-			Localidad localidadSucursal2 = this.localidadRepository.findById(57L).orElse(null);
             Domicilio domicilio2 = Domicilio.builder()
                     .calle("Godoy Cruz")
                     .numero(123)
                     .cp(4120)
-                    .localidad(localidadSucursal2)
+                    .localidad(null)
                     .build();
-			if(localidadSucursal2 != null){
-				localidadSucursal2.getDomicilios().add(domicilio2);
-			}
+
             //Se crea sucursal 2
             Sucursal sucursal2 = Sucursal.builder()
                     .nombre("Surcursal Godoy Cruz")
@@ -448,6 +438,23 @@ public class BuenSaborBackApplication {
             pedido1.setEmpleado(empleado);
 
             clienteRepository.save(cliente1);
+        };
+    }
+
+    @Bean
+    @Order(3)
+    CommandLineRunner init3() {
+        return args -> {
+            List<Domicilio> domicilios = this.domicilioRepository.findAll();
+            int i = 0;
+            for (Domicilio domicilio : domicilios){
+                Localidad localidad = this.localidadService.getLocalidadById(i+10L);
+                domicilio.setLocalidad(localidad);
+                localidad.getDomicilios().add(domicilio);
+                this.domicilioRepository.save(domicilio);
+                i += 10;
+            }
+
         };
     }
 

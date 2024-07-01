@@ -29,8 +29,8 @@ public class LocalidadServiceImpl implements ILocalidadService {
     }
 
     @Override
-    public Localidad getLocalidadById(Long idPais){
-        return this.localidadRepository.findById(idPais).orElseThrow(() -> new NotFoundException(String.format("Localidad con ID %d no encontrado", idPais)));
+    public Localidad getLocalidadById(Long idLocalidad){
+        return this.localidadRepository.findById(idLocalidad).orElseThrow(() -> new NotFoundException(String.format("Localidad con ID %d no encontrado", idLocalidad)));
     }
     public boolean existLocalidadById(Long idLocalidad){
         return this.localidadRepository.existsById(idLocalidad);
