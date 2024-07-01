@@ -26,43 +26,10 @@ public class UsuarioController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@AuthenticationPrincipal Jwt jwt) {
         try {
-            String auth0Id = jwt.getSubject();
-            String username = jwt.getClaim("preferred_username");
-            String email = jwt.getClaim("email");
-            List<String> roles = jwt.getClaim("https://apiprueba/roles");
 
-            // Assuming we take the first role if there are multiple
-            String role = roles != null && !roles.isEmpty() ? roles.get(0) : "Cliente";
+            Usuario usuario = decodeToken(jwt);
 
-            // Map the role obtained from Auth0 to your Rol enum
-            Rol userRole;
-            switch (role) {
-                case "Cliente":
-                    userRole = Rol.Cliente;
-                    break;
-                case "Admin":
-                    userRole = Rol.Admin;
-                    break;
-                default:
-                    userRole = Rol.Cliente; // Default to Cliente if role is unrecognized
-                    break;
-            }
-
-            Usuario usuario = new Usuario();
-            usuario.setAuth0Id(auth0Id);
-            usuario.setUsername(username);
-            usuario.setEmail(email);
-            usuario.setRol(userRole);
-
-            Usuario usuarioLogueado = usuarioService.login(username, auth0Id);
-
-            // If the user was newly created or if email or role has changed
-            if (!Objects.equals(usuarioLogueado.getEmail(), email) || usuarioLogueado.getRol() != userRole) {
-                usuarioLogueado.setEmail(email);
-                usuarioLogueado.setRol(userRole);
-
-                usuarioLogueado = usuarioService.register(usuarioLogueado);
-            }
+            Usuario usuarioLogueado = usuarioService.login(usuario.getUsername(), usuario.getAuth0Id());
 
             return ResponseEntity.ok().body(usuarioLogueado);
 
@@ -72,8 +39,9 @@ public class UsuarioController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Usuario usuario) {
+    public ResponseEntity<?> register(@AuthenticationPrincipal Jwt jwt) {
         try {
+            Usuario usuario = decodeToken(jwt);
             Usuario usuarioRegistrado = usuarioService.register(usuario);
             return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRegistrado);
         } catch (Exception e) {
@@ -81,9 +49,11 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping("/validar/{nombreUsuario}")
-    public ResponseEntity<Boolean> validarExistenciaUsuario(@PathVariable String nombreUsuario) {
-        boolean usuarioExistente = usuarioService.existsUsuarioByUsername(nombreUsuario);
+    @GetMapping("/validar")
+    public ResponseEntity<Boolean> validarExistenciaUsuario(@AuthenticationPrincipal Jwt jwt) {
+        Usuario usuario = decodeToken(jwt);
+        boolean usuarioExistente = usuarioService.existsUsuarioByUsername(usuario.getUsername());
+        System.out.println("VERIFICACION " + usuarioExistente);
         return ResponseEntity.ok(usuarioExistente);
     }
 
@@ -113,5 +83,44 @@ public class UsuarioController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Error al obtener los usuarios: " + e.getMessage()));
         }
+    }
+
+    private Usuario decodeToken(Jwt jwt){
+        System.out.println(jwt);
+        String auth0Id = jwt.getSubject();
+        String username = jwt.getClaim("preferred_username");
+        String email = jwt.getClaim("email");
+        List<String> roles = jwt.getClaim("https://apiprueba/roles");
+
+        // Assuming we take the first role if there are multiple
+        String role = roles != null && !roles.isEmpty() ? roles.get(0) : "Cliente";
+
+        // Map the role obtained from Auth0 to your Rol enum
+        Rol userRole;
+        switch (role) {
+            case "Cliente":
+                userRole = Rol.Cliente;
+                break;
+            case "Admin":
+                userRole = Rol.Admin;
+                break;
+            default:
+                userRole = Rol.Cliente; // Default to Cliente if role is unrecognized
+                break;
+        }
+
+        Usuario usuario = new Usuario();
+        usuario.setAuth0Id(auth0Id);
+        System.out.println("EMAIL: "+ email);
+        System.out.println("USERNAME: "+ username);
+        if (username == null) {
+            usuario.setUsername(email.split("@")[0]);
+        } else {
+            usuario.setUsername(username);
+        }
+        usuario.setEmail(email);
+        usuario.setRol(userRole);
+        System.out.println("USUARIO decodificado " + usuario);
+        return usuario;
     }
 }

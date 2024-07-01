@@ -142,9 +142,9 @@ public class SecurityConfiguration {
                         //Usuario
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/auth/validar/{nombreUsuario}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/auth/validar").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/auth/cliente/{nombreUsuario}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/auth").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/auth/**").permitAll()
 
                         .anyRequest().permitAll()
                 )

@@ -89,6 +89,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
             return usuarioRepository.save(usuarioActualizado);
         } else {
             // Si el usuario no existe, lo guardamos como nuevo
+            System.out.println("USUARIO A GUARDAR " + usuario);
             return usuarioRepository.save(usuario);
         }
     }
