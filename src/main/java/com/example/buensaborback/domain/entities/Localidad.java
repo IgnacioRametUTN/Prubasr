@@ -27,7 +27,7 @@ public class Localidad extends Base{
     private Provincia provincia;
 
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "localidad")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "localidad")
     @Builder.Default
     @ToString.Exclude
     private Set<Domicilio> domicilios = new HashSet<>();

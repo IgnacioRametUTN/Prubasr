@@ -29,7 +29,7 @@ public class Domicilio extends Base{
     @JoinColumn(name = "id_localidad")
     private Localidad localidad;
 
-    @ManyToMany(mappedBy = "domicilios", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "domicilios", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private Set<Cliente> clientes = new HashSet<>();
 
