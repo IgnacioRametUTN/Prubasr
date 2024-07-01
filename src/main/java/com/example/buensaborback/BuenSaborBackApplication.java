@@ -12,6 +12,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.core.annotation.Order;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -84,6 +85,7 @@ public class BuenSaborBackApplication {
     }
 
     @Bean
+    @Order(1)
     CommandLineRunner init2() {
         return args -> {
             System.out.println("Guardando Datos Domicilio");
@@ -109,7 +111,7 @@ public class BuenSaborBackApplication {
 
 
     @Bean
-    @DependsOn({"init2"})
+    @Order(2)
     CommandLineRunner init() {
         return args -> {
             logger.info("----------------Persistiendo los modelos---------------------");
@@ -143,10 +145,10 @@ public class BuenSaborBackApplication {
                     //se crea localidad
                     .localidad(localidadSucursal)
                     .build();
-
             if (localidadSucursal != null) {
                 localidadSucursal.getDomicilios().add(domicilio1);
             }
+
             //Se crean sucursal 1
             Sucursal sucursal1 = Sucursal.builder()
                     .nombre("Sucursal Lujan")
