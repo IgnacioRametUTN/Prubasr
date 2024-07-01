@@ -82,7 +82,7 @@ public class PedidoServiceImpl implements IPedidoService {
             if (pedido.getTipoEnvio() == TipoEnvio.Delivery) {
                 tiempoPreparacion += 10; // Additional fixed time for delivery
             }
-        LocalTime tiempoEstimado = now.plusMinutes(tiempoPreparacion);
+        LocalTime tiempoEstimado = now.plusMinutes(tiempoPreparacion).withSecond(0).withNano(0);
 
         pedido.setHoraEstimadaFinalizacion(tiempoEstimado);
             return pedidoRepository.save(pedido);
@@ -139,9 +139,10 @@ public class PedidoServiceImpl implements IPedidoService {
     }
 
     @Override
-    public List<Pedido> getAllByCliente(Long idCliente){
-        Cliente cliente = this.clienteService.getClienteById(idCliente);
-        return this.pedidoRepository.findByAltaTrueAndCliente(cliente);
+    public List<Pedido> getAllByCliente(String user){
+
+        Usuario usuario =this.usuarioService.getUsuarioByUsername(user);
+        return this.pedidoRepository.findByAltaTrueAndCliente(usuario.getCliente());
     }
     public List<Object> findTopProducts(LocalDate startDate, LocalDate endDate) {
         return pedidoRepository.findTopProducts(startDate, endDate);

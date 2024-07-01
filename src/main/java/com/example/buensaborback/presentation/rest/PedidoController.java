@@ -52,6 +52,7 @@ public class PedidoController {
         List<Pedido> pedidos = pedidoService.getAllByFecha(fecha);
         return new ResponseEntity<>(pedidos, HttpStatus.OK);
     }
+
     @GetMapping("/estado/{estado}")
     public ResponseEntity<List<Pedido>> GetByEstado(@PathVariable("estado") Estado estado) {
         List<Pedido> pedidos = pedidoService.findByEstado(estado);
@@ -64,6 +65,10 @@ public class PedidoController {
         System.out.println(pedidoActualizado);
         return new ResponseEntity<>(pedidoActualizado, HttpStatus.OK);
     }
-
+    @GetMapping("/cliente/{cliente}")
+    public ResponseEntity<List<Pedido>> getAllByCliente(@PathVariable("cliente") String user) {
+        List<Pedido> pedidos = pedidoService.getAllByCliente(user);
+        return new ResponseEntity<>(pedidos, HttpStatus.OK);
+    }
 }
 

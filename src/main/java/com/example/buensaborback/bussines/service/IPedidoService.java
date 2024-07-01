@@ -14,7 +14,7 @@ public interface IPedidoService {
     boolean existsPedidoById(Long id);
     Pedido save(Pedido pedido);
     List<Pedido> getAll();
-    List<Pedido> getAllByCliente(Long idCliente);
+    List<Pedido> getAllByCliente(String user);
     List<Pedido> getAllByFecha(LocalDate fecha);
     Pedido delete(Long id);
     List<Object> findTopProducts(LocalDate startDate, LocalDate endDate);
