@@ -3,13 +3,16 @@ package com.example.buensaborback.bussines.service.impl;
 import com.example.buensaborback.bussines.service.*;
 import com.example.buensaborback.domain.entities.*;
 import com.example.buensaborback.domain.entities.enums.Estado;
+import com.example.buensaborback.domain.entities.enums.TipoEnvio;
 import com.example.buensaborback.presentation.advice.exception.InsufficientStock;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.PedidoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 
@@ -43,8 +46,10 @@ public class PedidoServiceImpl implements IPedidoService {
     public boolean existsPedidoById(Long id){
         return this.pedidoRepository.existsById(id);
     }
-//    @Transactional
+  @Transactional
     public Pedido save(Pedido pedido) {
+        LocalTime now = LocalTime.now();
+        int tiempoPreparacion=0;
         pedido.setEstado(Estado.Preparacion);
         Domicilio domicilio =domicilioService.getDomicilioById(pedido.getDomicilio().getId());
         pedido.setDomicilio(domicilio);
@@ -56,7 +61,6 @@ public class PedidoServiceImpl implements IPedidoService {
             for (DetallePedido detalle : pedido.getDetallePedidos()) {
                 //Preguntar si existe, sino Falla
                 Articulo articulo = getArticulo(detalle);
-
                 //Revisar cantidades actuales de los insumos
                 if(articulo instanceof ArticuloManufacturado){
                     ((ArticuloManufacturado) articulo).getArticuloManufacturadoDetalles().forEach(detalleManufacturado -> {      //Cantidad que necesito para 1      //Cantidad que pide
@@ -68,11 +72,19 @@ public class PedidoServiceImpl implements IPedidoService {
                         //Hay que guardar el nuevo stock
                         detalleManufacturado.getArticuloInsumo().setStockActual(stockRestante);
                     });
+                    tiempoPreparacion+=((ArticuloManufacturado) articulo).getTiempoEstimadoMinutos();
                 }
+
                 pedido.setTotalCosto(calcularCostoTotal(pedido.getDetallePedidos()));
                 detalle.setArticulo(articulo);
                 detalle.setPedido(pedido);
             }
+            if (pedido.getTipoEnvio() == TipoEnvio.Delivery) {
+                tiempoPreparacion += 10; // Additional fixed time for delivery
+            }
+        LocalTime tiempoEstimado = now.plusMinutes(tiempoPreparacion);
+
+        pedido.setHoraEstimadaFinalizacion(tiempoEstimado);
             return pedidoRepository.save(pedido);
 
     }
