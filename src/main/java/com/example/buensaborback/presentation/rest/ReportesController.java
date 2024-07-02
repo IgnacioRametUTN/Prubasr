@@ -51,6 +51,22 @@ public class ReportesController {
         }
     }
 
+    @GetMapping("/pedidos/excel")
+    public ResponseEntity<?> generateExcelPedidosBetween(@RequestParam("startDate") LocalDate startDate, @RequestParam("endDate") LocalDate endDate) {
+        try {
+            ByteArrayInputStream excelStream = reporteService.generateExcelPedidosBetween(startDate, endDate);
+            byte[] excelBytes = IOUtils.toByteArray(excelStream);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+            headers.setContentDispositionFormData("attachment", "reporte_pedidos.xlsx");
+            headers.setContentLength(excelBytes.length);
+            return new ResponseEntity<>(excelBytes, headers, HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/reporte-totales")
     public ReporteDTO findPedidosBetweenDates(@RequestParam("startDate") LocalDate startDate, @RequestParam("endDate") LocalDate endDate) {
         return reporteService.findPedidosBetweenDates(startDate, endDate);

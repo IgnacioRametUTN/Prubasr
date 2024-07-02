@@ -4,9 +4,8 @@ import com.example.buensaborback.bussines.service.ReporteService;
 import com.example.buensaborback.domain.dto.ReporteDTO;
 import com.example.buensaborback.domain.entities.*;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
@@ -82,10 +81,95 @@ public class ReporteServiceImpl implements ReporteService {
         }
     }
 
+    @Override
+    public ByteArrayInputStream generateExcelPedidosBetween(LocalDate startDate, LocalDate endDate) throws IOException {
+        Workbook workbook = new XSSFWorkbook();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            Sheet sheet = workbook.createSheet("Pedidos");
+            createHeaderRow(sheet, List.of("Id Pedido", "Fecha Pedido","Cliente", "Domicilio", "Forma Pago","Estado" , "Detalle", "Precio Venta", "Precio Costo", "Cantidad" , "Total Costo", "Total Ingreso", "Total Ganancia"));
+            int rowNum = 1; // Avanzamos a la segunda fila porque la primera ya tiene el header
+            List<Pedido> data = this.pedidoService.findPedidosBetweenDates(startDate, endDate);
+
+            for (Pedido pedido : data){
+                Row mainRow = sheet.createRow(rowNum);
+                mainRow.createCell(0).setCellValue(pedido.getId());
+                mainRow.createCell(1).setCellValue(pedido.getFechaPedido().toString());
+                mainRow.createCell(2).setCellValue(pedido.getCliente().getNombre() + " " + pedido.getCliente().getApellido());
+                String domicilioTemplate = "%s, %d, de %s, %s, Argentina.";
+                mainRow.createCell(3).setCellValue(String.format(domicilioTemplate,
+                        pedido.getDomicilio().getCalle(),
+                        pedido.getDomicilio().getNumero(),
+                        pedido.getDomicilio().getLocalidad().getNombre(),
+                        pedido.getDomicilio().getLocalidad().getProvincia().getNombre()
+                ));
+                mainRow.createCell(4).setCellValue(pedido.getFormaPago().toString());
+                mainRow.createCell(5).setCellValue(pedido.getEstado().toString());
+                int contadorDetalles = rowNum ;
+                for (DetallePedido detalle : pedido.getDetallePedidos()){
+                    if(contadorDetalles == rowNum){
+                        mainRow.createCell(6).setCellValue(detalle.getArticulo().getDenominacion());
+                        mainRow.createCell(7).setCellValue(detalle.getArticulo().getPrecioVenta());
+                        mainRow.createCell(8).setCellValue(detalle.getArticulo() instanceof ArticuloInsumo ? ((ArticuloInsumo) detalle.getArticulo()).getPrecioCompra() : 0);
+                        mainRow.createCell(9).setCellValue(detalle.getCantidad());
+                    }else{
+                        Row detalleRow = sheet.createRow(contadorDetalles);
+                        detalleRow.createCell(6).setCellValue(detalle.getArticulo().getDenominacion());
+                        detalleRow.createCell(7).setCellValue(detalle.getArticulo().getPrecioVenta());
+                        detalleRow.createCell(8).setCellValue(detalle.getArticulo() instanceof ArticuloInsumo ? ((ArticuloInsumo) detalle.getArticulo()).getPrecioCompra() : 0);
+                        detalleRow.createCell(9).setCellValue(detalle.getCantidad());
+
+                    }
+                    contadorDetalles++;
+                }
+                mainRow.createCell(10).setCellValue(pedido.getTotalCosto());
+                mainRow.createCell(11).setCellValue(pedido.getTotal());
+                mainRow.createCell(12).setCellValue(pedido.getTotal() - pedido.getTotalCosto());
+
+                //Combinar Celdas
+                CellStyle style = workbook.createCellStyle();
+                style.setAlignment(HorizontalAlignment.CENTER);
+                style.setVerticalAlignment(VerticalAlignment.CENTER);
+                //Columna del ID
+                sheet.getRow(rowNum).getCell(0).setCellStyle(style);
+                sheet.addMergedRegion(new CellRangeAddress(rowNum, contadorDetalles, 0, 0));
+                //Columna de la Fecha
+                sheet.getRow(rowNum).getCell(1).setCellStyle(style);
+                sheet.addMergedRegion(new CellRangeAddress(rowNum, contadorDetalles, 1, 1));
+                //Columna del Cliente
+                sheet.getRow(rowNum).getCell(2).setCellStyle(style);
+                sheet.addMergedRegion(new CellRangeAddress(rowNum, contadorDetalles, 2, 2));
+                //Columna del Domicilio
+                sheet.getRow(rowNum).getCell(3).setCellStyle(style);
+                sheet.addMergedRegion(new CellRangeAddress(rowNum, contadorDetalles, 3, 3));
+                //Columna de la Forma de Pago
+                sheet.getRow(rowNum).getCell(4).setCellStyle(style);
+                sheet.addMergedRegion(new CellRangeAddress(rowNum, contadorDetalles, 4, 4));
+                //Columna del Estado
+                sheet.getRow(rowNum).getCell(5).setCellStyle(style);
+                sheet.addMergedRegion(new CellRangeAddress(rowNum, contadorDetalles, 5, 5));
+                //Columna del Total Costo
+                sheet.getRow(rowNum).getCell(10).setCellStyle(style);
+                sheet.addMergedRegion(new CellRangeAddress(rowNum, contadorDetalles, 10, 10));
+                //Columna del Total Ingreso
+                sheet.getRow(rowNum).getCell(11).setCellStyle(style);
+                sheet.addMergedRegion(new CellRangeAddress(rowNum, contadorDetalles, 11, 11));
+                //Columna del Total Ganancia
+                sheet.getRow(rowNum).getCell(12).setCellStyle(style);
+                sheet.addMergedRegion(new CellRangeAddress(rowNum, contadorDetalles, 12, 12));
+                rowNum += pedido.getDetallePedidos().size() +1;
+            }
+            workbook.write(outputStream);
+            return new ByteArrayInputStream(outputStream.toByteArray());
+        } finally {
+            workbook.close();
+            outputStream.close();
+        }
+    }
+
     private ByteArrayInputStream generateExcelReport(LocalDate startDate, LocalDate endDate) throws IOException {
         Workbook workbook = new XSSFWorkbook();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        System.out.println("BBBBBBBBBBBBBBBBBBBBBBBB");
         try {
             Sheet sheet = workbook.createSheet("Movimientos");
             createHeaderRow(sheet, List.of("Fecha", "Ingresos", "Gastos", "Ganancias"));
@@ -110,8 +194,6 @@ public class ReporteServiceImpl implements ReporteService {
 
     private void createPedidoRows(List<Object[]> data, Sheet sheet, int rowIndex) {
         int row2 = rowIndex;
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        System.out.println(data);
         for (Object[] rowData : data) {
             Row row = sheet.createRow(row2);
             row.createCell(0).setCellValue(String.valueOf(rowData[0]));

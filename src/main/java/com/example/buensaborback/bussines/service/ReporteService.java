@@ -4,6 +4,7 @@ import com.example.buensaborback.domain.dto.ReporteDTO;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface ReporteService {
     ReporteDTO findPedidosBetweenDates(LocalDate startDate, LocalDate endDate);
 
     ByteArrayInputStream generateExcelMovimientos(LocalDate startDate, LocalDate endDate);
+
+    ByteArrayInputStream generateExcelPedidosBetween(LocalDate startDate, LocalDate endDate) throws IOException;
 }
