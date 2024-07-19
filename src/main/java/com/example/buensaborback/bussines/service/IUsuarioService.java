@@ -13,7 +13,7 @@ public interface IUsuarioService {
      boolean existsUsuarioById(Long id);
      boolean existsUsuarioByUsername(String username);
 
-     Usuario login(String nombreUsuario, String clave);
+     Usuario login(Usuario usuario);
 
      Usuario register(Usuario usuario);
 

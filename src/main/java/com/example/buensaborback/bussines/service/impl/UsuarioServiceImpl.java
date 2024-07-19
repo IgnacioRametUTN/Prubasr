@@ -56,24 +56,19 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     @Override
-    public Usuario login(String username, String auth0Id) {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findByUsername(username);
+    public Usuario login(Usuario usuario) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByUsername(usuario.getUsername());
         if (usuarioOptional.isPresent()) {
-            Usuario usuario = usuarioOptional.get();
-            if (usuario.getAuth0Id().equals(auth0Id)) {
-                return usuario;
+            System.out.println("Usuario encontrado" );
+            Usuario usuarios = usuarioOptional.get();
+            if (usuario.getAuth0Id().equals(usuario.getAuth0Id())) {
+                return usuarios;
             } else {
                 throw new UnauthorizeException("Credenciales incorrectas");
             }
         } else {
-            // Si el usuario no existe en la base de datos local, lo registramos
-            Usuario nuevoUsuario = new Usuario();
-            nuevoUsuario.setUsername(username);
-            nuevoUsuario.setAuth0Id(auth0Id);
-            // Aquí deberías obtener el email y el rol de Auth0
-            // nuevoUsuario.setEmail(emailFromAuth0);
-            // nuevoUsuario.setRol(rolFromAuth0);
-            return usuarioRepository.save(nuevoUsuario);
+
+            return this.register(usuario);
         }
     }
 

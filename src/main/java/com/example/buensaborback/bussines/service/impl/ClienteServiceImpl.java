@@ -39,8 +39,9 @@ public class ClienteServiceImpl implements IClienteService {
 
     @Override
     public Cliente create(Cliente entity) {
-        System.out.println(entity);
+
         if(entity.getUsuario().getUsername() == null){
+            System.out.println("usuario no encontrado");
             throw new NotFoundException("Usuario no encontrado");
         }
         entity.setUsuario(usuarioService.getUsuarioByUsername(entity.getUsuario().getUsername()));
@@ -49,6 +50,7 @@ public class ClienteServiceImpl implements IClienteService {
             Localidad local = localidadService.getLocalidadById(domicilio.getLocalidad().getId());
             domicilio.setLocalidad(local);
         }
+        entity.setAlta(true);
         return this.clienteRepository.save(entity);
     }
 

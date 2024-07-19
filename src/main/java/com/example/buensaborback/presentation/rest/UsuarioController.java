@@ -29,7 +29,7 @@ public class UsuarioController {
 
             Usuario usuario = decodeToken(jwt);
 
-            Usuario usuarioLogueado = usuarioService.login(usuario.getUsername(), usuario.getAuth0Id());
+            Usuario usuarioLogueado = usuarioService.login(usuario);
 
             return ResponseEntity.ok().body(usuarioLogueado);
 
