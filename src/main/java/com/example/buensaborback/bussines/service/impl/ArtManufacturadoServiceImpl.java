@@ -9,14 +9,10 @@ import com.example.buensaborback.presentation.advice.exception.ImageUploadLimitE
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.ArticuloManufacturadoRepository;
 import com.example.buensaborback.repositories.ImagenRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
@@ -215,23 +211,24 @@ private final IImagenService imagenService;
     @Override
     public List<ArticuloManufacturado> findArtManufacturadosFromCategoryAndSubcategories(Long idSucursal, Long idCategoria) {
         Sucursal sucursal = this.sucursalService.getSucursalById(idSucursal);
+        if(idCategoria == 0){
+            return this.articuloManufacturadoRepository.findBySucursal(sucursal);
+        }
         Categoria categoria = this.categoriaServiceImpl.getCategoriaById(idCategoria);
 
         // Recoge los IDs de las subcategorías que pertenecen a la sucursal específica
-        List<Long> subCategoriasIds = categoria.getSubCategorias().stream()
+        List<Categoria> subCategorias = new ArrayList<>(categoria.getSubCategorias().stream()
                 .filter(subcategoria -> subcategoria.getSucursales().stream().anyMatch(s -> s.getId().equals(sucursal.getId())))
-                .map(Base::getId)
-                .collect(Collectors.toList());
+                .toList());
 
-        System.out.println("Manufacturados");
-        System.out.println("subcategorias validas " + subCategoriasIds.size());
-
+        subCategorias.add(categoria);
         // Consulta en el repositorio
-        List<ArticuloManufacturado> lista = this.articuloManufacturadoRepository.findBySucursalCategoriaAndSubCategorias(sucursal.getId(), categoria.getId(), subCategoriasIds);
+        Set<ArticuloManufacturado> lista = new HashSet<>();
+        for (Categoria cat : subCategorias){
+            lista.addAll(articuloManufacturadoRepository.findByAltaTrueAndCategoria_IdAndSucursal_Id(cat.getId(), sucursal.getId()));
+        }
 
-        System.out.println(lista.size());
-
-        return lista;
+        return lista.stream().toList();
     }
 
 }
