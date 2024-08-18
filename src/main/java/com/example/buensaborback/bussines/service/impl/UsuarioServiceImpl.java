@@ -2,6 +2,7 @@ package com.example.buensaborback.bussines.service.impl;
 
 import com.example.buensaborback.bussines.service.IUsuarioService;
 import com.example.buensaborback.domain.entities.Usuario;
+import com.example.buensaborback.domain.entities.enums.Rol;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.presentation.advice.exception.UnauthorizeException;
 import com.example.buensaborback.repositories.UsuarioRepository;
@@ -67,7 +68,6 @@ public class UsuarioServiceImpl implements IUsuarioService {
                 throw new UnauthorizeException("Credenciales incorrectas");
             }
         } else {
-
             return this.register(usuario);
         }
     }
@@ -76,14 +76,11 @@ public class UsuarioServiceImpl implements IUsuarioService {
     public Usuario register(Usuario usuario) {
         Optional<Usuario> usuarioExistente = usuarioRepository.findByUsername(usuario.getUsername());
         if (usuarioExistente.isPresent()) {
-            // Si el usuario ya existe, actualizamos sus datos
             Usuario usuarioActualizado = usuarioExistente.get();
             usuarioActualizado.setAuth0Id(usuario.getAuth0Id());
             usuarioActualizado.setEmail(usuario.getEmail());
-
             return usuarioRepository.save(usuarioActualizado);
         } else {
-            // Si el usuario no existe, lo guardamos como nuevo
             System.out.println("USUARIO A GUARDAR " + usuario);
             return usuarioRepository.save(usuario);
         }
@@ -93,5 +90,22 @@ public class UsuarioServiceImpl implements IUsuarioService {
     public String encriptarClaveSHA256(String clave) {
         // Implementación para encriptar la contraseña si fuera necesario
         return null;
+    }
+
+    @Override
+    public List<Usuario> getAllUsuarios() {
+        return usuarioRepository.findAll();
+    }
+
+    @Override
+    public List<Usuario> getUsuariosByRol(Rol rol) {
+        return usuarioRepository.findByRol(rol);
+    }
+
+    @Override
+    public Usuario updateUsuarioRol(Long id, Rol newRol) {
+        Usuario usuario = getUsuarioById(id);
+        usuario.setRol(newRol);
+        return usuarioRepository.save(usuario);
     }
 }

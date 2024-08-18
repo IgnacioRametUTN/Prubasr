@@ -3,6 +3,7 @@ package com.example.buensaborback.presentation.rest;
 import com.example.buensaborback.bussines.service.IUsuarioService;
 import com.example.buensaborback.domain.entities.Usuario;
 import com.example.buensaborback.domain.entities.enums.Rol;
+import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.List;
 
 @RestController
@@ -26,13 +26,9 @@ public class UsuarioController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@AuthenticationPrincipal Jwt jwt) {
         try {
-
             Usuario usuario = decodeToken(jwt);
-
             Usuario usuarioLogueado = usuarioService.login(usuario);
-
             return ResponseEntity.ok().body(usuarioLogueado);
-
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Error en el proceso de login: " + e.getMessage()));
         }
@@ -85,6 +81,42 @@ public class UsuarioController {
         }
     }
 
+    @GetMapping("/usuarios")
+    public ResponseEntity<?> getAllUsuarios() {
+        try {
+            List<Usuario> usuarios = usuarioService.getAllUsuarios();
+            return ResponseEntity.ok(usuarios);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Error al obtener los usuarios: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/usuarios/rol/{rol}")
+    public ResponseEntity<?> getUsuariosByRol(@PathVariable Rol rol) {
+        try {
+            List<Usuario> usuarios = usuarioService.getUsuariosByRol(rol);
+            return ResponseEntity.ok(usuarios);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Error al obtener los usuarios por rol: " + e.getMessage()));
+        }
+    }
+
+    @PutMapping("/usuarios/{id}/rol")
+    public ResponseEntity<?> updateUsuarioRol(@PathVariable Long id, @RequestBody Rol newRol) {
+        try {
+            Usuario updatedUsuario = usuarioService.updateUsuarioRol(id, newRol);
+            return ResponseEntity.ok(updatedUsuario);
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Error al actualizar el rol del usuario: " + e.getMessage()));
+        }
+    }
+
     private Usuario decodeToken(Jwt jwt){
         System.out.println(jwt);
         String auth0Id = jwt.getSubject();
@@ -92,10 +124,8 @@ public class UsuarioController {
         String email = jwt.getClaim("email");
         List<String> roles = jwt.getClaim("https://apiprueba/roles");
 
-        // Assuming we take the first role if there are multiple
         String role = roles != null && !roles.isEmpty() ? roles.get(0) : "Cliente";
 
-        // Map the role obtained from Auth0 to your Rol enum
         Rol userRole;
         switch (role) {
             case "Cliente":
@@ -105,7 +135,7 @@ public class UsuarioController {
                 userRole = Rol.Admin;
                 break;
             default:
-                userRole = Rol.Cliente; // Default to Cliente if role is unrecognized
+                userRole = Rol.Cliente;
                 break;
         }
 
