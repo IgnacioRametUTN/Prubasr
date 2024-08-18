@@ -1,5 +1,6 @@
 package com.example.buensaborback.presentation.rest;
 
+import com.cloudinary.provisioning.Account;
 import com.example.buensaborback.bussines.service.IUsuarioService;
 import com.example.buensaborback.domain.entities.Usuario;
 import com.example.buensaborback.domain.entities.enums.Rol;
@@ -104,8 +105,9 @@ public class UsuarioController {
     }
 
     @PutMapping("/usuarios/{id}/rol")
-    public ResponseEntity<?> updateUsuarioRol(@PathVariable Long id, @RequestBody Rol newRol) {
+    public ResponseEntity<?> updateUsuarioRol(@PathVariable Long id, @RequestBody String newRolString) {
         try {
+            Rol newRol = Rol.valueOf(newRolString);
             Usuario updatedUsuario = usuarioService.updateUsuarioRol(id, newRol);
             return ResponseEntity.ok(updatedUsuario);
         } catch (NotFoundException e) {
