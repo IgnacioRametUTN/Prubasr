@@ -105,6 +105,10 @@ public class UsuarioServiceImpl implements IUsuarioService {
     @Override
     public Usuario updateUsuarioRol(Long id, Rol newRol) {
         Usuario usuario = getUsuarioById(id);
+        if (usuario == null) {
+            throw new NotFoundException(String.format("Usuario con ID %d no encontrado", id));
+        }
+
         usuario.setRol(newRol);
         return usuarioRepository.save(usuario);
     }

@@ -110,6 +110,9 @@ public class UsuarioController {
             Rol newRol = Rol.valueOf(newRolString);
             Usuario updatedUsuario = usuarioService.updateUsuarioRol(id, newRol);
             return ResponseEntity.ok(updatedUsuario);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Rol inválido: " + e.getMessage()));
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", e.getMessage()));
