@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @ToString
 @SuperBuilder
-@JsonIgnoreProperties({"hibernateLazyInitializer","cliente"})
+@JsonIgnoreProperties({"hibernateLazyInitializer","cliente", "empleado"})
 public class Usuario extends Base {
 
     private String auth0Id;

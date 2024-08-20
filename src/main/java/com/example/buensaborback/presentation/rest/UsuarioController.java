@@ -86,6 +86,7 @@ public class UsuarioController {
     public ResponseEntity<?> getAllUsuarios() {
         try {
             List<Usuario> usuarios = usuarioService.getAllUsuarios();
+            System.out.println(usuarios);
             return ResponseEntity.ok(usuarios);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
