@@ -1,7 +1,10 @@
 package com.example.buensaborback.bussines.service.impl;
 
-import com.example.buensaborback.bussines.service.*;
-import com.example.buensaborback.domain.entities.Domicilio;
+import com.example.buensaborback.bussines.service.ICloudinaryService;
+import com.example.buensaborback.bussines.service.IEmpresaService;
+import com.example.buensaborback.bussines.service.IImagenService;
+import com.example.buensaborback.bussines.service.ISucursalService;
+import com.example.buensaborback.domain.entities.ArticuloInsumo;
 import com.example.buensaborback.domain.entities.Imagen;
 import com.example.buensaborback.domain.entities.Sucursal;
 
@@ -10,10 +13,12 @@ import com.example.buensaborback.presentation.advice.exception.ImageUploadLimitE
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.ImagenRepository;
 import com.example.buensaborback.repositories.SucursalRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -25,36 +30,21 @@ public class ISucursalServiceImpl implements ISucursalService {
     private final IImagenService imagenService;
 
     private final IEmpresaService empresaService;
-    private final IDomicilioService domicilioService;
+
     public ISucursalServiceImpl(SucursalRepository sucursalRepository, CloudinaryServiceImpl cloudinaryService,
                                 ImagenRepository imagenRepository, ImagenServiceImpl imagenService,
-                                IEmpresaServiceImpl empresaService, IDomicilioService domicilioService) {
+                                IEmpresaServiceImpl empresaService) {
         this.sucursalRepository = sucursalRepository;
         this.cloudinaryService = cloudinaryService;
         this.imagenRepository = imagenRepository;
         this.imagenService = imagenService;
         this.empresaService = empresaService;
-        this.domicilioService = domicilioService;
     }
 
     @Override
     public Sucursal saveSucursal(Sucursal sucursal) {
-        if (sucursal == null) {
-            throw new IllegalArgumentException("Sucursal no puede estar vacia");
-        }
-
-        if (sucursal.getEmpresa() == null || sucursal.getEmpresa().getId() == null) {
-            throw new IllegalArgumentException("Ingresar empresa valida");
-        }
-
-        if (sucursal.getDomicilio() == null) {
-            throw new IllegalArgumentException("Ingresar un domicilio valido");
-        }
-
         System.out.println(sucursal);
-
         sucursal.setEmpresa(empresaService.getEmpresaById(sucursal.getEmpresa().getId()));
-        sucursal.setDomicilio(domicilioService.create(sucursal.getDomicilio()));
 
         return sucursalRepository.save(sucursal);
     }
@@ -70,30 +60,22 @@ public class ISucursalServiceImpl implements ISucursalService {
     }
 
     @Override
-    public Sucursal updateSucursal(Long id, Sucursal sucursal) {
-        // Fetch the existing Sucursal
-        Sucursal existingSucursal = getSucursalById(id);
-        if (existingSucursal == null) {
-            // Handle the case where the Sucursal does not exist
-            throw new NotFoundException("No se encontro la sucursal: " + id);
-        }
-
-        // Update fields of the existing Sucursal
-        existingSucursal.setNombre(sucursal.getNombre());
-        existingSucursal.setHorarioApertura(sucursal.getHorarioApertura());
-        existingSucursal.setHorarioCierre(sucursal.getHorarioCierre());
-
-        // Update the Domicilio
-        Domicilio updatedDomicilio = domicilioService.update(sucursal.getDomicilio().getId(), sucursal.getDomicilio());
-        existingSucursal.setDomicilio(updatedDomicilio);
-
-        // Update images if applicable
-        imagenService.updateImagenes(existingSucursal.getImagenes(), sucursal.getImagenes());
-
-        // Save and return the updated Sucursal
-        return sucursalRepository.save(existingSucursal);
+    public List<Sucursal> getSucursalesByIds(List<Long> ids) {
+        return sucursalRepository.findAllById(ids);
     }
 
+    @Override
+    public Sucursal updateSucursal(Long id, Sucursal sucursal) {
+        Sucursal existingSucursal = getSucursalById(id);
+        Sucursal updatedSucursal = existingSucursal;
+        updatedSucursal.setNombre(sucursal.getNombre());
+        updatedSucursal.setHorarioApertura(sucursal.getHorarioApertura());
+        updatedSucursal.setHorarioCierre(sucursal.getHorarioCierre());
+
+        //Verificar
+        imagenService.updateImagenes(existingSucursal.getImagenes(), updatedSucursal.getImagenes());
+        return sucursalRepository.save(updatedSucursal);
+    }
 
     @Override
     public void deleteSucursal(Long id) {
