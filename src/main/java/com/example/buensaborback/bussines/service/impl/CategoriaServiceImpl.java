@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -81,6 +82,7 @@ public class CategoriaServiceImpl implements ICategoriaService {
         categoria.setDenominacion(body.getDenominacion());
         categoria.setAlta(body.isAlta());
 
+
         // Update sucursales
         categoria.getSucursales().clear();
         categoria.getSucursales().addAll(sucursales);
@@ -93,40 +95,79 @@ public class CategoriaServiceImpl implements ICategoriaService {
 
     @Override
     public Categoria create(Long idPadre, Long idSucursal, Categoria body, List<Long> sucursalesIds) {
+        // Obtener la sucursal principal sobre la que se está trabajando
         Sucursal sucursal = sucursalService.getSucursalById(idSucursal);
-        List<Sucursal> sucursales = sucursalService.getSucursalesByIds(sucursalesIds);
+        System.out.println("Active sucursal " + sucursal.getNombre());
+        System.out.println("idpadre " + idPadre);
 
+        // Obtener la lista de sucursales asociadas a la categoría
+        List<Sucursal> sucursales = sucursalService.getSucursalesByIds(sucursalesIds);
+        System.out.println("Sucursales asociadas: " + sucursales);
+
+        // Verificar si ya existe una categoría con dicho nombre
         if (existsCategoriaByDenominacion(body.getDenominacion())) {
+            // Si existe, recuperar esa categoría en lugar de crear una nueva
             body = categoriaRepository.findByDenominacionIgnoreCase(body.getDenominacion());
+            System.out.println("Categoría existente recuperada: " + body);
         } else {
-            if (idPadre != 0) {
+            // Si no existe una categoría, se creará
+            if (idPadre != null && idPadre != 0) {
+                // Si se proporciona un idPadre y no es 0, es una subcategoría
                 Categoria categoriaPadre = getCategoriaById(idPadre);
+                System.out.println("Categoría padre encontrada: " + categoriaPadre);
+
                 body.setCategoriaPadre(categoriaPadre);
-                categoriaPadre.getSubCategorias().add(body);
+            } else {
+                // Si idPadre es null o 0, entonces es una categoría padre
+                body.setCategoriaPadre(null); // No tiene categoría padre
+                System.out.println("Categoría padre no asignada, es una categoría raíz.");
             }
         }
 
-        actualizarCategoriaExistente(body, sucursal, sucursales);
-        return categoriaRepository.save(body);
+        // Actualizar la información de la categoría actual
+        Categoria categoriaGuardada=actualizarCategoriaExistente(body, sucursal, sucursales);
+
+        System.out.println("Categoría después de actualizar la información: " + body);
+        System.out.println("Categoría guardada: " + categoriaGuardada);
+        return categoriaGuardada;
     }
 
-    private void actualizarCategoriaExistente(Categoria body, Sucursal sucursal, List<Sucursal> sucursales) {
+    private Categoria actualizarCategoriaExistente(Categoria body, Sucursal sucursal, List<Sucursal> sucursales) {
+        System.out.println("Actualizando categoría existente...");
         body.setAlta(true);
-        body.getSucursales().add(sucursal);
-        body.getSucursales().addAll(sucursales);
-
-        for (Sucursal s : sucursales) {
-            s.getCategorias().add(body);
+        System.out.println("Sucursales antes de agregar nuevas: " + body.getSucursales());
+        body.getSucursales().clear(); // Asegúrate de que no agregue duplicados
+        if (!sucursales.contains(sucursal)){
+            body.getSucursales().add(sucursal);
         }
+        body.getSucursales().addAll(sucursales);
+        System.out.println("Sucursales después de agregar nuevas: " + body.getSucursales());
 
-        if (body.getCategoriaPadre() != null) {
-            body.getCategoriaPadre().setAlta(true);
-            body.getCategoriaPadre().getSucursales().add(sucursal);
-            body.getCategoriaPadre().getSucursales().addAll(sucursales);
-            for (Sucursal s : sucursales) {
-                s.getCategorias().add(body.getCategoriaPadre());
+        // Actualizar las sucursales con la nueva categoría
+        for (Sucursal s : body.getSucursales()) {
+            try {
+                System.out.println("Actualizando sucursal con ID: " + s.getId());
+                Sucursal actualizada = sucursalService.getSucursalById(s.getId());
+                if (actualizada != null) {
+                    if (!actualizada.getCategorias().contains(body)) {
+                        if (categoriaRepository.existsByDenominacionIgnoreCase(body.getDenominacion())){
+                            Categoria categoria = categoriaRepository.findByDenominacionIgnoreCase(body.getDenominacion());
+                            actualizada.getCategorias().add(categoria);
+                        }else {
+                            actualizada.getCategorias().add(body);
+                        }
+                        sucursalService.updateSucursal(actualizada.getId(), actualizada);
+                        System.out.println("Sucursal actualizada con nueva categoría: " + actualizada);
+                    }
+                } else {
+                    System.err.println("Sucursal no encontrada: " + s.getId());
+                }
+            } catch (Exception e) {
+                System.err.println("Error al actualizar la sucursal con ID: " + s.getId() + " - " + e.getMessage());
             }
         }
+        System.out.println("Categoría después de actualizar sucursales: " + body);
+        return body;
     }
 
     @Override

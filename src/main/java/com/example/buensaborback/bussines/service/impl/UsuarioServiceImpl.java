@@ -60,7 +60,6 @@ public class UsuarioServiceImpl implements IUsuarioService {
     public Usuario login(Usuario usuario) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findByUsername(usuario.getUsername());
         if (usuarioOptional.isPresent()) {
-            System.out.println("Usuario encontrado" );
             Usuario usuarios = usuarioOptional.get();
             if (usuario.getAuth0Id().equals(usuario.getAuth0Id())) {
                 return usuarios;
@@ -81,7 +80,6 @@ public class UsuarioServiceImpl implements IUsuarioService {
             usuarioActualizado.setEmail(usuario.getEmail());
             return usuarioRepository.save(usuarioActualizado);
         } else {
-            System.out.println("USUARIO A GUARDAR " + usuario);
             return usuarioRepository.save(usuario);
         }
     }

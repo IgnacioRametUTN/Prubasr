@@ -48,9 +48,9 @@ public class CategoriaController {
         return ResponseEntity.ok().body(this.categoriaService.update(id, request.getCategoria(), request.getSucursalesIds()));
     }
 
-    @PostMapping("/{idSucursal}/{idCategoriaPadre}")
-    public ResponseEntity<Categoria> save(@PathVariable("idCategoriaPadre") Long idPadre,
-                                          @PathVariable("idSucursal") Long idSucursal,
+    @PostMapping("/{idSucursal}")
+    public ResponseEntity<Categoria> save(@PathVariable("idSucursal") Long idSucursal,
+                                          @RequestParam(value = "idCategoriaPadre", required = false) Long idPadre,
                                           @RequestBody CategoriaRequest request) {
         return ResponseEntity.ok().body(this.categoriaService.create(idPadre, idSucursal, request.getCategoria(), request.getSucursalesIds()));
     }

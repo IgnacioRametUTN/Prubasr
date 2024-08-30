@@ -2,10 +2,12 @@ package com.example.buensaborback.domain.entities;
 
 
 import com.example.buensaborback.domain.entities.Categoria;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 
 public class CategoriaRequest {
+
     private Categoria categoria;
     private List<Long> sucursalesIds;
 

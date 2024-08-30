@@ -16,7 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@ToString
+@ToString(exclude = {"categoriaPadre", "subCategorias"})
 @SuperBuilder
 
 @JsonIgnoreProperties({"hibernateLazyInitializer","articulos"})
@@ -26,6 +26,7 @@ public class Categoria extends Base {
 
     @ManyToMany(mappedBy = "categorias")
     @Builder.Default
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "domicilio","empresa", "imagenes","articulos","categorias"})
     private Set<Sucursal> sucursales = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "categoria", fetch = FetchType.LAZY)

@@ -50,7 +50,6 @@ public class UsuarioController {
     public ResponseEntity<Boolean> validarExistenciaUsuario(@AuthenticationPrincipal Jwt jwt) {
         Usuario usuario = decodeToken(jwt);
         boolean usuarioExistente = usuarioService.existsUsuarioByUsername(usuario.getUsername());
-        System.out.println("VERIFICACION " + usuarioExistente);
         return ResponseEntity.ok(usuarioExistente);
     }
 
@@ -86,7 +85,6 @@ public class UsuarioController {
     public ResponseEntity<?> getAllUsuarios() {
         try {
             List<Usuario> usuarios = usuarioService.getAllUsuarios();
-            System.out.println(usuarios);
             return ResponseEntity.ok(usuarios);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -124,7 +122,6 @@ public class UsuarioController {
     }
 
     private Usuario decodeToken(Jwt jwt){
-        System.out.println(jwt);
         String auth0Id = jwt.getSubject();
         String username = jwt.getClaim("preferred_username");
         String email = jwt.getClaim("email");
@@ -147,8 +144,6 @@ public class UsuarioController {
 
         Usuario usuario = new Usuario();
         usuario.setAuth0Id(auth0Id);
-        System.out.println("EMAIL: "+ email);
-        System.out.println("USERNAME: "+ username);
         if (username == null) {
             usuario.setUsername(email.split("@")[0]);
         } else {
@@ -156,7 +151,6 @@ public class UsuarioController {
         }
         usuario.setEmail(email);
         usuario.setRol(userRole);
-        System.out.println("USUARIO decodificado " + usuario);
         return usuario;
     }
 }
