@@ -54,9 +54,11 @@ public class SucursalController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSucursal(@PathVariable Long id) {
-        sucursalService.deleteSucursal(id);
+    @PutMapping("/baja/{id}")
+    public ResponseEntity<Void> bajaLogicaSucursal(@PathVariable Long id, @RequestParam boolean activo) {
+
+        sucursalService.bajaLogicaSucursal(id, activo);
+
         return ResponseEntity.noContent().build();
     }
 

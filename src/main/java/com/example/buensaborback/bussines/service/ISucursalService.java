@@ -12,9 +12,9 @@ public interface ISucursalService {
     Sucursal getSucursalById(Long id);
     List<Sucursal> getAllSucursales();
     Sucursal updateSucursal(Long id, Sucursal sucursal);
-    void deleteSucursal(Long id);
     List<Sucursal> getSucursalesByEmpresaId(Long empresaId);
 
+    void bajaLogicaSucursal(Long id, boolean activo);
     List<Sucursal> getSucursalesByIds(List<Long> ids);
     Set<Imagen> uploadImages(MultipartFile[] files, Long id);
 }

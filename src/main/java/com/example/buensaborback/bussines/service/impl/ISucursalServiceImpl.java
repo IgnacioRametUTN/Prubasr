@@ -13,6 +13,7 @@ import com.example.buensaborback.presentation.advice.exception.ImageUploadLimitE
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.ImagenRepository;
 import com.example.buensaborback.repositories.SucursalRepository;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -76,10 +77,16 @@ public class ISucursalServiceImpl implements ISucursalService {
         imagenService.updateImagenes(existingSucursal.getImagenes(), updatedSucursal.getImagenes());
         return sucursalRepository.save(updatedSucursal);
     }
-
     @Override
-    public void deleteSucursal(Long id) {
-        sucursalRepository.deleteById(id);
+    public void bajaLogicaSucursal(Long id, boolean activo) {
+        Optional<Sucursal> sucursalOpt = sucursalRepository.findById(id);
+        if (sucursalOpt.isPresent()) {
+            Sucursal sucursal = sucursalOpt.get();
+            sucursal.setAlta(activo);  // Cambia el estado de activo
+            sucursalRepository.save(sucursal);
+        } else {
+            throw new ResourceNotFoundException("Sucursal no encontrada con ID " + id);
+        }
     }
 
     @Override
