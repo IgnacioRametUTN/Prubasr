@@ -371,14 +371,25 @@ public class BuenSaborBackApplication {
                     .subTotal(5000.00)
                     .articulo(coca)
                     .build();
+            DetallePedido detallePedido3 = DetallePedido.builder()
+                    .cantidad(1)
+                    .subTotal(6500.00)
+                    .articulo(pizzaNapolitana)
+                    .build();
+
+            DetallePedido detallePedido4 = DetallePedido.builder()
+                    .cantidad(2)
+                    .subTotal(5000.00)
+                    .articulo(coca)
+                    .build();
 
             //Se crea pedido para el cliente1
             Pedido pedido1 = Pedido.builder()
                     .horaEstimadaFinalizacion(LocalTime.of(11, 16, 10))
                     .total(11500.00)
                     .totalCosto(1000.10)
-                    .estado(Estado.Preparacion)
-                    .tipoEnvio(TipoEnvio.TakeAway)
+                    .estado(Estado.EnProceso)
+                    .tipoEnvio(TipoEnvio.Delivery)
                     .formaPago(FormaPago.MercadoPago)
                     .fechaPedido(LocalDate.of(2024, 4, 23))
                     .factura(factura1)
@@ -389,7 +400,23 @@ public class BuenSaborBackApplication {
 
             detallePedido.setPedido(pedido1);
             detallePedido2.setPedido(pedido1);
+            //Pedido 2
+            Pedido pedido2 = Pedido.builder()
+                    .horaEstimadaFinalizacion(LocalTime.of(11, 16, 10))
+                    .total(11500.00)
+                    .totalCosto(1000.10)
+                    .estado(Estado.EnProceso)
+                    .tipoEnvio(TipoEnvio.TakeAway)
+                    .formaPago(FormaPago.MercadoPago)
+                    .fechaPedido(LocalDate.of(2024, 4, 23))
+                    .factura(null)
+                    .domicilio(domicilioCliente)
+                    .sucursal(sucursal1)
+                    .detallePedidos(new HashSet<>(Set.of(detallePedido, detallePedido2)))
+                    .build();
 
+            detallePedido3.setPedido(pedido2);
+            detallePedido4.setPedido(pedido2);
 
             //Se crea cliente
             Cliente cliente1 = Cliente.builder()
@@ -399,14 +426,14 @@ public class BuenSaborBackApplication {
                     .fechaNacimiento(LocalDate.of(1990, 11, 12))
                     .imagenes(Set.of(imagen4))
                     .usuario(usuario1)
-                    .pedidos(new HashSet<>(Set.of(pedido1)))
+                    .pedidos(new HashSet<>(Set.of(pedido1,pedido2)))
                     .domicilios(new HashSet<>(Set.of(domicilioCliente)))
                     .build();
 
             //se agrega el cliente al domicilio
             domicilioCliente.setClientes(new HashSet<>(Set.of(cliente1)));
             pedido1.setCliente(cliente1);
-
+            pedido2.setCliente(cliente1);
             //Se crea imagen para la promocion
             Imagen imagenPromocion = Imagen.builder()
                     .url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSa5KnhV_vPs_Ww8QFMruBYkK0srngvkuEm1aQWLq1sSg&s")

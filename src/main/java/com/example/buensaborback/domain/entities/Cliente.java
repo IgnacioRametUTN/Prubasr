@@ -19,7 +19,7 @@ import java.util.Set;
 @ToString
 @SuperBuilder
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer","pedidos", "usuario"})
+@JsonIgnoreProperties({"hibernateLazyInitializer","pedidos"})
 public class Cliente extends Base{
 
     private String nombre;
@@ -29,6 +29,7 @@ public class Cliente extends Base{
 
     @OneToOne(cascade = CascadeType.ALL)
     @ToString.Exclude
+    @JsonIgnoreProperties({"hibernateLazyInitializer","cliente","empleado"})
     private Usuario usuario;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

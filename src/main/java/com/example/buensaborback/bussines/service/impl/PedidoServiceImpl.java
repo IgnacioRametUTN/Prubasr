@@ -50,7 +50,7 @@ public class PedidoServiceImpl implements IPedidoService {
     public Pedido save(Pedido pedido) {
         LocalTime now = LocalTime.now();
         int tiempoPreparacion=0;
-        pedido.setEstado(Estado.Preparacion);
+        pedido.setEstado(Estado.EnProceso);
         Domicilio domicilio =domicilioService.getDomicilioById(pedido.getDomicilio().getId());
         pedido.setDomicilio(domicilio);
         Sucursal sucursal = sucursalService.getSucursalById(pedido.getSucursal().getId());
@@ -80,7 +80,7 @@ public class PedidoServiceImpl implements IPedidoService {
                 detalle.setPedido(pedido);
             }
             if (pedido.getTipoEnvio() == TipoEnvio.Delivery) {
-                tiempoPreparacion += 10; // Additional fixed time for delivery
+                tiempoPreparacion += 10;
             }
         LocalTime tiempoEstimado = now.plusMinutes(tiempoPreparacion).withSecond(0).withNano(0);
 
