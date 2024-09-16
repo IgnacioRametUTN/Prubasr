@@ -17,9 +17,9 @@ public interface IPedidoService {
     List<Pedido> getAllByCliente(String user);
     List<Pedido> getAllByFecha(LocalDate fecha);
     Pedido delete(Long id);
-    List<Object> findTopProducts(LocalDate startDate, LocalDate endDate);
+    List<Object[]> findTopProducts(LocalDate startDate, LocalDate endDate, Long idSucursal);
 
-    List<Pedido> findPedidosBetweenDates(LocalDate startDate, LocalDate endDate);
+    List<Pedido> findPedidosBetweenDates(LocalDate startDate, LocalDate endDate, Long idSucursal);
 
     List<Pedido> findByEstado(Estado estado);
     Pedido actualizarEstado(Long id, Estado estado);

@@ -1,6 +1,5 @@
 package com.example.buensaborback.repositories;
 
-import com.example.buensaborback.domain.entities.Articulo;
 import com.example.buensaborback.domain.entities.Cliente;
 import com.example.buensaborback.domain.entities.Factura;
 import com.example.buensaborback.domain.entities.Pedido;
@@ -20,15 +19,19 @@ public interface PedidoRepository  extends JpaRepository<Pedido, Long> {
     List<Pedido> findByAltaTrueAndCliente(Cliente cliente);
 
     @Query("SELECT a.denominacion, SUM(dp.cantidad) AS totalCantidad " +
-            "FROM Pedido p " +
-            "JOIN p.detallePedidos dp " +
-            "JOIN dp.articulo a " +
+            "FROM Pedido p JOIN p.detallePedidos dp JOIN dp.articulo a " +
             "WHERE p.fechaPedido BETWEEN :startDate AND :endDate " +
+            "AND p.sucursal.id = :idSucursal " +
             "GROUP BY a.denominacion " +
             "ORDER BY totalCantidad DESC")
-    List<Object> findTopProducts(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+    List<Object[]> findTopProductsBySucursal(@Param("startDate") LocalDate startDate,
+                                             @Param("endDate") LocalDate endDate,
+                                             @Param("idSucursal") Long idSucursal);
 
-    List<Pedido> findByFechaPedidoBetween(LocalDate startDate, LocalDate endDate);
+    @Query("select p from Pedido p where p.sucursal.id = :idSucursal and p.fechaPedido between :startDate and :endDate")
+    List<Pedido> findBySucursal_IdAndFechaPedidoBetween(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("idSucursal") Long idSucursal);
+
+
 
     List<Pedido> findByEstado(Estado estado);
     Pedido findByFactura(Factura factura);
