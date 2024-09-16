@@ -13,6 +13,7 @@ public interface ReporteService {
     List<Object[]> findTopProducts(LocalDate startDate, LocalDate endDate, Long idSucursal);
     List<Object[]> getTopProductsGraph(LocalDate startDate, LocalDate endDate, Long idSucursal);
     List<Object[]> findMovimientosBetween(LocalDate startDate, LocalDate endDate, Long idSucursal);
+    List<Object[]> getMovimientosBetweenGraph(LocalDate startDate, LocalDate endDate, Long idSucursal);
     ReporteDTO findPedidosBetweenDates(LocalDate startDate, LocalDate endDate, Long idSucursal);
 
     ByteArrayInputStream generateExcelMovimientos(LocalDate startDate, LocalDate endDate, Long idSucursal);

@@ -55,7 +55,7 @@ public class ReportesController {
 
     @GetMapping("/reporte-diario")
     public List<Object[]> findMovimientosMonetariosBetween(@PathVariable("idSucursal") Long idSucursal, @RequestParam("startDate") LocalDate startDate, @RequestParam("endDate") LocalDate endDate) {
-        return reporteService.findMovimientosBetween(startDate, endDate, idSucursal);
+        return reporteService.getMovimientosBetweenGraph(startDate, endDate, idSucursal);
     }
     @GetMapping("/reporte-diario/excel")
     public ResponseEntity<?> generateExcelMovimientosMonetariosBetween(@PathVariable("idSucursal") Long idSucursal, @RequestParam("startDate") LocalDate startDate, @RequestParam("endDate") LocalDate endDate) {

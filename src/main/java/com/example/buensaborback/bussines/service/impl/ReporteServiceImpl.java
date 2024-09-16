@@ -39,12 +39,17 @@ public class ReporteServiceImpl implements ReporteService {
         return ranking;
     }
 
+    public List<Object[]> getMovimientosBetweenGraph(LocalDate startDate, LocalDate endDate, Long idSucursal){
+        List<Object[]> ranking = new ArrayList<>();
+        ranking.add(new Object[]{"Fecha", "Ingresos", "Costos", "Ganancias"});
+        ranking.addAll(this.findMovimientosBetween(startDate,endDate, idSucursal));
+        return ranking;
+    }
+
     @Override
     public List<Object[]> findMovimientosBetween(LocalDate startDate, LocalDate endDate, Long idSucursal) {
         List<Pedido> pedidos= pedidoService.findPedidosBetweenDates(startDate, endDate, idSucursal);
         List<Object[]> lista = new ArrayList<>();
-        String[] string = {"Fecha", "Ingresos", "Costos", "Ganancias"};
-        lista.add(string);
         for (Pedido pedido : pedidos){
             Object[] row = new Object[4];
             row[0] = pedido.getFechaPedido().toString();
