@@ -144,12 +144,12 @@ public class PedidoServiceImpl implements IPedidoService {
         Usuario usuario =this.usuarioService.getUsuarioByUsername(user);
         return this.pedidoRepository.findByAltaTrueAndCliente(usuario.getCliente());
     }
-    public List<Object> findTopProducts(LocalDate startDate, LocalDate endDate) {
-        return pedidoRepository.findTopProducts(startDate, endDate);
+    public List<Object[]> findTopProducts(LocalDate startDate, LocalDate endDate, Long idSucursal) {
+        return pedidoRepository.findTopProductsBySucursal(startDate, endDate, idSucursal);
     }
 
-    public List<Pedido> findPedidosBetweenDates(LocalDate startDate, LocalDate endDate) {
-        return pedidoRepository.findByFechaPedidoBetween(startDate, endDate);
+    public List<Pedido> findPedidosBetweenDates(LocalDate startDate, LocalDate endDate, Long idSucursal) {
+        return pedidoRepository.findBySucursal_IdAndFechaPedidoBetween(startDate, endDate, idSucursal);
 
     }
     public List<Pedido> findByEstado(Estado estado){

@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reportes")
+@RequestMapping("/api/reportes/sucursal/{idSucursal}")
 @CrossOrigin("*")
 public class ReportesController {
     private final ReporteService reporteService;
@@ -27,22 +27,44 @@ public class ReportesController {
 
 
     @GetMapping("/top-products")
-    public List<Object> findTopProducts(@RequestParam("startDate") LocalDate startDate, @RequestParam("endDate") LocalDate endDate) {
-        return reporteService.findTopProducts(startDate, endDate);
+    public List<Object[]> findTopProducts(@PathVariable("idSucursal") Long idSucursal,
+                                          @RequestParam("startDate") LocalDate startDate,
+                                          @RequestParam("endDate") LocalDate endDate) {
+        return reporteService.getTopProductsGraph(startDate, endDate, idSucursal);
+
+
     }
 
-    @GetMapping("/reporte-diario")
-    public List<Object[]> findMovimientosMonetariosBetween(@RequestParam("startDate") LocalDate startDate, @RequestParam("endDate") LocalDate endDate) {
-        return reporteService.findMovimientosBetween(startDate, endDate);
-    }
-    @GetMapping("/reporte-diario/excel")
-    public ResponseEntity<?> generateExcelMovimientosMonetariosBetween(@RequestParam("startDate") LocalDate startDate, @RequestParam("endDate") LocalDate endDate) {
+    @GetMapping("/top-products/excel")
+    public ResponseEntity<?> generateExcelTopProducts(@PathVariable("idSucursal") Long idSucursal,
+                                                      @RequestParam("startDate") LocalDate startDate,
+                                                      @RequestParam("endDate") LocalDate endDate) {
         try {
-            ByteArrayInputStream excelStream = reporteService.generateExcelMovimientos(startDate, endDate);
+            ByteArrayInputStream excelStream = reporteService.generateExcelRankingComidas(startDate, endDate, idSucursal);
             byte[] excelBytes = IOUtils.toByteArray(excelStream);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
-            headers.setContentDispositionFormData("attachment", "reporte_pedidos.xlsx");
+            headers.setContentDispositionFormData("attachment", "reporte_top_products.xlsx");
+            headers.setContentLength(excelBytes.length);
+            return new ResponseEntity<>(excelBytes, headers, HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/reporte-diario")
+    public List<Object[]> findMovimientosMonetariosBetween(@PathVariable("idSucursal") Long idSucursal, @RequestParam("startDate") LocalDate startDate, @RequestParam("endDate") LocalDate endDate) {
+        return reporteService.findMovimientosBetween(startDate, endDate, idSucursal);
+    }
+    @GetMapping("/reporte-diario/excel")
+    public ResponseEntity<?> generateExcelMovimientosMonetariosBetween(@PathVariable("idSucursal") Long idSucursal, @RequestParam("startDate") LocalDate startDate, @RequestParam("endDate") LocalDate endDate) {
+        try {
+            ByteArrayInputStream excelStream = reporteService.generateExcelMovimientos(startDate, endDate, idSucursal);
+            byte[] excelBytes = IOUtils.toByteArray(excelStream);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+            headers.setContentDispositionFormData("attachment", "reporte_movimientos.xlsx");
             headers.setContentLength(excelBytes.length);
             return new ResponseEntity<>(excelBytes, headers, HttpStatus.OK);
         } catch (IOException e) {
@@ -52,9 +74,9 @@ public class ReportesController {
     }
 
     @GetMapping("/pedidos/excel")
-    public ResponseEntity<?> generateExcelPedidosBetween(@RequestParam("startDate") LocalDate startDate, @RequestParam("endDate") LocalDate endDate) {
+    public ResponseEntity<?> generateExcelPedidosBetween(@PathVariable("idSucursal") Long idSucursal, @RequestParam("startDate") LocalDate startDate, @RequestParam("endDate") LocalDate endDate) {
         try {
-            ByteArrayInputStream excelStream = reporteService.generateExcelPedidosBetween(startDate, endDate);
+            ByteArrayInputStream excelStream = reporteService.generateExcelPedidosBetween(startDate, endDate, idSucursal);
             byte[] excelBytes = IOUtils.toByteArray(excelStream);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
@@ -68,7 +90,7 @@ public class ReportesController {
     }
 
     @GetMapping("/reporte-totales")
-    public ReporteDTO findPedidosBetweenDates(@RequestParam("startDate") LocalDate startDate, @RequestParam("endDate") LocalDate endDate) {
-        return reporteService.findPedidosBetweenDates(startDate, endDate);
+    public ReporteDTO findPedidosBetweenDates(@PathVariable("idSucursal") Long idSucursal, @RequestParam("startDate") LocalDate startDate, @RequestParam("endDate") LocalDate endDate) {
+        return reporteService.findPedidosBetweenDates(startDate, endDate, idSucursal);
     }
 }
