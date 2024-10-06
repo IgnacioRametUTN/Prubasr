@@ -5,6 +5,7 @@ import com.example.buensaborback.bussines.service.IEmpresaService;
 import com.example.buensaborback.bussines.service.IImagenService;
 import com.example.buensaborback.bussines.service.ISucursalService;
 import com.example.buensaborback.domain.entities.ArticuloInsumo;
+import com.example.buensaborback.domain.entities.Empresa;
 import com.example.buensaborback.domain.entities.Imagen;
 import com.example.buensaborback.domain.entities.Sucursal;
 
@@ -44,10 +45,12 @@ public class ISucursalServiceImpl implements ISucursalService {
 
     @Override
     public Sucursal saveSucursal(Sucursal sucursal) {
-        System.out.println(sucursal);
-        sucursal.setEmpresa(empresaService.getEmpresaById(sucursal.getEmpresa().getId()));
 
-        return sucursalRepository.save(sucursal);
+        Empresa empresa = empresaService.getEmpresaById(sucursal.getEmpresa().getId());
+        sucursal.setEmpresa(empresa);
+        empresa.getSucursales().add(sucursal);
+        empresaService.saveEmpresa(empresa);
+        return empresa.getSucursales().stream().filter(sucursal1 -> sucursal.getNombre().equals(sucursal1.getNombre())).findFirst().get();
     }
 
     @Override
