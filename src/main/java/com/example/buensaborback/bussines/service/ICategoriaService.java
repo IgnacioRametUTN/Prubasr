@@ -2,6 +2,7 @@ package com.example.buensaborback.bussines.service;
 
 import com.example.buensaborback.domain.entities.Categoria;
 import com.example.buensaborback.domain.entities.Imagen;
+import com.example.buensaborback.domain.entities.Sucursal;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

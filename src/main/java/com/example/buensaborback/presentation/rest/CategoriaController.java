@@ -45,6 +45,9 @@ public class CategoriaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Categoria> update(@PathVariable("id") Long id, @RequestBody CategoriaRequest request) {
+        System.out.println("entre update");
+        System.out.println(request.getCategoria());
+        System.out.println(request.getSucursalesIds());
         return ResponseEntity.ok().body(this.categoriaService.update(id, request.getCategoria(), request.getSucursalesIds()));
     }
 

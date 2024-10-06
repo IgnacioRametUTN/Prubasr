@@ -409,7 +409,7 @@ public class BuenSaborBackApplication {
                     .tipoEnvio(TipoEnvio.TakeAway)
                     .formaPago(FormaPago.MercadoPago)
                     .fechaPedido(LocalDate.of(2024, 4, 23))
-                    .factura(null)
+                    .factura(null)//Ver esto
                     .domicilio(domicilioCliente)
                     .sucursal(sucursal1)
                     .detallePedidos(new HashSet<>(Set.of(detallePedido, detallePedido2)))

@@ -9,6 +9,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -48,4 +49,6 @@ public class Categoria extends Base {
     @JoinColumn(name= "categoria_id")
     @Builder.Default
     protected Set<Imagen> imagenes = new HashSet<Imagen>();
+
+
 }
