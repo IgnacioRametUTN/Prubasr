@@ -3,6 +3,7 @@ package com.example.buensaborback.repositories;
 import com.example.buensaborback.domain.entities.Cliente;
 import com.example.buensaborback.domain.entities.Factura;
 import com.example.buensaborback.domain.entities.Pedido;
+import com.example.buensaborback.domain.entities.Sucursal;
 import com.example.buensaborback.domain.entities.enums.Estado;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Repository
 public interface PedidoRepository  extends JpaRepository<Pedido, Long> {
-    List<Pedido> findByFechaPedido(LocalDate fecha);
+    List<Pedido> findByFechaPedidoAndSucursal(LocalDate fecha, Sucursal sucursal);
 
     List<Pedido> findByAltaTrueAndCliente(Cliente cliente);
 
@@ -33,7 +34,7 @@ public interface PedidoRepository  extends JpaRepository<Pedido, Long> {
 
 
 
-    List<Pedido> findByEstado(Estado estado);
+    List<Pedido> findByEstadoAndSucursal(Estado estado, Sucursal sucursal);
     Pedido findByFactura(Factura factura);
 
 }

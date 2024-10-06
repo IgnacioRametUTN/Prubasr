@@ -412,7 +412,7 @@ public class BuenSaborBackApplication {
                     .factura(null)//Ver esto
                     .domicilio(domicilioCliente)
                     .sucursal(sucursal1)
-                    .detallePedidos(new HashSet<>(Set.of(detallePedido, detallePedido2)))
+                    .detallePedidos(new HashSet<>(Set.of(detallePedido3, detallePedido4)))
                     .build();
 
             detallePedido3.setPedido(pedido2);

@@ -14,6 +14,7 @@ import com.example.buensaborback.presentation.advice.exception.ImageUploadLimitE
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.ImagenRepository;
 import com.example.buensaborback.repositories.SucursalRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,13 +46,16 @@ public class ISucursalServiceImpl implements ISucursalService {
 
     @Override
     public Sucursal saveSucursal(Sucursal sucursal) {
-
         Empresa empresa = empresaService.getEmpresaById(sucursal.getEmpresa().getId());
         sucursal.setEmpresa(empresa);
-        empresa.getSucursales().add(sucursal);
-        empresaService.saveEmpresa(empresa);
-        return empresa.getSucursales().stream().filter(sucursal1 -> sucursal.getNombre().equals(sucursal1.getNombre())).findFirst().get();
+        Sucursal savedSucursal = sucursalRepository.save(sucursal);
+        empresa.getSucursales().add(savedSucursal);
+        empresaService.updateEmpresa(empresa.getId(), empresa);
+
+        return savedSucursal;
     }
+
+
 
     @Override
     public Sucursal getSucursalById(Long id) {

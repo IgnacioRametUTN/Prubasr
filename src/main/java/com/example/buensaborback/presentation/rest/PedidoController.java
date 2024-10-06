@@ -47,15 +47,15 @@ public class PedidoController {
         return new ResponseEntity<>(pedidoService.getPedidoById(id), HttpStatus.OK);
 
     }
-    @GetMapping("/fecha/{fecha}")
-    public ResponseEntity<List<Pedido>> getAllByFecha(@PathVariable("fecha") LocalDate fecha) {
-        List<Pedido> pedidos = pedidoService.getAllByFecha(fecha);
+    @GetMapping("/{idSucursal}/fecha/{fecha}")
+    public ResponseEntity<List<Pedido>> getAllByFecha(@PathVariable("idSucursal") Long idSucursal, @PathVariable("fecha") LocalDate fecha) {
+        List<Pedido> pedidos = pedidoService.getAllByFecha(fecha, idSucursal);
         return new ResponseEntity<>(pedidos, HttpStatus.OK);
     }
 
-    @GetMapping("/estado/{estado}")
-    public ResponseEntity<List<Pedido>> GetByEstado(@PathVariable("estado") Estado estado) {
-        List<Pedido> pedidos = pedidoService.findByEstado(estado);
+    @GetMapping("/{idSucursal}/estado/{estado}")
+    public ResponseEntity<List<Pedido>> GetByEstado(@PathVariable("idSucursal") Long idSucursal, @PathVariable("estado") Estado estado) {
+        List<Pedido> pedidos = pedidoService.findByEstado(estado, idSucursal);
         return new ResponseEntity<>(pedidos, HttpStatus.OK);
     }
     @PutMapping("/estado/actualizar/{id}/{estado}")

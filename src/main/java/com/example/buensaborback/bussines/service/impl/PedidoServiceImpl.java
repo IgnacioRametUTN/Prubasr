@@ -126,8 +126,9 @@ public class PedidoServiceImpl implements IPedidoService {
 
     @Override
 //    @Transactional(readOnly = true)
-    public List<Pedido> getAllByFecha(LocalDate fecha) {
-        return pedidoRepository.findByFechaPedido(fecha);
+    public List<Pedido> getAllByFecha(LocalDate fecha, Long idSucursal) {
+        Sucursal sucursal = sucursalService.getSucursalById(idSucursal);
+        return pedidoRepository.findByFechaPedidoAndSucursal(fecha, sucursal);
     }
 
     @Override
@@ -152,8 +153,9 @@ public class PedidoServiceImpl implements IPedidoService {
         return pedidoRepository.findBySucursal_IdAndFechaPedidoBetween(startDate, endDate, idSucursal);
 
     }
-    public List<Pedido> findByEstado(Estado estado){
-        return pedidoRepository.findByEstado(estado);
+    public List<Pedido> findByEstado(Estado estado, Long idSucursal){
+        Sucursal sucursal = sucursalService.getSucursalById(idSucursal);
+        return pedidoRepository.findByEstadoAndSucursal(estado, sucursal);
     }
 
     //@Transactional
