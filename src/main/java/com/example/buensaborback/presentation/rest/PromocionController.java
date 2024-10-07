@@ -46,8 +46,7 @@ public class PromocionController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Promocion> updatePromocion(@PathVariable Long id, @RequestBody Promocion promocionDetails) {
-        Promocion updatedPromocion = promocionService.update(id, promocionDetails);
-        return updatedPromocion != null ? ResponseEntity.ok(updatedPromocion) : ResponseEntity.notFound().build();
+        return ResponseEntity.ok(promocionService.update(id, promocionDetails));
     }
 
     @DeleteMapping("/sucursal/{idSucursal}/{id}")

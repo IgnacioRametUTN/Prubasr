@@ -4,6 +4,7 @@ import com.example.buensaborback.bussines.service.*;
 import com.example.buensaborback.domain.entities.*;
 import com.example.buensaborback.presentation.advice.exception.BadRequestException;
 import com.example.buensaborback.presentation.advice.exception.ImageUploadLimitException;
+import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.ImagenRepository;
 import com.example.buensaborback.repositories.PromocionRepository;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class PromocionServiceImpl implements IPromocionService {
@@ -41,7 +43,7 @@ public class PromocionServiceImpl implements IPromocionService {
 
     @Override
     public Promocion getPromocionById(Long id) {
-        return promocionRepository.findById(id).orElse(null);
+        return promocionRepository.findById(id).orElseThrow(() -> new NotFoundException("No se encontro la promocion con ID " + id));
     }
 
     @Override
@@ -161,6 +163,7 @@ public class PromocionServiceImpl implements IPromocionService {
 
         }
         imagenService.updateImagenes(promocion.getImagenes(), entity.getImagenes());
+        entity.setSucursales(entity.getSucursales().stream().map(sucursal -> sucursalService.getSucursalById(sucursal.getId())).collect(Collectors.toSet()));
         entity.setDetallesPromocion(promocionDetalles);
         return this.promocionRepository.save(entity);
     }
