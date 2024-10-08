@@ -68,6 +68,7 @@ public class IEmpresaServiceImpl implements IEmpresaService {
             existingEmpresa.setRazonSocial(empresa.getRazonSocial());
             existingEmpresa.setCuil(empresa.getCuil());
             existingEmpresa.setSucursales(empresa.getSucursales());
+            existingEmpresa.setAlta(empresa.isAlta());
             //Verificar cambio de imagenes
             imagenService.updateImagenes(existingEmpresa.getImagenes(), empresa.getImagenes());
             return empresaRepository.save(existingEmpresa);

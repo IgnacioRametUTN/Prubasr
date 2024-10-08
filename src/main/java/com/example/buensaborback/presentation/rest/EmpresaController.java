@@ -47,11 +47,7 @@ public class EmpresaController {
     @PutMapping("/{id}")
     public ResponseEntity<Empresa> updateEmpresa(@PathVariable Long id, @RequestBody Empresa empresa) {
         Empresa updatedEmpresa = empresaService.updateEmpresa(id, empresa);
-        if (updatedEmpresa != null) {
-            return ResponseEntity.ok(updatedEmpresa);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(updatedEmpresa);
     }
 
     @DeleteMapping("/{id}")
