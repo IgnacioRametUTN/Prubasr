@@ -77,7 +77,7 @@ public class PromocionServiceImpl implements IPromocionService {
             }else{//Si hay otras sucursales usando esta promocion, hay que verificar si los articulos son compatibles
                 promocionExistente.getDetallesPromocion().forEach(promocionDetalle -> {
                     Articulo articulo = getArticulo(promocionDetalle);
-                    if(articulo.getSucursal().equals(sucursal)){
+                    if(!articulo.getSucursal().equals(sucursal)){
                         throw new BadRequestException("No puedes agregar esta promocion porque no tienes los articulos");
                     }
                 });
