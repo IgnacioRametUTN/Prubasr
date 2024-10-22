@@ -3,28 +3,14 @@ package com.example.buensaborback.domain.entities;
 
 import com.example.buensaborback.domain.entities.Categoria;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
+import lombok.Getter;
 
 import java.util.List;
-
+@Getter
+@Data
 public class CategoriaRequest {
-
     private Categoria categoria;
     private List<Long> sucursalesIds;
 
-    // Getters and setters
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
-
-    public List<Long> getSucursalesIds() {
-        return sucursalesIds;
-    }
-
-    public void setSucursalesIds(List<Long> sucursalesIds) {
-        this.sucursalesIds = sucursalesIds;
-    }
 }
