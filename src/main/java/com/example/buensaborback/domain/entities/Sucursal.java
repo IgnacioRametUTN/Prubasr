@@ -26,10 +26,10 @@ public class Sucursal extends Base{
     private LocalTime horarioApertura;
     private LocalTime horarioCierre;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private Domicilio domicilio;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "sucursal_categoria",
             joinColumns = @JoinColumn(name = "sucursal_id"),
             inverseJoinColumns = @JoinColumn(name = "categoria_id"))

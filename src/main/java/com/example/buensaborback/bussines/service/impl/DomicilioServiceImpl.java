@@ -3,6 +3,7 @@ package com.example.buensaborback.bussines.service.impl;
 import com.example.buensaborback.bussines.service.IDomicilioService;
 import com.example.buensaborback.bussines.service.ILocalidadService;
 import com.example.buensaborback.domain.entities.Domicilio;
+import com.example.buensaborback.domain.entities.Localidad;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.DomicilioRepository;
 import com.example.buensaborback.repositories.LocalidadRepository;
@@ -80,5 +81,9 @@ public class DomicilioServiceImpl implements IDomicilioService {
         Domicilio domicilio = this.getDomicilioById(id);
         domicilio.setAlta(!domicilio.isAlta());
         return domicilio;
+    }
+
+    public Localidad getLocalidadById(Long id){
+        return this.localidadService.getLocalidadById(id);
     }
 }

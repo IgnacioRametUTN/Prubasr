@@ -25,7 +25,7 @@ public class Categoria extends Base {
 
     private String denominacion;
 
-    @ManyToMany(mappedBy = "categorias")
+    @ManyToMany(mappedBy = "categorias", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @Builder.Default
     @JsonIgnoreProperties({"hibernateLazyInitializer", "domicilio","empresa", "imagenes","articulos","categorias"})
     private Set<Sucursal> sucursales = new HashSet<>();
@@ -42,7 +42,7 @@ public class Categoria extends Base {
 
     @OneToMany(mappedBy = "categoriaPadre", cascade = CascadeType.ALL)
     @Builder.Default
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "sucursales","articulos"})
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "articulos"})
     private Set<Categoria> subCategorias = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

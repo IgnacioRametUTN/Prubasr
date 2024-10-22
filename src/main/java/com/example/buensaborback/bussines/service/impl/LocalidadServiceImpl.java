@@ -24,6 +24,7 @@ public class LocalidadServiceImpl implements ILocalidadService {
 
     @Override
     public List<Localidad> findLocalidadesByProvincia(Long idProvincia) {
+        if(idProvincia == 0) return this.localidadRepository.findAll();
         Provincia provincia =  this.provinciaService.getProvinciaById(idProvincia);
         return this.localidadRepository.findByProvincia(provincia);
     }

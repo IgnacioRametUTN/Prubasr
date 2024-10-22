@@ -51,11 +51,11 @@ public class CategoriaController {
         return ResponseEntity.ok().body(this.categoriaService.update(id, request.getCategoria(), request.getSucursalesIds()));
     }
 
-    @PostMapping("/{idSucursal}")
-    public ResponseEntity<Categoria> save(@PathVariable("idSucursal") Long idSucursal,
-                                          @RequestParam(value = "idCategoriaPadre", required = false) Long idPadre,
+    @PostMapping("")
+    public ResponseEntity<Categoria> save(
+                                          @RequestParam(value = "idCategoriaPadre", required = false) Long idCategoriaPadre,
                                           @RequestBody CategoriaRequest request) {
-        return ResponseEntity.ok().body(this.categoriaService.create(idPadre, idSucursal, request.getCategoria(), request.getSucursalesIds()));
+        return ResponseEntity.ok().body(this.categoriaService.create(idCategoriaPadre, request.getCategoria(), request.getSucursalesIds()));
     }
 
     @PostMapping("/uploads")
@@ -67,5 +67,10 @@ public class CategoriaController {
     @DeleteMapping("/{idSucursal}/{id}")
     public ResponseEntity<Categoria> delete(@PathVariable("idSucursal") Long idSucursal, @PathVariable("id") Long id) {
         return ResponseEntity.ok().body(this.categoriaService.delete(id, idSucursal));
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<?> validateCategoria(@RequestBody String categoriaDenominacion){
+        return ResponseEntity.ok().body(this.categoriaService.validateCategoria(categoriaDenominacion));
     }
 }
