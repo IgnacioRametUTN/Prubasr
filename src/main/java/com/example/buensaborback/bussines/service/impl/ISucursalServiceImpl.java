@@ -45,6 +45,7 @@ public class ISucursalServiceImpl implements ISucursalService {
     @Override
     public Sucursal saveSucursal(Sucursal sucursal) {
         sucursal.setEmpresa(empresaService.getEmpresaById(sucursal.getEmpresa().getId()));
+        sucursal.getDomicilio().setLocalidad(domicilioService.getLocalidadById(sucursal.getDomicilio().getLocalidad().getId()));
         return sucursalRepository.save(sucursal);
     }
 
