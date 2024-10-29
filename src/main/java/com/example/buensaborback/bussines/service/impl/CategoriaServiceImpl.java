@@ -81,7 +81,6 @@ public class CategoriaServiceImpl implements ICategoriaService {
         categoriaExistente.setAlta(true);
         categoriaExistente.setDenominacion(body.getDenominacion());
         actualizarRelacionSucursales2(categoriaExistente, sucursales);
-        categoriaRepository.save(categoriaExistente);
         // Update images
         imagenService.updateImagenes(categoriaExistente.getImagenes(), body.getImagenes());
         return categoriaRepository.save(categoriaExistente);
@@ -90,23 +89,15 @@ public class CategoriaServiceImpl implements ICategoriaService {
     @Override
     public Categoria create(Long idPadre, Categoria body, List<Long> sucursalesIds) {
         List<Sucursal> sucursales = sucursalService.getSucursalesByIds(sucursalesIds);
-        Categoria categoriaExistente = null;
-        if (existsCategoriaByDenominacion(body.getDenominacion())) {
-            categoriaExistente = categoriaRepository.findByDenominacionIgnoreCase(body.getDenominacion());
-        }
 
-        if (categoriaExistente != null) {
-            body = categoriaExistente;
+        if (idPadre != null && idPadre != 0) {
+            Categoria categoriaPadre = getCategoriaById(idPadre);
+            body.setCategoriaPadre(categoriaPadre);
         } else {
-            if (idPadre != null && idPadre != 0) {
-                Categoria categoriaPadre = getCategoriaById(idPadre);
-                body.setCategoriaPadre(categoriaPadre);
-            } else {
-                body.setCategoriaPadre(null);
-            }
-            body = categoriaRepository.save(body);
+            body.setCategoriaPadre(null);
         }
-        return actualizarRelacionSucursales(body, sucursales);
+        actualizarRelacionSucursales2(body, sucursales);
+        return categoriaRepository.save(body);
     }
 
 
@@ -117,11 +108,15 @@ public class CategoriaServiceImpl implements ICategoriaService {
        for (Sucursal sucursal : sucursales){
            categoria.getSucursales().removeIf(s -> s.getId().equals(sucursal.getId()));
            sucursal.getCategorias().removeIf(c -> c.getId().equals(categoria.getId()));
-           sucursalService.saveSucursal(sucursal);
+           if(!categoria.getSubCategorias().isEmpty()){
+               for (Categoria subCategoria : categoria.getSubCategorias()){
+                   subCategoria.getSucursales().removeIf(s -> s.getId().equals(sucursal.getId()));
+                   sucursal.getCategorias().removeIf(c -> c.getId().equals(subCategoria.getId()));
+               }
+           }
        }
         sucursales = new ArrayList<>(nuevasSucursales);
         //Agregar relaciones
-
         for (Sucursal sucursal : sucursales){
             categoria.getSucursales().add(sucursal);
             sucursal.getCategorias().add(categoria);
@@ -129,7 +124,6 @@ public class CategoriaServiceImpl implements ICategoriaService {
                 categoria.getCategoriaPadre().getSucursales().add(sucursal);
                 sucursal.getCategorias().add(categoria.getCategoriaPadre());
             }
-            sucursalService.saveSucursal(sucursal);
         }
 
     }
