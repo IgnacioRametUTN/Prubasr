@@ -182,7 +182,7 @@ public class PromocionServiceImpl implements IPromocionService {
         if(promocion.getSucursales().isEmpty()){//Si nadie la esta utilizada pasa a estar en baja
             promocion.setAlta(false);
         }
-        this.sucursalService.saveSucursal(sucursal);
+        this.sucursalService.updateSucursal(idSucursal, sucursal);
         return this.promocionRepository.save(promocion);
     }
 
