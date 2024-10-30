@@ -8,6 +8,7 @@ import com.example.buensaborback.domain.entities.Empresa;
 
 import com.example.buensaborback.domain.entities.Imagen;
 import com.example.buensaborback.presentation.advice.exception.BadRequestException;
+import com.example.buensaborback.presentation.advice.exception.DuplicateEntryException;
 import com.example.buensaborback.presentation.advice.exception.ImageUploadLimitException;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.EmpresaRepository;
@@ -39,7 +40,14 @@ public class IEmpresaServiceImpl implements IEmpresaService {
 
     @Override
     public Empresa saveEmpresa(Empresa empresa) {
+        validateEmpresaNombre(empresa.getNombre());
         return empresaRepository.save(empresa);
+    }
+
+    private void validateEmpresaNombre(String nombre) {
+        if(empresaRepository.existsByNombreIgnoreCase(nombre.trim())){
+            throw new DuplicateEntryException(String.format("Ya existe la empresa de nombre '%s'", nombre));
+        }
     }
 
     @Override
@@ -64,14 +72,17 @@ public class IEmpresaServiceImpl implements IEmpresaService {
     @Override
     public Empresa updateEmpresa(Long id, Empresa empresa) {
         Empresa existingEmpresa = this.getEmpresaById(id);
-            existingEmpresa.setNombre(empresa.getNombre());
-            existingEmpresa.setRazonSocial(empresa.getRazonSocial());
-            existingEmpresa.setCuil(empresa.getCuil());
-            existingEmpresa.setSucursales(empresa.getSucursales());
-            existingEmpresa.setAlta(empresa.isAlta());
-            //Verificar cambio de imagenes
-            imagenService.updateImagenes(existingEmpresa.getImagenes(), empresa.getImagenes());
-            return empresaRepository.save(existingEmpresa);
+        if (!empresa.getNombre().equalsIgnoreCase(existingEmpresa.getNombre())) {
+            validateEmpresaNombre(empresa.getNombre());
+        }
+        existingEmpresa.setNombre(empresa.getNombre());
+        existingEmpresa.setRazonSocial(empresa.getRazonSocial());
+        existingEmpresa.setCuil(empresa.getCuil());
+        existingEmpresa.setSucursales(empresa.getSucursales());
+        existingEmpresa.setAlta(empresa.isAlta());
+        //Verificar cambio de imagenes
+        imagenService.updateImagenes(existingEmpresa.getImagenes(), empresa.getImagenes());
+        return empresaRepository.save(existingEmpresa);
 
     }
 

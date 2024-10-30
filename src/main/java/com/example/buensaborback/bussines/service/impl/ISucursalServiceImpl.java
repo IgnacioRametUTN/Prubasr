@@ -7,6 +7,7 @@ import com.example.buensaborback.domain.entities.Imagen;
 import com.example.buensaborback.domain.entities.Sucursal;
 
 import com.example.buensaborback.presentation.advice.exception.BadRequestException;
+import com.example.buensaborback.presentation.advice.exception.DuplicateEntryException;
 import com.example.buensaborback.presentation.advice.exception.ImageUploadLimitException;
 import com.example.buensaborback.presentation.advice.exception.NotFoundException;
 import com.example.buensaborback.repositories.ImagenRepository;
@@ -46,6 +47,7 @@ public class ISucursalServiceImpl implements ISucursalService {
     public Sucursal saveSucursal(Sucursal sucursal) {
         sucursal.setEmpresa(empresaService.getEmpresaById(sucursal.getEmpresa().getId()));
         sucursal.getDomicilio().setLocalidad(domicilioService.getLocalidadById(sucursal.getDomicilio().getLocalidad().getId()));
+        validateSucursalNombre(sucursal.getNombre(), sucursal.getEmpresa());
         return sucursalRepository.save(sucursal);
     }
 
@@ -69,6 +71,9 @@ public class ISucursalServiceImpl implements ISucursalService {
     @Override
     public Sucursal updateSucursal(Long id, Sucursal sucursal) {
         Sucursal existingSucursal = getSucursalById(id);
+        if(!sucursal.getNombre().equalsIgnoreCase(existingSucursal.getNombre())){
+            validateSucursalNombre(sucursal.getNombre(), sucursal.getEmpresa());
+        }
         existingSucursal.setNombre(sucursal.getNombre());
         existingSucursal.setHorarioApertura(sucursal.getHorarioApertura());
         existingSucursal.setHorarioCierre(sucursal.getHorarioCierre());
@@ -76,9 +81,20 @@ public class ISucursalServiceImpl implements ISucursalService {
         existingSucursal.setDomicilio(sucursal.getDomicilio());
 
         //Verificar
+        System.out.println("IMAGENES");
+        System.out.println(sucursal.getImagenes().size());
+        System.out.println(existingSucursal.getImagenes().size());
         imagenService.updateImagenes(existingSucursal.getImagenes(), sucursal.getImagenes());
+
         return sucursalRepository.save(existingSucursal);
     }
+
+    private void validateSucursalNombre(String nombre, Empresa empresa) {
+        if(sucursalRepository.existsByNombreIgnoreCaseAndEmpresa(nombre.trim(), empresa)){
+            throw new DuplicateEntryException(String.format("La sucursal'%s' ya existe", nombre));
+        }
+    }
+
     @Override
     public void bajaLogicaSucursal(Long id, boolean activo) {
         Optional<Sucursal> sucursalOpt = sucursalRepository.findById(id);
