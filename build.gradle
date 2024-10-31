@@ -1,0 +1,63 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.4'
+	id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// https://mvnrepository.com/artifact/org.mapstruct/mapstruct
+	implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final' //Anotacion para implementar los beans de mapstruct
+	implementation 'com.mercadopago:sdk-java:2.1.24'
+
+	//CLOUDINARY
+	implementation 'com.cloudinary:cloudinary-http44:1.36.0'
+	implementation 'com.cloudinary:cloudinary-taglib:1.36.0'
+	implementation 'io.github.cdimascio:dotenv-java:2.2.4'
+
+	// Auth0
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
+	implementation 'com.konghq:unirest-java:3.11.12' // Para obtener el token
+	//Seguridad
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// PostGreSQL
+	implementation 'org.postgresql:postgresql:42.7.2'
+	//PDF
+	implementation 'com.itextpdf:itextpdf:5.5.13.3'
+
+	//Email
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	//Excel
+	implementation 'org.apache.poi:poi-ooxml:5.2.4'
+
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
