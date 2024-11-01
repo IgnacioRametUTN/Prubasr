@@ -86,7 +86,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     @Override
     public String encriptarClaveSHA256(String clave) {
-        // Implementación para encriptar la contraseña si fuera necesario
+        // Implementación para encriptar la contraseña
         return null;
     }
 

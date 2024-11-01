@@ -41,7 +41,6 @@ public class ClienteServiceImpl implements IClienteService {
     public Cliente create(Cliente entity) {
 
         if(entity.getUsuario().getUsername() == null){
-            System.out.println("usuario no encontrado");
             throw new NotFoundException("Usuario no encontrado");
         }
         entity.setUsuario(usuarioService.getUsuarioByUsername(entity.getUsuario().getUsername()));

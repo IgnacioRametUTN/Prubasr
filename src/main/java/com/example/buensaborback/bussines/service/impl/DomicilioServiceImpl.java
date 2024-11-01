@@ -53,22 +53,20 @@ public class DomicilioServiceImpl implements IDomicilioService {
 
     @Override
     public Domicilio update(Long id, Domicilio body) {
-        // Verificar si el domicilio existe por el id
+
         this.existsDomicilioById(id);
 
-        // Obtener el domicilio existente de la base de datos
         Domicilio existingDomicilio = this.domicilioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Domicilio no encontrado con id: " + id));
 
         body.setLocalidad(localidadService.getLocalidadById(body.getLocalidad().getId()));
-        // Actualizar los campos del domicilio existente con los del body
+        // Actualizar los campos del domicilio
         existingDomicilio.setLocalidad(body.getLocalidad());
         existingDomicilio.setAlta(body.isAlta());
         existingDomicilio.setCp(body.getCp());
         existingDomicilio.setNumero(body.getNumero());
         existingDomicilio.setClientes(body.getClientes());
         existingDomicilio.setCalle(body.getCalle());
-        // Guardar el domicilio actualizado en la base de datos
         return this.domicilioRepository.save(existingDomicilio);
     }
     @Override

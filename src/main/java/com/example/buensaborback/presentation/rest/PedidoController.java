@@ -60,9 +60,7 @@ public class PedidoController {
     }
     @PutMapping("/estado/actualizar/{id}/{estado}")
     public ResponseEntity<Pedido> updateEstado(@PathVariable("id") Long id, @PathVariable("estado") Estado estado) {
-        System.out.println("estado " + estado);
         Pedido pedidoActualizado = pedidoService.actualizarEstado(id, estado);
-        System.out.println(pedidoActualizado);
         return new ResponseEntity<>(pedidoActualizado, HttpStatus.OK);
     }
     @GetMapping("/cliente/{cliente}")

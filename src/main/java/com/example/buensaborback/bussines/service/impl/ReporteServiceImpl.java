@@ -129,7 +129,6 @@ public class ReporteServiceImpl implements ReporteService {
         if (data.isEmpty()) {
             throw new NotFoundException("No hay datos para generar el reporte");
         }
-        System.out.println(data.size());
         Workbook workbook = new XSSFWorkbook();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {

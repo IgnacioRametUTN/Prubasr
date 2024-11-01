@@ -80,10 +80,6 @@ public class ISucursalServiceImpl implements ISucursalService {
         sucursal.getDomicilio().setLocalidad(domicilioService.getLocalidadById(sucursal.getDomicilio().getLocalidad().getId()));
         existingSucursal.setDomicilio(sucursal.getDomicilio());
 
-        //Verificar
-        System.out.println("IMAGENES");
-        System.out.println(sucursal.getImagenes().size());
-        System.out.println(existingSucursal.getImagenes().size());
         imagenService.updateImagenes(existingSucursal.getImagenes(), sucursal.getImagenes());
 
         return sucursalRepository.save(existingSucursal);
@@ -100,7 +96,7 @@ public class ISucursalServiceImpl implements ISucursalService {
         Optional<Sucursal> sucursalOpt = sucursalRepository.findById(id);
         if (sucursalOpt.isPresent()) {
             Sucursal sucursal = sucursalOpt.get();
-            sucursal.setAlta(activo);  // Cambia el estado de activo
+            sucursal.setAlta(activo);
             sucursalRepository.save(sucursal);
         } else {
             throw new ResourceNotFoundException("Sucursal no encontrada con ID " + id);

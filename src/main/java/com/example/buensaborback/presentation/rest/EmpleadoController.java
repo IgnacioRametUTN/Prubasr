@@ -25,7 +25,6 @@ public class EmpleadoController {
 
     @GetMapping ("/formulario/{empleado}")
     public ResponseEntity<RedirectDto> redirectToExternalUrl(@PathVariable("empleado") String email) {
-        System.out.println("entre al redirect");
         try{
             return ResponseEntity.ok(RedirectDto.builder().urlRedirect("/formulario-empleado").build());
         }catch (Exception e){

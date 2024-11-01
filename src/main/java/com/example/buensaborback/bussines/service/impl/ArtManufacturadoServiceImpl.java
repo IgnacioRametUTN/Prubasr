@@ -125,7 +125,6 @@ private final IImagenService imagenService;
         // Maneja los detalles que ya no están presentes en la entidad actualizada
         for (ArticuloManufacturadoDetalle detalleViejo : detallesViejo) {
             if (!detalles.contains(detalleViejo)) {
-                System.out.println("Desactivando: " + detalleViejo.toString());
                 detalleViejo.setAlta(false);
                 artManufacturadoDetalleServiceImpl.create(detalleViejo);
             }

@@ -55,7 +55,6 @@ public class PedidoServiceImpl implements IPedidoService {
         pedido.setDomicilio(domicilio);
         Sucursal sucursal = sucursalService.getSucursalById(pedido.getSucursal().getId());
         pedido.setSucursal(sucursal);
-        System.out.println("Pedido recibido: " + pedido.toString());
         Usuario usuarioOp = usuarioService.getUsuarioByUsername(pedido.getCliente().getUsuario().getUsername());
             pedido.setCliente(usuarioOp.getCliente());
             for (DetallePedido detalle : pedido.getDetallePedidos()) {
@@ -106,7 +105,6 @@ public class PedidoServiceImpl implements IPedidoService {
                 total += ((ArticuloInsumo) articulo).getPrecioCompra() * detallePedido.getCantidad();
             }
         }
-        System.out.println("TOTAL COSTO " + total);
         return total;
     }
 
@@ -119,20 +117,17 @@ public class PedidoServiceImpl implements IPedidoService {
     }
 
     @Override
-//    @Transactional(readOnly = true)
     public List<Pedido> getAll() {
         return pedidoRepository.findAll();
     }
 
     @Override
-//    @Transactional(readOnly = true)
     public List<Pedido> getAllByFecha(LocalDate fecha, Long idSucursal) {
         Sucursal sucursal = sucursalService.getSucursalById(idSucursal);
         return pedidoRepository.findByFechaPedidoAndSucursal(fecha, sucursal);
     }
 
     @Override
-//    @Transactional
     public Pedido delete(Long id) {
         Pedido pedido = this.getPedidoById(id);
         pedido.setAlta(pedido.isAlta());
@@ -158,7 +153,6 @@ public class PedidoServiceImpl implements IPedidoService {
         return pedidoRepository.findByEstadoAndSucursal(estado, sucursal);
     }
 
-    //@Transactional
     public Pedido actualizarEstado(Long id, Estado estado){
         Pedido pedido = this.getPedidoById(id);
         pedido.setEstado(estado);
